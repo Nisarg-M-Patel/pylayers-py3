@@ -64,7 +64,8 @@ import numpy
 import struct
 import logging
 import operator
-import cStringIO
+import io
+from functools import reduce
 
 
 
@@ -256,7 +257,7 @@ dimensions: %(dimensions)s
 
         count, = struct.unpack('B', handle.read(1))
         self.dimensions = [
-            struct.unpack('B', handle.read(1))[0] for _ in xrange(count)]
+            struct.unpack('B', handle.read(1))[0] for _ in range(count)]
 
         count = reduce(operator.mul, self.dimensions, 1)
         self.bytes = None
@@ -298,7 +299,7 @@ class Group(object):
             1 + len(self.name) + # size of name and name bytes
             2 + # next offset marker
             1 + len(self.desc) + # size of desc and desc bytes
-            sum(p.binary_size() for p in self.params.itervalues()))
+            sum(p.binary_size() for p in self.params.values()))
 
     def get_int8(self, key):
         return struct.unpack('b', self.params[key].bytes)[0]
@@ -360,12 +361,12 @@ class Manager(object):
 
     def groups(self):
         '''Get all the (name, group) pairs in our file.'''
-        return self._groups.iteritems()
+        return iter(self._groups.items())
 
     def parameter_blocks(self):
         '''Compute the size (in 512B blocks) of the parameter section.'''
         bytes = 4
-        for name, group in self._groups.iteritems():
+        for name, group in self._groups.items():
             bytes += group.binary_size()
         blocks, overflow = divmod(bytes, 512)
         if overflow:
@@ -429,7 +430,7 @@ class Reader(Manager):
         # boundary issues).
         bytes = self._handle.read(512 * parameter_blocks)
         while bytes:
-            buf = cStringIO.StringIO(bytes)
+            buf = io.StringIO(bytes)
 
             chars_in_name, group_id = struct.unpack('bb', buf.read(2))
             if group_id == 0 or chars_in_name == 0:
@@ -482,7 +483,7 @@ class Reader(Manager):
         self._handle.seek((self.header.data_block - 1) * 512)
         start = self._handle.tell()
         f = 0
-        for f in xrange(self.end_field() - self.start_field() + 1):
+        for f in range(self.end_field() - self.start_field() + 1):
          
             points = array.array(format)
             points.fromfile(self._handle, 4 * ppf)
@@ -551,7 +552,7 @@ class Writer(Manager):
         self._handle.write(struct.pack('B', len(group.desc)))
         self._handle.write(group.desc)
         logging.debug('writing group info yields offset %d', self._handle.tell())
-        for name, param in group.params.iteritems():
+        for name, param in group.params.items():
             self._handle.write(struct.pack('bb', len(name), group_id))
             self._handle.write(name)
             self._handle.write(struct.pack('h', param.binary_size() - 2 - len(name)))
@@ -595,7 +596,7 @@ class Writer(Manager):
         point_units: The units that the point numbers represent.
         '''
         try:
-            points, analog = iter(frames).next()
+            points, analog = next(iter(frames))
         except StopIteration:
             return
 
@@ -632,7 +633,7 @@ class Writer(Manager):
         point_group.add_param('LABELS', desc='labels',
                               data_size=-1,
                               dimensions=[5, ppf],
-                              bytes=''.join('M%03d ' % i for i in xrange(ppf)))
+                              bytes=''.join('M%03d ' % i for i in range(ppf)))
         point_group.add_param('DESCRIPTIONS', desc='descriptions',
                               data_size=-1,
                               dimensions=[16, ppf],

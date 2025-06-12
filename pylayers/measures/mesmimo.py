@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #-*- coding:Utf-8 -*-
-from __future__ import print_function
+
 from pylayers.signal.bsignal import *
 from pylayers.antprop.aarray import *
 from pylayers.util.project import *
@@ -748,7 +748,7 @@ class MIMO(object):
                  ['','','','']])
                  }
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -812,8 +812,8 @@ class MIMO(object):
         uuR = self.uR
         uuT = self.uT
         # index in uR and uT
-        iUr=np.array(map(lambda x : np.where(abs(uuR-x)==(abs(uuR-x)).min())[0][0], np.ravel(uR)))
-        iUt=np.array(map(lambda x : np.where(abs(uuT-x)==(abs(uuT-x)).min())[0][0], np.ravel(uT)))
+        iUr=np.array([np.where(abs(uuR-x)==(abs(uuR-x)).min())[0][0] for x in np.ravel(uR)])
+        iUt=np.array([np.where(abs(uuT-x)==(abs(uuT-x)).min())[0][0] for x in np.ravel(uT)])
 
         self.grid = M
         shM = M.shape
@@ -943,7 +943,7 @@ class MIMO(object):
                    }
 
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -1051,7 +1051,7 @@ class MIMO(object):
                     'title':'',
                    }
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 

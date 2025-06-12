@@ -125,7 +125,7 @@ class VolumeSlicer(HasTraits):
         # move the others
         def move_view(obj, evt):
             position = obj.GetCurrentCursorPosition()
-            for other_axis, axis_number in self._axis_names.iteritems():
+            for other_axis, axis_number in self._axis_names.items():
                 if other_axis == axis_name:
                     continue
                 ipw3d = getattr(self, 'ipw_3d_%s' % other_axis)
@@ -241,7 +241,7 @@ def inotshow(filename,**kwargs):
                 'doc':False
                 }
 
-    for key, value in defaults.items():
+    for key, value in list(defaults.items()):
         if key not in kwargs:
             kwargs[key] = value
 

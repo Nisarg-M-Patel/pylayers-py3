@@ -60,6 +60,6 @@ for entry in tentry:
 # Reshaping
 #
 for k in dico['CARTESIANPOINT']:
-    p = map(float,dico['CARTESIANPOINT'][k])
+    p = list(map(float,dico['CARTESIANPOINT'][k]))
     dico['CARTESIANPOINT'][k] = p
 

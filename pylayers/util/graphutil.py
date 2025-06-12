@@ -108,7 +108,7 @@ def draw(G,**kwargs):
     # update default values
     #
 
-    for key, value in defaults.items():
+    for key, value in list(defaults.items()):
         if key not in kwargs:
             kwargs[key] = value
 
@@ -155,8 +155,8 @@ def draw(G,**kwargs):
         na = na1 + na2
         # edge == air
         ea=[]
-        [[ea.append((n1,n2)) for n2 in G[n1].keys()] for n1 in na]
-        [[ea.append((n2,n1)) for n2 in G[n1].keys()] for n1 in na]
+        [[ea.append((n1,n2)) for n2 in list(G[n1].keys())] for n1 in na]
+        [[ea.append((n2,n1)) for n2 in list(G[n1].keys())] for n1 in na]
 
         nodelista = [ x for x in nodelist if x in na ]
         edgelista = [ x for x in edgelist if x in ea ]

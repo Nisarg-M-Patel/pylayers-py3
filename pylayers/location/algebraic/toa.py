@@ -5,7 +5,7 @@ from scipy import optimize
 import numpy.linalg as la
 #import cvxmod as cvxm
 #import cvxopt as cvxo
-from crlb import *
+from .crlb import *
 
 class ToALocation(object):
     """
@@ -55,9 +55,9 @@ class ToALocation(object):
         """
         Dispaly scenario information
         """
-        print "Reference Radio Nodes:\n", self.RN
-        print "Measured ToA:\n", self.ToA
-        print "STD of Measured ToA:\n", self.ToAStd
+        print("Reference Radio Nodes:\n", self.RN)
+        print("Measured ToA:\n", self.ToA)
+        print("STD of Measured ToA:\n", self.ToAStd)
 
     def LSToALocate(self,RN, ToA):
         """

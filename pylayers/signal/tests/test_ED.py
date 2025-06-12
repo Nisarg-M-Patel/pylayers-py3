@@ -50,21 +50,21 @@ Phiy = Phix * np.real(HH.y * np.conj(HH.y))
 
 
 plot(fft.fftshift(Phix))
-title(u'$\Phi_x(f)$')
+title('$\Phi_x(f)$')
 
 plot(fft.fftshift(Phiy))
-title(u'$\Phi_y(f)$')
+title('$\Phi_y(f)$')
 
 
-print( 'empirical :', mean(y.y))
-print( ' mean xQ : ', mean(ED.xq))
-print( 'theoretical :',Rn.max()[0]*ED.beta*ED.bet)
+print(( 'empirical :', mean(y.y)))
+print(( ' mean xQ : ', mean(ED.xq)))
+print(( 'theoretical :',Rn.max()[0]*ED.beta*ED.bet))
 
 
 
-print( 'theoretical : ',mean(Phiy))
-print( 'empirical : ', np.var(y.y))
-print( 'std : ', np.sqrt(np.var(y.y)))
+print(( 'theoretical : ',mean(Phiy)))
+print(( 'empirical : ', np.var(y.y)))
+print(( 'std : ', np.sqrt(np.var(y.y))))
 
 
 
@@ -72,8 +72,8 @@ order_e = (2*mean(y.y)**2)/np.var(y.y)
 order_t = (2*(Rn.max()[0]*ED.beta*ED.beta)**2)/mean(Phiy)
 scale_e = np.sqrt(np.var(y.y)/(2*order_e))
 scale_t = np.sqrt(mean(Phiy)/(2*order_t))
-print( "ordre empirical : ",order_e)
-print( "ordre theoretical : ",order_t)
+print(( "ordre empirical : ",order_e))
+print(( "ordre theoretical : ",order_t))
 print( scale_e)
 print (scale_t)
 
@@ -100,7 +100,7 @@ print( order)
 ip=bs.EnImpulse(fe=fsGHz)
 ip.translate(10)
 ip.help(typ='mb')
-print( ip.energy())
+print(( ip.energy()))
 
 
 

@@ -26,6 +26,6 @@ d1 = Pmm1l - Pmm1n
 d2 = Pmp1l - Pmp1n
 d3 = Pmm1l - P
 d4 = Pmp1l - Q
-print d1,d2,d3,d4
+print(d1,d2,d3,d4)
 
 

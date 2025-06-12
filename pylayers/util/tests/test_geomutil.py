@@ -12,10 +12,10 @@ class Tesgeu(TestCase):
         B = np.array([[0,0,0,0],[1,2,3,4],[10,10,10,10]])
         v = np.array([[1,1,1,1],[0,0,0,0],[0,0,0,0]])
         T = geu.onb(A, B,v)
-        print( np.shape(T))
-        print( T[:,0,:])
-        print( T[:,1,:])
-        print( T[:,2,:])
+        print(( np.shape(T)))
+        print(( T[:,0,:]))
+        print(( T[:,1,:]))
+        print(( T[:,2,:]))
         assert_equal(np.shape(T),(4,3,3))
 
     def test_ispoint(self):

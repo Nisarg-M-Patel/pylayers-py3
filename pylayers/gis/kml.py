@@ -114,7 +114,7 @@ def gearth_fig(extent,extent_c):
 
     lax = [0,0,1,1] 
     ax = fig.add_axes(lax)
-    print(figsize,aspect,lax)
+    print((figsize,aspect,lax))
 
     ax.set_xlim(extent[0], extent[1])
     ax.set_ylim(extent[2], extent[3])

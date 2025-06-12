@@ -5,7 +5,7 @@ import pdb
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 from xml.etree.ElementTree import SubElement
-from geometry import *
+from .geometry import *
 """
 
 Creates an E-field or H-field excitation.

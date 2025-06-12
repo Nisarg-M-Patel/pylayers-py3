@@ -4,7 +4,7 @@
 .. autosummary::
 
 """
-from __future__ import print_function
+
 import doctest
 import os
 import glob

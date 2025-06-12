@@ -99,7 +99,7 @@ B2 = DL1.R[2]['B'][:,:,1,0]
 B3 = DL1.R[2]['B'][:,:,2,0]
 R1  = DL1.R.I.I[0,2,:,:]
 res1 = np.dot(B3,np.dot(R1,np.dot(B2,B1)))
-print( res0-res1)
+print(( res0-res1))
 #U = Bi_1[:,:,0]
 #V = Bo_1[:,:,0]
 #B = np.dot(Bi_1[:,:,0].T,Bo0_1)

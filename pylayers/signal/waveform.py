@@ -66,7 +66,7 @@ class Waveform(dict):
                 'threshdB': 3,
                 'twns': 30}
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 self[key] = value
             else:
@@ -74,7 +74,7 @@ class Waveform(dict):
         self.eval()
 
     def eval(self):
-        u""" evaluate waveform
+        """ evaluate waveform
 
         The :math:`\lambda/4*\pi` factor which is necessary to get the proper budget
         link ( from the Friis formula) is introduced in this function.
@@ -128,10 +128,10 @@ class Waveform(dict):
 
         """
         if self['typ']=='generic':
-            for k in self.keys():
-                print(k , " : ",self[k])
+            for k in list(self.keys()):
+                print((k , " : ",self[k]))
         else:
-            print("typ:",self['typ'])
+            print(("typ:",self['typ']))
 
 
     def showpsd(self,Tpns=1000):
@@ -407,7 +407,7 @@ class Waveform(dict):
         if fig ==[]:
             fig = plt.figure()
         title =''
-        for pk in self.keys():
+        for pk in list(self.keys()):
             val   = self[pk]
             title = title + pk + ': '
             if type(val) != 'str':

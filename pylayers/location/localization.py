@@ -69,7 +69,7 @@ class Localization(object):
 
         defaults={'PN':Network(),'net':Network(),'method':['geo','alg'],'model':{},'ID':'0','save':[]}
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key in args:
                 setattr(self, key, args[key])
             else:
@@ -131,9 +131,9 @@ class Localization(object):
 
         """
         ## loop on edges
-        for e in self.net.node[self.ID]['PN'].edge[self.ID].keys():
+        for e in list(self.net.node[self.ID]['PN'].edge[self.ID].keys()):
             ## loop on wstd
-            for wstd in self.net.node[self.ID]['PN'].edge[self.ID][e].keys():
+            for wstd in list(self.net.node[self.ID]['PN'].edge[self.ID][e].keys()):
                 try:
                     param = dict(self.config.items(wstd+'_PLM'))
                     self.cla.append(
@@ -187,7 +187,7 @@ class Localization(object):
             from the network graph
         """
         if wstd == 'all':
-            wstd=self.net.node[self.ID]['PN'].SubNet.keys()
+            wstd=list(self.net.node[self.ID]['PN'].SubNet.keys())
         if ldp == 'all':
             ldp=['Pr','TOA','TDOA']
         else:
@@ -197,7 +197,7 @@ class Localization(object):
         self.algloc.nodes={}
         self.algloc.ldp={}
         for c in self.cla.c:
-            cwstd,cldp,e,own=c.origin.values()
+            cwstd,cldp,e,own=list(c.origin.values())
 
             if (cwstd in wstd) and (cldp in ldp) :
                 if self.net.node[self.ID]['PN'].edge[self.ID][e[0]][cwstd]['vis']:
@@ -355,11 +355,11 @@ class PLocalization(Process):
 
 #            if not bep or (self.sim.now() - self.loc.net.node[self.loc.ID]['PN'].node[self.loc.ID]['te']>self.loc_updt_time):
             if self.sim.verbose:
-                print('localization request communication from node',self.loc.ID, '@',self.sim.now())
+                print(('localization request communication from node',self.loc.ID, '@',self.sim.now()))
             self.tx.cmdrq.signal()
             self.loc.update(ldp='TOA')
 
 
             if bep and self.sim.verbose :
-                print('LOCALIZATION node',self.loc.ID, ' update @',self.sim.now())
+                print(('LOCALIZATION node',self.loc.ID, ' update @',self.sim.now()))
             yield hold, self, self.loc_updt_time

@@ -1,6 +1,6 @@
 from pylayers.util.project import *
 import networkx as nx
-import ConfigParser
+import configparser
 import scipy.stats as sps
 import pdb
 
@@ -50,8 +50,8 @@ class Take_all():
             cd[ldp] = {}
             for rat in Rat:
                 try:
-                    cd[ldp][rat] = nx.get_edge_attributes(
-                        net.SubNet[rat], ldp).items()
+                    cd[ldp][rat] = list(nx.get_edge_attributes(
+                        net.SubNet[rat], ldp).items())
                 except:
                     pass  # if the specified RAT doesn't exist in the PN
 

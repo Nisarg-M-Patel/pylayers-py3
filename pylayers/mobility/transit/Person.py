@@ -26,7 +26,7 @@ import datetime
 import sys
 
 if sys.version_info.major==2:
-    import ConfigParser
+    import configparser
     from SimPy.SimulationRT import Process,Simulation,hold
 else:
     import configparser as ConfigParser
@@ -196,7 +196,7 @@ class Person(Process):
                 self.nextroomId   = random.sample(self.L.Gr.nodes(),1)[0]
             #self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim
         elif self.cdest == 'file':
-           cfg = ConfigParser.ConfigParser()
+           cfg = configparser.ConfigParser()
            cfg.read(pyu.getlong('nodes_destination.ini','ini'))
            self.room_seq=eval(dict(cfg.items(self.ID))['room_seq'])
            self.room_wait=eval(dict(cfg.items(self.ID))['room_wait'])
@@ -248,7 +248,7 @@ class Person(Process):
 
 
         if 'mysql' in self.save:
-           config = ConfigParser.ConfigParser()
+           config = configparser.ConfigParser()
            config.read(pyu.getlong('simulnet.ini','ini'))
            sql_opt = dict(config.items('Mysql'))
            self.db = Database(sql_opt['host'],sql_opt['user'],sql_opt['passwd'],sql_opt['dbname'])
@@ -288,7 +288,7 @@ class Person(Process):
         while True:
             if self.moving:
                 if self.sim.verbose:
-                    print('meca: updt ag ' + self.ID + ' @ ',self.sim.now())
+                    print(('meca: updt ag ' + self.ID + ' @ ',self.sim.now()))
 
                 # if np.allclose(conv_vecarr(self.destination)[:2],self.L.Gw.pos[47]):
                 #     import ipdb
@@ -429,7 +429,7 @@ class Person(Process):
                         self.destination = self.waypoints[0]
 
                         if self.sim.verbose:
-                            print('meca: ag ' + self.ID + ' wait ' + str(self.wait) ) 
+                            print(('meca: ag ' + self.ID + ' wait ' + str(self.wait) )) 
                         yield hold, self, self.wait
 
                     else:

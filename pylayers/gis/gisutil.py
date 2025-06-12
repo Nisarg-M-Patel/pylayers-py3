@@ -2,7 +2,7 @@
 import numpy as np
 import pdb
 import simplejson
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import requests
 import json
 """
@@ -356,7 +356,7 @@ def minsec2dec(old):
 
     """
     direction = {'N':-1, 'S':1, 'E': -1, 'W':1}
-    new = old.replace(u'',' ').replace('\'',' ').replace('"',' ')
+    new = old.replace('',' ').replace('\'',' ').replace('"',' ')
     new = new.split()
     new_dir = new.pop()
     return (int(new[0])+int(new[1])/60.0+int(new[2])/3600.0) * direction[new_dir]
@@ -527,7 +527,7 @@ def get_google_elev_profile(node0,node1,nb_samples=10):
     n1  = str(node1[0]) + ',' + str(node1[1])
     url = ELEVATION_BASE_URL + 'path=' + n0 + '|' + n1 +'&samples=' + str(nb_samples)
     response = simplejson.load(urllib.request.urlopen(url))
-    print(response['status'])
+    print((response['status']))
     if response['status'] =='OK':
         profile = []
         for k in range(nb_samples):

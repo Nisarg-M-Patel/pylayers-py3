@@ -6,7 +6,7 @@
     :members:
 
 """
-from __future__ import print_function
+
 import doctest
 import os
 import glob
@@ -2041,7 +2041,7 @@ class Pattern(PyLayers):
 
                 # angular basis for phi
                 angle = np.linspace(0, 2 * np.pi, len(r), endpoint=True)
-                plt.title(u'$\\theta$ plane')
+                plt.title('$\\theta$ plane')
 
             if kwargs['plan']=='phi':
                 iphi = np.arange(self.nph)
@@ -2065,7 +2065,7 @@ class Pattern(PyLayers):
                 else:
                     r =  20 * np.log10(self.sqG[arg])
 
-                plt.title(u'$\\phi$ plane ')
+                plt.title('$\\phi$ plane ')
             # actual plotting
 
             if len(lfreq)>1: 
@@ -3536,7 +3536,7 @@ class Antenna(Pattern):
 
                      }
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -4834,7 +4834,7 @@ class Antenna(Pattern):
                         k =  np.squeeze(coeff['Cz.k']))
 
 
-            if not 'S' in self.__dict__.keys():
+            if not 'S' in list(self.__dict__.keys()):
                 self.S = SSHCoeff(Cx, Cy,Cz)
             else:
                 self.S.sets3(Cx,Cy,Cz)

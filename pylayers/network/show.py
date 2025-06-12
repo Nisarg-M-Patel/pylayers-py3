@@ -33,7 +33,7 @@ import time
 import matplotlib.pyplot as plt
 
 if sys.version_info.major==2:
-    import ConfigParser
+    import configparser
     from SimPy.SimulationRT import Process, hold  # sympy 2
 else:
     import configparser as ConfigParser
@@ -71,7 +71,7 @@ class ShowNet(Process):
                     'sim': None}
 
 ##       initialize attributes
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key in args:
                 setattr(self, key, args[key])
             else:
@@ -91,7 +91,7 @@ class ShowNet(Process):
         self.info = False
 
         self.coll_plot = {}
-        self.C = ConfigParser.ConfigParser()
+        self.C = configparser.ConfigParser()
         self.C.read(pyu.getlong('show.ini','ini'))
         self.wstdcolor = dict(self.C.items('wstdcolor'))
         self.wstdes = dict(self.C.items('wstdestyle'))
@@ -121,10 +121,10 @@ class ShowNet(Process):
                     self.coll_plot['edge'] = [[]]
                     self.coll_plot['edge'].append([])
                     Cl = []
-                rloop = self.net.wstd.keys()
+                rloop = list(self.net.wstd.keys())
                 for ii, rl in enumerate(rloop):
                     pos = self.net.get_pos(rl)
-                    pos = {k:v[:2] for k,v in pos.items()}
+                    pos = {k:v[:2] for k,v in list(pos.items())}
                     self.coll_plot['node'][1].append(nx.draw_networkx_nodes(self.net, pos=pos, nodelist=self.net.SubNet[rl].nodes(), node_size=100., node_color='r'))
     #                if self.option['estimate']:
     #                    try:
@@ -134,7 +134,7 @@ class ShowNet(Process):
     #                    except:
     #                        pass
                     Cl = nx.draw_networkx_labels(self.net.SubNet[rl], pos=pos, font_size=10)
-                    self.coll_plot['label'][1].extend(Cl.values())
+                    self.coll_plot['label'][1].extend(list(Cl.values()))
                     self.coll_plot['edge'][1].append((nx.draw_networkx_edges(self.net, pos=pos, edgelist=self.net.SubNet[rl].edges(), width=2., alpha=0.9, edge_color=self.wstdcolor[rl], style=self.wstdes[rl],arrows=False)))
 
                 if self.legend:
@@ -178,10 +178,10 @@ class ShowNet(Process):
                     self.coll_plot['edge'] = [[]]
                     self.coll_plot['edge'].append([])
                     Cl = []
-                rloop = self.net.wstd.keys()
+                rloop = list(self.net.wstd.keys())
                 for ii, rl in enumerate(rloop):
                     pos = self.net.get_pos(rl)
-                    pos = {k:v[:2] for k,v in pos.items()}
+                    pos = {k:v[:2] for k,v in list(pos.items())}
                     self.coll_plot['node'][1].append(nx.draw_networkx_nodes(self.net, pos=pos, nodelist=self.net.SubNet[rl].nodes(), node_size=100., node_color='r'))
     #                if self.option['estimate']:
     #                    try:
@@ -191,7 +191,7 @@ class ShowNet(Process):
     #                    except:
     #                        pass
                     Cl = nx.draw_networkx_labels(self.net.SubNet[rl], pos=pos, font_size=10)
-                    self.coll_plot['label'][1].extend(Cl.values())
+                    self.coll_plot['label'][1].extend(list(Cl.values()))
 
                     self.coll_plot['edge'][1].append((nx.draw_networkx_edges(self.net, pos=pos, edgelist=self.net.SubNet[rl].edges(), width=2., alpha=0.9, edge_color=self.wstdcolor[rl], style=self.wstdes[rl],arrows=False)))
 
@@ -238,7 +238,7 @@ class ShowTable(Process):
                     'sim': None}
 
 ##       initialize attributes
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key in args:
                 setattr(self, key, args[key])
             else:
@@ -265,7 +265,7 @@ class ShowTable(Process):
         self.colLabels2 = ('name', 'pos x', 'pos y ',
                            'vel x', 'vel y', 'acc x', 'acc y')
         self.cellText = []
-        self.C = ConfigParser.ConfigParser()
+        self.C = configparser.ConfigParser()
         self.C.read(pyu.getlong('show.ini','ini'))
         self.wstdcolor = dict(self.C.items('wstdcolor'))
         self.wstdes = dict(self.C.items('wstdestyle'))
@@ -287,7 +287,7 @@ class ShowTable(Process):
                 self.coll_plot['table'].append([])
 
             self.cellText1 = []
-            for rat in self.net.wstd.keys():
+            for rat in list(self.net.wstd.keys()):
                 T = nx.get_edge_attributes(self.net.SubNet[rat], 'TOA')
                 P = nx.get_edge_attributes(self.net.SubNet[rat], 'Pr')
                 D = nx.get_edge_attributes(self.net.SubNet[rat], 'd')

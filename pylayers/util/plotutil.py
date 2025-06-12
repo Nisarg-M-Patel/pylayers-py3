@@ -63,7 +63,7 @@ def cformat(x,y,**kwargs):
     """
     defaults = {'typ':'l20'}
 
-    for key, value in defaults.items():
+    for key, value in list(defaults.items()):
         if key not in kwargs:
             kwargs[key] = value
 
@@ -215,7 +215,7 @@ def mulcplot(x,y,**kwargs):
     if 'nlin' in kwargs:
         grid=True
 
-    for key, value in defaults.items():
+    for key, value in list(defaults.items()):
         if key not in kwargs:
             kwargs[key] = value
     #print "att",kwargs['att']
@@ -285,7 +285,7 @@ def mulcplot(x,y,**kwargs):
     # filtering kwargs argument for plot function
     args ={}
     for k in kwargs:
-        if k not in defaults.keys():
+        if k not in list(defaults.keys()):
             args[k]=kwargs[k]
 
     #
@@ -533,14 +533,14 @@ def displot(pt, ph, arrow=False, **kwargs ):
                  'fig' : [] ,
                  'ax' : []  }
 
-    for key, value in defaults.items():
+    for key, value in list(defaults.items()):
         if key not in kwargs:
             kwargs[key] = value
 
 
     args ={}
     for k in kwargs:
-        if k not in defaults.keys():
+        if k not in list(defaults.keys()):
             args[k]=kwargs[k]
 
     if kwargs['fig'] == []:
@@ -796,12 +796,12 @@ def shadow(data,ax):
                ud = np.hstack((ud,np.array([len(data)-1])))
 
 
-       tseg = np.array(zip(um,ud))
+       tseg = np.array(list(zip(um,ud)))
        #else:
        #    tseg = np.array(zip(ud,um))
     else:
        if data.all():
-           tseg = np.array(zip(np.array([0]),np.array([len(data)-1])))
+           tseg = np.array(list(zip(np.array([0]),np.array([len(data)-1]))))
 
     # data.any
     if data.any():

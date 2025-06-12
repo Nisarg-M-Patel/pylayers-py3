@@ -14,7 +14,7 @@ import time
 import pdb
 
 if sys.version_info.major==2:
-    import ConfigParser
+    import configparser
     from SimPy.SimulationRT import Simulation
 else:
     import configparser as ConfigParser
@@ -143,7 +143,7 @@ class Agent(object):
                     'gcom': Gcom(),
                     'comm_mode': 'autonomous'}
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in args:
                 args[key] = value
 
@@ -283,7 +283,7 @@ class Agent(object):
             self.MoA = 0
 
         if 'mysql' in args['save']:
-            config = ConfigParser.ConfigParser()
+            config = configparser.ConfigParser()
             config.read(pyu.getlong('simulnet.ini', 'ini'))
             sql_opt = dict(config.items('Mysql'))
             db = Database(sql_opt['host'], sql_opt['user'],

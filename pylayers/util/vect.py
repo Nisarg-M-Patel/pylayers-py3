@@ -65,7 +65,7 @@ class Vect(object):
                 return(w)
 
         def show(self):
-                print "(",self.x,',',self.y,',',self.z,")"
+                print("(",self.x,',',self.y,',',self.z,")")
 
         def n2(self):
                 norm = sqrt(self.x*self.x+self.y*self.y+self.z*self.z)
@@ -98,10 +98,10 @@ class Vect(object):
                 return(l)
 
         def afficheMethodesEtAttributs(self):
-             print
-             print "Method List"
+             print()
+             print("Method List")
              for methode in dir(self):
-                   print methode
+                   print(methode)
 
 class Point(Vect):
 

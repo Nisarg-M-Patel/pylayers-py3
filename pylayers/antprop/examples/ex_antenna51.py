@@ -58,12 +58,12 @@ tu = []
 
 errelTha,errelPha,errela = A.errel(20,dsf,typ='s3')
 
-print "a: nok",errela,errelPha,errelTha
+print("a: nok",errela,errelPha,errelTha)
 
 for r in tr:
     E = A.C.s2tos3_new(r)
     errelTh,errelPh,errel = A.errel(20,dsf,typ='s3')
-    print 'r : ',r,errel,E
+    print('r : ',r,errel,E)
     tet.append(errelTh)
     tep.append(errelPh)
     te.append(errel)
@@ -73,9 +73,9 @@ line2 = plt.plot(array(tr),10*log10(array(tet)),'r')
 line3 = plt.plot(array(tr),10*log10(array(te)),'g')
 #
 plt.xlabel('order l')
-plt.ylabel(u'$\epsilon_{rel}$  (dB)',fontsize=18)
+plt.ylabel('$\epsilon_{rel}$  (dB)',fontsize=18)
 plt.title('Evolution of reconstruction relative error wrt order')
-plt.legend((u'$\epsilon_{rel}^{\phi}$',u'$\epsilon_{rel}^{\\theta}$',u'$\epsilon_{rel}^{total}$'))
+plt.legend(('$\epsilon_{rel}^{\phi}$','$\epsilon_{rel}^{\\theta}$','$\epsilon_{rel}^{total}$'))
 plt.legend((line1,line2,line3),('a','b','c'))
 plt.show()
 plt.legend(('errel_phi','errel_theta','errel'))

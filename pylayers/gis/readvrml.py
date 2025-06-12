@@ -39,7 +39,7 @@ def savelay(dpt,dwall, _filename='struc.lay'):
 
     """
     fd = open('struc.str2', 'w')
-    s1 = str(len(dpt.keys()))+' '+str(len(dwall.keys()))+' 0\n'
+    s1 = str(len(list(dpt.keys())))+' '+str(len(list(dwall.keys())))+' 0\n'
     fd.write(s1)
     for ipt in dpt:
         p = dpt[ipt]
@@ -408,11 +408,11 @@ def ParseMaterial(st):
 def show(dico):
     """ show dico
     """
-    for key in dico.keys():
+    for key in list(dico.keys()):
         if key != 'name':
             plt.plot(dico[key]['coord'][:, 0], dico[key]['coord'][:, 2])
         else:
-            print(dico[key])
+            print((dico[key]))
     plt.show()
 
 
@@ -456,15 +456,15 @@ def parsevrml(filename):
     dg = {}                         # list of groups
     targetkey = ' geometry IndexedLineSet '
     targetkey = ' geometry IndexedFaceSet '
-    for on in tnum.keys():
+    for on in list(tnum.keys()):
         dico = {}
         ob = tnum[on]
         val = tobj[on]
         dico = extract(val, dico)
         if ob.find('LIGHT') != -1:
-            td[ob] = ParseDirectionalLight(dico.values()[0])
+            td[ob] = ParseDirectionalLight(list(dico.values())[0])
         if ob.find('APPEARANCE') != -1:
-            td[ob] = ParseMaterial(dico.values()[0])
+            td[ob] = ParseMaterial(list(dico.values())[0])
         if val.find('Group') != -1:
             try:
                 # tg.append(g)    # save previous group
@@ -490,7 +490,7 @@ def vrml2sha(tg):
         tg   : list of objects
     """
     for l in tg:
-        for k in l.keys():
+        for k in list(l.keys()):
             if k != 'name':
                 c = l[k]['coord']
                 i = l[k]['index']
@@ -520,7 +520,7 @@ def vrml2geom(tg, rac):
         fina = pyu.getlong(_fi1, 'geom')
         fd = open(fina, 'w')
         fd.write('LIST')
-        for k in l.keys():
+        for k in list(l.keys()):
             if k != 'name':
                 filename = fi1+'-'+str(k)
                 fd.write('{<'+filename+'.off}\n')
@@ -588,7 +588,7 @@ class VLayout(PyLayers):
                 iop = 0
                 for ip in range(Np):
                     p = tp[:, ip]
-                    for iold in tp2.keys():
+                    for iold in list(tp2.keys()):
                         pold = tp2[iold]['coord']
                         if np.shape(pold) == (2,):
                             dist = np.dot(p-pold, p-pold)
@@ -610,7 +610,7 @@ class VLayout(PyLayers):
             for ID in self.entity[g]:
                 tr = {}
                 dr2 = self.entity[g][ID]['c2d']
-                for k in dr2.keys():
+                for k in list(dr2.keys()):
                     for u in dr2[k]['nump']:
                         tr[u] = k
                 self.entity[g][ID]['tr'] = tr
@@ -621,7 +621,7 @@ class VLayout(PyLayers):
             for ID in self.entity[g]:
                 di = self.entity[g][ID]['index']
                 di2 = {}
-                for k in di.keys():  # for all polygons
+                for k in list(di.keys()):  # for all polygons
                     ti2 = []      # reserve a list= for 2d indexes
                     lpoly = di[k]  # get sequence of 3d points
                     for ip in lpoly:
@@ -666,10 +666,10 @@ class VLayout(PyLayers):
         else:
             a = ax
 
-        if num > len(self.entity.keys()):
-            group = self.entity.keys()
+        if num > len(list(self.entity.keys())):
+            group = list(self.entity.keys())
         else:
-            group = [self.entity.keys()[num]]
+            group = [list(self.entity.keys())[num]]
 
         for g in group:
             for ID in self.entity[g]:
@@ -688,7 +688,7 @@ class VLayout(PyLayers):
         """
         w = self.entity['WALL']
         dwall = {}
-        for k in w.keys():
+        for k in list(w.keys()):
             dwall[k] = {}
             dwall[k]['ID'] = w[k]['ID']
             #
@@ -710,7 +710,7 @@ class VLayout(PyLayers):
             gymin = 1e15
             gxmax = -1e15
             gymax = -1e15
-            for ik in dp.keys():
+            for ik in list(dp.keys()):
                 pol = dp[ik]
                 bounds = pol.bounds
                 xmin = bounds[0]
@@ -753,7 +753,7 @@ class VLayout(PyLayers):
         fi1 = 'entity'
         GL = geo.Geomlist(fi1)
         for k in IDs:
-            ID = te.keys()[k]
+            ID = list(te.keys())[k]
             filename = fi1+'-'+str(k)
             GL.append('{<'+filename+'.off}\n')
             G = geo.Geomoff(filename)
@@ -792,4 +792,4 @@ if __name__ == "__main__":
         seg = dwall[k]['seg'].xy
         pta = np.r_[seg[0][0],seg[1][0]]
         phe = np.r_[seg[0][1],seg[1][1]]
-        print(pta,phe)
+        print((pta,phe))

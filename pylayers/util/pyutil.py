@@ -49,7 +49,7 @@ r"""
     in_ipynb
 
 """
-from __future__ import print_function
+
 import os
 import re
 import numpy as np
@@ -1815,11 +1815,11 @@ def extract_block_diag(A,M,k=0):
 
     # Check that the matrix can be block divided
     if A.shape[0] != A.shape[1] or A.shape[0] % M != 0:
-        raise StandardError('Matrix must be square and a multiple of block size')
+        raise Exception('Matrix must be square and a multiple of block size')
 
     # Assign indices for offset from main diagonal
     if abs(k) > M - 1:
-        raise StandardError('kth diagonal does not exist in matrix')
+        raise Exception('kth diagonal does not exist in matrix')
     elif k > 0:
         ro = 0
         co = abs(k)*M 
@@ -1839,11 +1839,11 @@ def fill_block_diag(A, blocks,M,k=0):
 
     # Check that the matrix can be block divided
     if A.shape[0] != A.shape[1] or A.shape[0] % M != 0:
-        raise StandardError('Matrix must be square and a multiple of block size')
+        raise Exception('Matrix must be square and a multiple of block size')
 
     # Assign indices for offset from main diagonal
     if abs(k) > M - 1:
-        raise StandardError('kth diagonal does not exist in matrix')
+        raise Exception('kth diagonal does not exist in matrix')
     elif k > 0:
         ro = 0
         co = abs(k)*M 
@@ -1864,11 +1864,11 @@ def fill_block_diagMDA(A, blocks,M,k=0):
 
     # Check that the matrix can be block divided
     if A.shape[0] != A.shape[1] or A.shape[0] % M != 0:
-        raise StandardError('Matrix must be square and a multiple of block size')
+        raise Exception('Matrix must be square and a multiple of block size')
 
     # Assign indices for offset from main diagonal
     if abs(k) > M - 1:
-        raise StandardError('kth diagonal does not exist in matrix')
+        raise Exception('kth diagonal does not exist in matrix')
     elif k > 0:
         ro = 0
         co = abs(k)*M 
@@ -1882,7 +1882,7 @@ def fill_block_diagMDA(A, blocks,M,k=0):
         A[i+ro:i+ro+M,i+co:i+co+M,...]=blocks[:,:,...,int(i/M)] 
     return A
 
-BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
+BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = list(range(8))
 
 #following from Python cookbook, #475186
 def has_colours(stream):

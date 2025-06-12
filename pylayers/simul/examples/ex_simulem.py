@@ -51,8 +51,8 @@ S.pafreq.fghzmax=11
 S.pafreq.nf=181
 S.pafreq.save()
 # showing the simulation 
-print "Launching "
-print "-----------------"
+print("Launching ")
+print("-----------------")
 S.launching(1)
 # retrieve the launching tree
 
@@ -71,9 +71,9 @@ for k in range(N):
     fig,ax = L1.show(S.L,k+1,f=fig)
 
 fig.savefig(pylayersdir+'/doc/auto_examples/simul/'+filestr+'-launching.png')    
-print "Tracing "
-print "-----------------"
-print "purc :",S.config.get('tud','purc')
+print("Tracing ")
+print("-----------------")
+print("purc :",S.config.get('tud','purc'))
 fig = plt.figure()
 S.tracing(1,1)
 gr = GrRay3D()
@@ -81,15 +81,15 @@ gr.load(S.dtra[1][1],S.L)
 f,a = S.L.showGs(fig=fig)
 #plt.axis('on')
 gr.show(fig=f,ax=a,rayset=np.arange(100))
-print "Tratotud "
-print "-----------------"
-print "purc :",S.config.get('tud','purc')
+print("Tratotud ")
+print("-----------------")
+print("purc :",S.config.get('tud','purc'))
 S.tratotud(1,1)
 gt = GrRayTud()
 # loading rays in tud format 
 #gt.load(S.dtud[1][1],S.dtang[1][1],S.drang[1][1],S.L.sl)
-print "Evalfield "
-print "-----------------"
+print("Evalfield ")
+print("-----------------")
 S.field(1,1)
 S.cir(1,1)
 f = plt.figure()

@@ -59,7 +59,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 #import Tkinter as tk
 import sys
 if sys.version_info.major==2:
-    import ConfigParser
+    import configparser
     from SimPy.SimulationRT import Process,hold
 else:
     import configparser as ConfigParser
@@ -185,7 +185,7 @@ class Node(PyLayers,nx.MultiGraph):
         random.randint(0x00, 0x7f),
         random.randint(0x00, 0xff),
         random.randint(0x00, 0xff) ]
-        return ':'.join(map(lambda x: "%02x" % x, mac))
+        return ':'.join(["%02x" % x for x in mac])
 
 
 class Network(PyLayers,nx.MultiDiGraph):
@@ -259,13 +259,13 @@ class Network(PyLayers,nx.MultiDiGraph):
             s = s + 'number of nodes: ' + str(len(self.nodes())) +'\n'
             title = '{0:7} | {1:15} |{2:7} | {3:4} | {4:17} | {5:10} |  {6:10} '.format('ID', 'name', 'group', 'type', 'position (x,y,z)','antenna', 'wstd')
             s = s + title + '\n' + '-'*len(title) + '\n'
-            subnet = self.SubNet.keys()
+            subnet = list(self.SubNet.keys())
             for sn in subnet:
                 for n in self.SubNet[sn].nodes():
                     # for compliance with simulnet and simultraj
                     # to be merged
                     try:
-                        wstd = self.node[n]['wstd'].keys()
+                        wstd = list(self.node[n]['wstd'].keys())
                     except:
                         wstd = self.node[n]['wstd']
                     try:
@@ -321,7 +321,7 @@ class Network(PyLayers,nx.MultiDiGraph):
             s = 'Personnal Network of node ' +str(self.owner)+ ' information\n***************************************\n'
             s = s + '{0:7} |{1:20} | {2:5} | {3:7}| {4:7}| {5:7}| {6:7}| {7:7}| {8:10}|'.format('peer','wstd', 'TOA','std TOA','tTOA', 'Pr', 'std Pr', 'tPr','visibility')
             for e1,e2 in self.edges():
-                for r in self.edge[e1][e2].keys():
+                for r in list(self.edge[e1][e2].keys()):
                     TOA = self.edge[e1][e2][r]['TOA'][0]
                     stdTOA = self.edge[e1][e2][r]['TOA'][1]
                     pr = self.edge[e1][e2][r]['Pr'][0]
@@ -476,11 +476,11 @@ class Network(PyLayers,nx.MultiDiGraph):
         r = n if r is None else r
         if r > n:
             return
-        indices = range(n)
-        cycles = range(n, n-r, -1)
+        indices = list(range(n))
+        cycles = list(range(n, n-r, -1))
         yield tuple((pool[indices[0]],pool[indices[1]],key,d))
         while n:
-            for i in reversed(range(r)):
+            for i in reversed(list(range(r))):
                 cycles[i] -= 1
                 if cycles[i] == 0:
                     indices[i:] = indices[i+1:] + indices[i:i+1]
@@ -556,12 +556,12 @@ class Network(PyLayers,nx.MultiDiGraph):
         n = len(pool)
         if r > n:
             return
-        indices = range(r)
+        indices = list(range(r))
 
         yield tuple((pool[indices[0]],pool[indices[1]],key,d))
         while True:
 
-            for i in reversed(range(r)):
+            for i in reversed(list(range(r))):
                 if indices[i] != i + n - r:
                     break
             else:
@@ -609,8 +609,8 @@ class Network(PyLayers,nx.MultiDiGraph):
 
         gvar=iter(var)
         while True:
-            G=gene.next()
-            Gvar=gvar.next()
+            G=next(gene)
+            Gvar=next(gvar)
             yield(tuple((G[0],G[1],wstd,Gvar)))
 
 
@@ -650,8 +650,8 @@ class Network(PyLayers,nx.MultiDiGraph):
 #                        self.wstd[r]=[no]
 
         # uniquify results
-        for ws in self.wstd.keys():
-            self.wstd[ws]    = {}.fromkeys(self.wstd[ws]).keys()
+        for ws in list(self.wstd.keys()):
+            self.wstd[ws]    = list({}.fromkeys(self.wstd[ws]).keys())
 
 
     def update_edges(self, d , wstd, nodes=[]):
@@ -669,7 +669,7 @@ class Network(PyLayers,nx.MultiDiGraph):
             raise error if nodes in the list are not in wstd
         """
         if isinstance(wstd,dict):
-            wstd = wstd.keys()
+            wstd = list(wstd.keys())
         elif not isinstance(wstd, list):
             wstd = [wstd]
 
@@ -709,7 +709,7 @@ class Network(PyLayers,nx.MultiDiGraph):
         edge_dict['vis'] = False
 
 
-        for wstd in self.wstd.keys():
+        for wstd in list(self.wstd.keys()):
             self.update_edges(edge_dict,wstd)
             self._get_SubNet(wstd)
 
@@ -728,7 +728,7 @@ class Network(PyLayers,nx.MultiDiGraph):
 
         """
 
-        for wstd in self.wstd.keys():
+        for wstd in list(self.wstd.keys()):
             self.links[wstd]=[]
             self.relinks[wstd]=[]
             for i in itertools.combinations(self.wstd[wstd],2):
@@ -789,7 +789,7 @@ class Network(PyLayers,nx.MultiDiGraph):
 
         for n in self.nodes():
             grp = self.node[n]['grp']
-            if grp not in self.grp.keys():
+            if grp not in list(self.grp.keys()):
                 self.grp[grp] = []
             if n not in self.grp[grp]:
                 self.grp[grp].extend([n])
@@ -850,7 +850,7 @@ class Network(PyLayers,nx.MultiDiGraph):
             # creating SubNetworks
             self.SubNet[wstd]= self.subgraph(self.wstd[wstd])
             # remove information from previous subnetwork (because subgraph copy the whole edge information)
-            for k in self.wstd.keys():
+            for k in list(self.wstd.keys()):
                 if k != wstd:
                     try:
                         self.SubNet[wstd].remove_edges_from(self.SubNet[k].edges(keys=True))
@@ -875,7 +875,7 @@ class Network(PyLayers,nx.MultiDiGraph):
         """
 
 
-        for wstd, subnet in self.SubNet.iteritems():
+        for wstd, subnet in self.SubNet.items():
             for n in subnet.nodes():
                 for nn in subnet.nodes():
                     if nn != n:
@@ -911,14 +911,14 @@ class Network(PyLayers,nx.MultiDiGraph):
         """
         ####################################################################################
         # first iteration requested to correctely initiatilzing Personnal Networks's Subnets 
-        for wstd in self.wstd.iterkeys():
+        for wstd in self.wstd.keys():
             for ldp in self.LDP:
                 self.compute_LDPs(self.nodes(),wstd)
         for n in self.nodes():
             self.node[n]['PN']._get_wstd()
             self.node[n]['PN']._get_SubNet()
             # Add access point position in each personal network (PN)
-            [self.node[n]['PN'].node[n2].update({'pe':self.node[n2]['p']}) for n2 in self.node[n]['PN'].node.iterkeys() if self.node[n]['PN'].node[n2]['typ'] == 'ap']
+            [self.node[n]['PN'].node[n2].update({'pe':self.node[n2]['p']}) for n2 in self.node[n]['PN'].node.keys() if self.node[n]['PN'].node[n2]['typ'] == 'ap']
 
         ####################################################################################
 
@@ -1020,8 +1020,8 @@ class Network(PyLayers,nx.MultiDiGraph):
                 n=[n]
                 T=[T]
             if len(n) == len(T):    
-                d=dict(zip(n,T))    # transform data to be complient with nx.set_node_attributes            
-                nowd=dict(zip(n,[now]*len(n)))
+                d=dict(list(zip(n,T)))    # transform data to be complient with nx.set_node_attributes            
+                nowd=dict(list(zip(n,[now]*len(n))))
             else :
                 raise TypeError('n and T must have the same length')
             # update position
@@ -1056,8 +1056,8 @@ class Network(PyLayers,nx.MultiDiGraph):
                 n=[n]
                 p=[p]
             if len(n) == len(p):    
-                d=dict(zip(n,p))    # transform data to be complient with nx.set_node_attributes            
-                nowd=dict(zip(n,[now]*len(n)))
+                d=dict(list(zip(n,p)))    # transform data to be complient with nx.set_node_attributes            
+                nowd=dict(list(zip(n,[now]*len(n))))
             else :
                 raise TypeError('n and p must have the same length')
             # update position
@@ -1120,13 +1120,13 @@ class Network(PyLayers,nx.MultiDiGraph):
 
         """
         if wstd == None:
-            if self.node[self.nodes()[0]].has_key('p'):
+            if 'p' in self.node[self.nodes()[0]]:
                 return nx.get_node_attributes(self,'p')
             else :
                 return nx.get_node_attributes(self,'pe')
         else :
             try:
-                if self.SubNet[wstd].node[self.SubNet[wstd].nodes()[0]].has_key('p'):
+                if 'p' in self.SubNet[wstd].node[self.SubNet[wstd].nodes()[0]]:
                     return nx.get_node_attributes(self.SubNet[wstd],'p')
                 else :
                     return nx.get_node_attributes(self.SubNet[wstd],'pe')
@@ -1191,7 +1191,7 @@ class Network(PyLayers,nx.MultiDiGraph):
 
         """
         O={}
-        for sn in self.SubNet.iteritems():
+        for sn in self.SubNet.items():
             for ldp in self.LDP:
                 try:
                     O[sn[0]].update({ldp:nx.get_edge_attributes(sn[1],ldp)})
@@ -1208,16 +1208,16 @@ class Network(PyLayers,nx.MultiDiGraph):
         Print information on edges connection and LDPs values and accuracy
 
         """
-        for wstd in self.wstd.keys():
-            print('-'*30)
+        for wstd in list(self.wstd.keys()):
+            print(('-'*30))
             print(wstd)
-            print('{0:10} | {1:5} | {2:5} | {3:5} | {4:5} | {5:5} |'.format('Node link','TOA ','TOA std', 'Pr','Pr std', 'distance' ))
-            print('-'*30)
+            print(('{0:10} | {1:5} | {2:5} | {3:5} | {4:5} | {5:5} |'.format('Node link','TOA ','TOA std', 'Pr','Pr std', 'distance' )))
+            print(('-'*30))
             T=nx.get_edge_attributes(self.SubNet[wstd],'TOA')
             P=nx.get_edge_attributes(self.SubNet[wstd],'Pr')
             D=nx.get_edge_attributes(self.SubNet[wstd],'d')
             for i in self.SubNet[wstd].edges(): # boucle sur toute les liaisons
-                print('{0:10} | {1:1.4} | {2:7.4} | {3:1.4} | {4:7.4} | {5:7.4} |'.format(i,T[i][0],T[i][1],P[i][0],P[i][1],D[i]))
+                print(('{0:10} | {1:1.4} | {2:7.4} | {3:1.4} | {4:7.4} | {5:7.4} |'.format(i,T[i][0],T[i][1],P[i][0],P[i][1],D[i])))
 
 
 
@@ -1239,7 +1239,7 @@ class Network(PyLayers,nx.MultiDiGraph):
 
 
         """
-        C = ConfigParser.ConfigParser()
+        C = configparser.ConfigParser()
         C.read(pyu.getlong('show.ini', 'ini'))
         color = ['r', 'g', 'b', 'm', 'y', 'c']*5
         style = ['-']*10
@@ -1254,7 +1254,7 @@ class Network(PyLayers,nx.MultiDiGraph):
 
 
         if wstd == None:
-            rloop = self.wstd.keys()
+            rloop = list(self.wstd.keys())
 
         else :
             if isinstance(wstd,list):
@@ -1296,7 +1296,7 @@ class Network(PyLayers,nx.MultiDiGraph):
 
         for ii,rl in enumerate(rloop):
             pos = self.get_pos(rl) 
-            pos = {k:v[:2] for k,v in pos.items()}
+            pos = {k:v[:2] for k,v in list(pos.items())}
             self.coll_plot['node'][1].append(nx.draw_networkx_nodes(
                                             self,
                                             pos=pos,
@@ -1308,7 +1308,7 @@ class Network(PyLayers,nx.MultiDiGraph):
                                        pos=pos,
                                        font_size=10,
                                        ax=ax)
-            self.coll_plot['label'][1].extend(Cl.values())
+            self.coll_plot['label'][1].extend(list(Cl.values()))
             self.coll_plot['edge'][1].append((nx.draw_networkx_edges(
                                               self,
                                               pos=pos,
@@ -1360,7 +1360,7 @@ class Network(PyLayers,nx.MultiDiGraph):
             f = mlab.gcf()
 
         if wstd == None:
-            rloop = self.wstd.keys()
+            rloop = list(self.wstd.keys())
 
         else :
             if isinstance(wstd,list):
@@ -1373,8 +1373,8 @@ class Network(PyLayers,nx.MultiDiGraph):
         for ii,rl in enumerate(rloop):
 
             pos = self.get_pos(rl)
-            posv = pos.values()
-            mp = dict(zip(pos.keys(),range(len(pos.keys()))))
+            posv = list(pos.values())
+            mp = dict(list(zip(list(pos.keys()),list(range(len(list(pos.keys())))))))
             edg = self.SubNet[rl].edges()
             connect = [(mp[e[0]],mp[e[1]]) for e in edg]
             posv = np.array(posv)
@@ -1402,7 +1402,7 @@ class Network(PyLayers,nx.MultiDiGraph):
 
         """
 
-        pos = np.array(nx.get_node_attributes(self,'p').values())
+        pos = np.array(list(nx.get_node_attributes(self,'p').values()))
         pos = np.hstack((pos,np.zeros((len(self.nodes()),1))))  # passage en 3D
         pos = pos.reshape((1,len(self.nodes())*3))
         filecsv = pyu.getlong(filename,pstruc['DIRNETSAVE'])+'.csv'
@@ -1422,7 +1422,7 @@ class Network(PyLayers,nx.MultiDiGraph):
 
         """
 
-        pos=nx.get_node_attributes(self,'p').items()
+        pos=list(nx.get_node_attributes(self,'p').items())
 
         AP=[]
         AG=[]
@@ -1430,7 +1430,7 @@ class Network(PyLayers,nx.MultiDiGraph):
         loc=False
         method = []
         # get methods for localization
-        simcfg = ConfigParser.ConfigParser()
+        simcfg = configparser.ConfigParser()
         simcfg.read(pyu.getlong('simulnet.ini','ini'))
         save =eval(simcfg.get('Save','save'))
         if 'loc' in save:
@@ -1443,7 +1443,7 @@ class Network(PyLayers,nx.MultiDiGraph):
                 AP.append(pos[i][0])
                 if not os.path.isfile(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE'])):
                     file=open(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE']),'w')
-                    config = ConfigParser.ConfigParser()
+                    config = configparser.ConfigParser()
                     config.add_section('coordinates')
 #                    config.set('coordinates',str(api), str(pos[i][1][0]) + ' ' + str(pos[i][1][1]) + ' '+str(height))
                     config.set('coordinates','1', str(pos[i][1][0]) + ' ' + str(pos[i][1][1]) + ' '+str(height))
@@ -1452,7 +1452,7 @@ class Network(PyLayers,nx.MultiDiGraph):
                     file.close()
             else:
                 AG.append(pos[i][0])
-                config = ConfigParser.ConfigParser()
+                config = configparser.ConfigParser()
                 if not os.path.isfile(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE'])):
                     file=open(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE']),'w')
                     config.add_section('coordinates')
@@ -1482,7 +1482,7 @@ class Network(PyLayers,nx.MultiDiGraph):
         if 'pyray' in save :
 
             file2=open(pyu.getlong('pyray.ini',pstruc['DIRNETSAVE']),'w')
-            config = ConfigParser.ConfigParser()
+            config = configparser.ConfigParser()
             config.add_section('nodes')
             config.add_section('layout')
             config.add_section('simulation')
@@ -1496,7 +1496,7 @@ class Network(PyLayers,nx.MultiDiGraph):
         if 'loc' in save :
 
             file2=open(pyu.getlong('loc.ini',pstruc['DIRNETSAVE']),'w')
-            config = ConfigParser.ConfigParser()
+            config = configparser.ConfigParser()
             config.add_section('nodes')
             config.add_section('simulation')
             config.set('nodes','AG',str(AG))
@@ -1533,7 +1533,7 @@ class Network(PyLayers,nx.MultiDiGraph):
                    Scipy.Simulation object
         """
 
-        pos=nx.get_node_attributes(self,'p').items()
+        pos=list(nx.get_node_attributes(self,'p').items())
         for i in range(len(pos)):
             if not 'BS' in pos[i][0]:
                 try:
@@ -1728,13 +1728,13 @@ class Network(PyLayers,nx.MultiDiGraph):
         """
 
 
-        assert len(self.SubNet.keys()) == 1 , NameError('when network.ini_save() \
+        assert len(list(self.SubNet.keys())) == 1 , NameError('when network.ini_save() \
         is used , only 1 wstd must be involved in the Network.\
         Please modify agent.ini')
 
 
         height= 1.5
-        pos=nx.get_node_attributes(self,'p').items()
+        pos=list(nx.get_node_attributes(self,'p').items())
 
         ### create ini files
         if self.idx == 0:
@@ -1742,7 +1742,7 @@ class Network(PyLayers,nx.MultiDiGraph):
         ### save agent positions
         for i in range(len(pos)):
             if self.node[pos[i][0]]['typ'] !='ap':
-                config = ConfigParser.ConfigParser()
+                config = configparser.ConfigParser()
                 config.read(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE']))
                 config.set('coordinates',str(self.idx+1),value = str(pos[i][1][0]) + ' ' + str(pos[i][1][1]) + ' '+str(height))
                 file=open(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE']),'w')
@@ -1778,7 +1778,7 @@ class Network(PyLayers,nx.MultiDiGraph):
         ### save agent positions estimations
         for n in node:
             if self.node[n]['typ'] !='ap':
-                config = ConfigParser.ConfigParser()
+                config = configparser.ConfigParser()
                 config.read(pyu.getlong(str(n[0]) + '.ini',pstruc['DIRNETSAVE']))
                 if pe_alg != {} :
                     config.set('alg_est',str(self.idx+1),value = str(pe_alg[n[0]][0]) + ' ' + str(pe_alg[n[0]][1]) + ' '+str(height))
@@ -1827,7 +1827,7 @@ class Network(PyLayers,nx.MultiDiGraph):
 
         """
 
-        assert len(self.SubNet.keys()) == 1 , NameError('when network.ini_save() \
+        assert len(list(self.SubNet.keys())) == 1 , NameError('when network.ini_save() \
         is used , only 1 wstd must be involved in the Network.\
         Please modify agent.ini')
 
@@ -1837,7 +1837,7 @@ class Network(PyLayers,nx.MultiDiGraph):
         else:
             file=open(pyu.getlong(filename ,'output'),'a')
 
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         timestamp = pyu.timestamp(S.now())
         config.add_section(timestamp)
         for e in self.edges():
@@ -1882,8 +1882,8 @@ class PNetwork():
                   'save':[]}
 
 ##       initialize attributes
-        for key, value in defaults.items():
-            if args.has_key(key):
+        for key, value in list(defaults.items()):
+            if key in args:
                 setattr(self, key, args[key])
             else:
                 setattr(self, key, value)
@@ -1895,7 +1895,7 @@ class PNetwork():
         self.filename='pos'
 
         if 'mysql' in self.save:
-           config = ConfigParser.ConfigParser()
+           config = configparser.ConfigParser()
            config.read(pyu.getlong('simulnet.ini','ini'))
            sql_opt = dict(config.items('Mysql'))
            self.net.db = Database(sql_opt['host'],sql_opt['user'],sql_opt['passwd'],sql_opt['dbname'])
@@ -1906,13 +1906,13 @@ class PNetwork():
 
         ####################################################################################
         # first iteration requested to correctely initiatilzing Personnal Networks's Subnets
-        for wstd in self.net.wstd.iterkeys():
+        for wstd in self.net.wstd.keys():
             self.net.compute_LDPs(wstd)
         for n in self.net.nodes():
             self.net.node[n]['PN']._get_wstd()
             self.net.node[n]['PN']._get_SubNet()
             # Add access point position in each personal network (PN)
-            [self.net.node[n]['PN'].node[n2].update({'pe':self.net.node[n2]['p']}) for n2 in self.net.node[n]['PN'].node.iterkeys() if self.net.node[n]['PN'].node[n2]['typ'] == 'ap']
+            [self.net.node[n]['PN'].node[n2].update({'pe':self.net.node[n2]['p']}) for n2 in self.net.node[n]['PN'].node.keys() if self.net.node[n]['PN'].node[n2]['typ'] == 'ap']
 
         ####################################################################################
         self.pos=self.net.get_pos()
@@ -1935,13 +1935,13 @@ class PNetwork():
         while True:
 
             ############### compute LDP
-            for wstd in self.net.wstd.iterkeys():
+            for wstd in self.net.wstd.keys():
                 self.net.compute_LDPs(wstd)
 
             if self.show_sg:
                 ############### compute Signature (Sg)
-                tx=self.net.node.keys()[0]
-                rx=self.net.node.keys()[1]
+                tx=list(self.net.node.keys())[0]
+                rx=list(self.net.node.keys())[1]
                 Sg=self.net.compute_Sg(tx,rx)
 
             ############## Show
@@ -1978,7 +1978,7 @@ class PNetwork():
 
             self.net.pos=self.net.get_pos()
             if self.sim.verbose:
-                print('network updated @',self.sim.now())
+                print(('network updated @',self.sim.now()))
             self.net.idx=self.net.idx+1
             yield hold, self, self.net_updt_time
 

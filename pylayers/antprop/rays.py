@@ -1,5 +1,5 @@
 # -*- coding: latin1 -*-
-from __future__ import print_function
+
 """
 .. currentmodule:: pylayers.antprop.rays
 
@@ -21,7 +21,7 @@ import pdb
 import os
 import copy
 if sys.version_info.major==2:
-    import ConfigParser
+    import configparser
 else:
     import configparser
 import glob
@@ -143,7 +143,7 @@ class Rays(PyLayers, dict):
 
     def __len__(self):
         Nray = 0
-        for k in self.keys():
+        for k in list(self.keys()):
             sh = np.shape(self[k]['sig'])
             Nray = Nray + sh[2]
         return Nray
@@ -292,13 +292,13 @@ class Rays(PyLayers, dict):
             f=h5py.File(filenameh5,'w')
             # keys not saved as attribute of h5py file
             notattr = ['I','B','B0','delays','dis']
-            for a in self.__dict__.keys():
+            for a in list(self.__dict__.keys()):
                 if a not in notattr:
                     f.attrs[a]=getattr(self,a)
 
-            for k in self.keys():
+            for k in list(self.keys()):
                 f.create_group(str(k))
-                for kk in self[k].keys():
+                for kk in list(self[k].keys()):
                     if kk == 'sig2d':
                         # Need to find an efficient way to save the signatures
                         # 2d which have created the rays
@@ -335,12 +335,12 @@ class Rays(PyLayers, dict):
         # read/write error
         try:
             f = h5py.File(filename,'r')
-            for k in f.keys():
+            for k in list(f.keys()):
                 self.update({eval(k):{}})
-                for kk in f[k].keys():
+                for kk in list(f[k].keys()):
                     self[eval(k)].update({kk:f[k][str(kk)][:]})
 
-            for a,va in f.attrs.items():
+            for a,va in list(f.attrs.items()):
                 setattr(self,a,va)
             f.close()
 
@@ -388,7 +388,7 @@ class Rays(PyLayers, dict):
 
         fh5=h5py.File(filenameh5,'a')
         if self.is3D:
-            if not grpname in fh5['ray'].keys():
+            if not grpname in list(fh5['ray'].keys()):
                 fh5['ray'].create_group(grpname)
             else :
                 print('ray/'+grpname +'already exists in '+filenameh5)
@@ -396,14 +396,14 @@ class Rays(PyLayers, dict):
 
 
         else:
-            if not grpname in fh5['ray2'].keys():
+            if not grpname in list(fh5['ray2'].keys()):
                 fh5['ray2'].create_group(grpname)
             else :
                 print('ray2/'+grpname +'already exists in '+filenameh5)
             f = fh5['ray2/'+grpname]
         # keys not saved as attribute of h5py file
         notattr = ['I','B','B0','dis']
-        for a in self.__dict__.keys():
+        for a in list(self.__dict__.keys()):
             if a not in notattr:
                 if type(a)==str:
                     a.encode('utf-8')
@@ -413,9 +413,9 @@ class Rays(PyLayers, dict):
                     else:
                         f.attrs[a] = getattr(self,a)
 
-        for k in self.keys():
+        for k in list(self.keys()):
             f.create_group(str(k))
-            for kk in self[k].keys():
+            for kk in list(self[k].keys()):
                 if kk == 'sig2d':
                     # Need to find an efficient way to save the signatures
                     # 2d which have created the rays
@@ -469,12 +469,12 @@ class Rays(PyLayers, dict):
 
             f = fh5[argfile]
 
-            for k in f.keys():
+            for k in list(f.keys()):
                 self.update({eval(k):{}})
-                for kk in f[k].keys():
+                for kk in list(f[k].keys()):
                     self[eval(k)].update({kk:f[k][str(kk)][:]})
 
-            for a,va in f.attrs.items():
+            for a,va in list(f.attrs.items()):
                 setattr(self,a,va)
 
 
@@ -748,7 +748,7 @@ class Rays(PyLayers, dict):
             cray = {}
 
 
-            for k in self[ni].keys():
+            for k in list(self[ni].keys()):
 
                 if ni ==0:
 
@@ -867,7 +867,7 @@ class Rays(PyLayers, dict):
         diffkey = ['diffvect','diffidx','diffslabs']
 
         r[ni] = {}
-        for k in self[ni].keys():
+        for k in list(self[ni].keys()):
             if k not in ['nbrays','rayidx','dis','nstrwall','nstrswall']:
                 tab  = self[ni][k]
                 if type(tab)==np.ndarray and k not in diffkey:
@@ -940,7 +940,7 @@ class Rays(PyLayers, dict):
                     'bcolorbar': False
                    }
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -973,11 +973,11 @@ class Rays(PyLayers, dict):
         if kwargs['rlist'] == []:
 
             # list of group of interactions
-            lgrint = self.keys()
+            lgrint = list(self.keys())
 
             for i in lgrint:
                 # list of rays
-                lray = range(len(self[i]['pt'][0, 0, :]))
+                lray = list(range(len(self[i]['pt'][0, 0, :])))
 
                 #if self.filled :
                 #    ax.set_title('rays index :'+ str(self[i]['rayidx']))
@@ -1040,7 +1040,7 @@ class Rays(PyLayers, dict):
             # 2D ray
             else:
                 for i in rlist:
-                    lray = range(len(self[i]['pt'][0, 0, :]))
+                    lray = list(range(len(self[i]['pt'][0, 0, :])))
                     #if self.filled :
                     #    ax.set_title('rays index :'+ str(self[i]['rayidx']))
                     for j in lray:
@@ -1361,17 +1361,17 @@ class Rays(PyLayers, dict):
 
 
                     if l < 0 and Nint%2 ==1: # l<0 Nint odd
-                        u = np.mod(range(Nint), 2)
+                        u = np.mod(list(range(Nint)), 2)
 
                     elif l > 0 and Nint%2 ==1: # l>0 Nint odd
-                        u = 1 - np.mod(range(Nint), 2)
+                        u = 1 - np.mod(list(range(Nint)), 2)
 
 
                     elif l < 0 and Nint%2 ==0: # l<0 Nint even
-                        u = 1 - np.mod(range(Nint), 2)
+                        u = 1 - np.mod(list(range(Nint)), 2)
 
                     elif l > 0 and Nint%2 ==0: # l>0 Nint even
-                        u = np.mod(range(Nint), 2)
+                        u = np.mod(list(range(Nint)), 2)
 
                     #
                     u = u + 4
@@ -1399,8 +1399,8 @@ class Rays(PyLayers, dict):
                     #
                     # sequence of extended sorted points
                     #
-                    ptees = ptee[:, ks, range(Nrayk)]
-                    siges = sige[:, ks, range(Nrayk)]
+                    ptees = ptee[:, ks, list(range(Nrayk))]
+                    siges = sige[:, ks, list(range(Nrayk))]
 
                     # extended and sorted signature
                     iint_f, iray_f = np.where(siges[ 1, :] == 4)  # floor interaction
@@ -1660,7 +1660,7 @@ class Rays(PyLayers, dict):
         #
         val =0
 
-        for k in r3d.keys():
+        for k in list(r3d.keys()):
             nrayk = np.shape(r3d[k]['sig'])[2]
             r3d[k]['nbrays'] = nrayk
             r3d[k]['rayidx'] = np.arange(nrayk)+val
@@ -1703,7 +1703,7 @@ class Rays(PyLayers, dict):
             r3d[k]['dis'] = rlength[u]
 
         r3d.delays = np.zeros((r3d.nray))
-        for k in r3d.keys():
+        for k in list(r3d.keys()):
             ir = r3d[k]['rayidx']
             r3d.delays[ir] = r3d[k]['dis']/0.3
 
@@ -2539,7 +2539,7 @@ class Rays(PyLayers, dict):
         # slk = nx.get_node_attributes(L.Gs, "name").keys()
         # find all material used in simulation
         #uslv = np.unique(L.sla[1:])
-        uslv = L.sl.keys()
+        uslv = list(L.sl.keys())
         #
         # add CEIL and FLOOR
         #
@@ -2871,7 +2871,7 @@ class Rays(PyLayers, dict):
         aoa= np.empty((2,self.nray))
         # loop on interaction blocks
         if ib==[]:
-            ib=self.keys()
+            ib=list(self.keys())
 
         # loop over group of interactions
         for l in ib:
@@ -3178,7 +3178,7 @@ class Rays(PyLayers, dict):
             ray index  
 
         """
-        assert t[0] in self.keys(), "wrong number of interactions"
+        assert t[0] in list(self.keys()), "wrong number of interactions"
         ir = self[t[0]]['rayidx'][t[1]]
         return(ir)
 
@@ -3475,7 +3475,7 @@ class Rays(PyLayers, dict):
                 # ipdb.set_trace()
                 if i == 'T' or i == 'R' or i =='D':
                     I = getattr(self.I, i)
-                    for slab in I.dusl.keys():
+                    for slab in list(I.dusl.keys()):
     #                    print slab
                         midx = I.dusl[slab]
     #                    print midx
@@ -3712,9 +3712,9 @@ class Rays(PyLayers, dict):
             colors= color_range[uER]
 
         if rlist ==[]:
-            nbi = self.keys()
+            nbi = list(self.keys())
             for i in nbi:
-                r = range(np.shape(self[i]['pt'])[2])
+                r = list(range(np.shape(self[i]['pt'])[2]))
                 ridx = self[i]['rayidx']
                 # number of rays
                 nbr = len(r) 
@@ -3813,7 +3813,7 @@ class Rays(PyLayers, dict):
         pg = np.hstack((pg,0.)).reshape(3,1)
 
         if ilist == []:
-            ilist = self.keys()
+            ilist = list(self.keys())
         pTx = self.pTx.reshape((3, 1))-pg
         pRx = self.pRx.reshape((3, 1))-pg
         filename = pyu.getlong("grRay" + str(id) + ".list", pstruc['DIRGEOM'])
@@ -3839,7 +3839,7 @@ class Rays(PyLayers, dict):
             k = 0
             for i in ilist:
                 if raylist == []:
-                    rlist = range(np.shape(self[i]['pt'])[2])
+                    rlist = list(range(np.shape(self[i]['pt'])[2]))
                 else:
                     rlist = raylist
                 for j in rlist:

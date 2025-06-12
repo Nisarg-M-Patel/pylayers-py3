@@ -23,7 +23,7 @@ import matplotlib as m
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 if sys.version_info.major==2:
-    import ConfigParser
+    import configparser
 else:
     import configparser as ConfigParser
 
@@ -92,7 +92,7 @@ class Coverage(PyLayers):
         """
 
 
-        self.config = ConfigParser.ConfigParser(allow_no_value=True)
+        self.config = configparser.ConfigParser(allow_no_value=True)
         self.config.read(pyu.getlong(_fileini,pstruc['DIRSIMUL']))
 
         # section layout
@@ -411,7 +411,7 @@ class Coverage(PyLayers):
         lblock = list(zip(r1[0:-1],r1[1:]))
 
         for bg in lblock:
-            p = product(range(bg[0],bg[1]),lactiveAP)
+            p = product(list(range(bg[0],bg[1])),lactiveAP)
             #
             # pa : access point ,3
             # pg : grid point ,2
@@ -1134,7 +1134,7 @@ class Coverage(PyLayers):
 
             # for k in range(self.na):
             #     ax.annotate(str(k),xy=(self.pa[0,k],self.pa[1,k]))
-            for k in self.dap.keys():
+            for k in list(self.dap.keys()):
                 ax.annotate(str(self.dap[k]['name']),xy=(self.dap[k]['p'][0],self.dap[k]['p'][1]))
             ax.set_title(title)
 

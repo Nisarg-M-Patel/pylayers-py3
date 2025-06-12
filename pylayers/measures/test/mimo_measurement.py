@@ -17,8 +17,8 @@ from pylayers.antprop.aarray import *
 #          comment='test MIMO calibration RF without nf=1601')
 
 
-Nr = input ("Number of receiving antennas : ")
-Nt = input ("Number of transmitting antennas : ")
+Nr = eval(input ("Number of receiving antennas : "))
+Nt = eval(input ("Number of transmitting antennas : "))
 author = 'bu'
 comment = 'no comment'
 _filecalh5 = 'calMIMO_'+str(Nr)+'_'+str(Nt)
@@ -30,7 +30,7 @@ calibration = True
 measure = True
 
 if mimocal:
-    print "Phase 1: MIMO full calibration"
+    print("Phase 1: MIMO full calibration")
     #author = input('author : ')
     #comment  = input('comment : ')
     vna = SCPI(emulated=emulated)
@@ -47,7 +47,7 @@ if mimocal:
 
 
 if calibration:
-    print "Phase 2 : MIMO single channel calibration"
+    print("Phase 2 : MIMO single channel calibration")
     #author = input('author : ')
     #comment  = input('comment : ')
     vna = SCPI(emulated=emulated)
@@ -64,8 +64,8 @@ if calibration:
              comment=comment)
     vna.close()
 if measure:
-    print "Phase 3 : MIMO single channel calibration"
-    print  "Measure started !"
+    print("Phase 3 : MIMO single channel calibration")
+    print("Measure started !")
     #author = input('author : ')
     #comment  = input('comment : ')
     # 2. Initialize the scanner
@@ -86,4 +86,4 @@ if measure:
                author = 'mamadou',
                )
     toc = time.time()
-    print "End of measurement time (s) :",toc-tic
+    print("End of measurement time (s) :",toc-tic)

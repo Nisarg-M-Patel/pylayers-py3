@@ -130,7 +130,7 @@ class MIMO(object):
         del self.C
 
     def capacity(self,trhodB=np.arange(-40,10,1)):
-        u""" calculates spectral efficiency
+        """ calculates spectral efficiency
 
         Notes
         -----
@@ -191,7 +191,7 @@ class MIMO(object):
                  ['','','','']])
                  }
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 

@@ -54,7 +54,7 @@ strucname = 'TA-Office'
 #strucname = 'defstr'
 L = Layout(strucname+'.ini')
 L.boundary()
-print L.ax
+print(L.ax)
 try:
     L.dumpr()
 except:
@@ -73,10 +73,10 @@ rx = np.array([35, 6, 2])
 
 S = Signatures(L, tx, rx)
 
-print "Calcul signatures"
+print("Calcul signatures")
 #s1 = S.get_sigslist(tx, rx)
 s1 = S.run(tx,rx,2)
-print "Fin calcul signatures"
+print("Fin calcul signatures")
 
 #print "signatures --> rayons "
 #r2d = S.sigs2rays(s1)
@@ -102,7 +102,7 @@ r2d = S.rays(s1)
 #
 #
 showr2d(L,r2d,tx,rx)
-print "rayons 2D --> rayons3D "
+print("rayons 2D --> rayons3D ")
 #rays3d = S.ray2D3D(r2d)
 #print "fin rayons 2D --> rayons3D "
 ##

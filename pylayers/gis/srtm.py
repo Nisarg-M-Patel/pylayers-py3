@@ -6,7 +6,7 @@
 .. autosummary::
 
 """
-from __future__ import print_function
+
 import doctest
 import os
 import glob
@@ -20,7 +20,7 @@ from html.parser import HTMLParser
 import ftplib
 import sys
 if sys.version_info.major==2:
-    import urllib2
+    import urllib.request, urllib.error, urllib.parse
     _PY3=False
 else:
     from urllib.request import urlopen
@@ -140,8 +140,8 @@ class SRTMDownloader:
         if _PY3:
             r1 = urlopen('http://'+self.server+'/'+self.directory)
         else:
-            conn = urllib2.Request('http://'+self.server+'/'+self.directory)
-            r1 = urllib2.urlopen(conn)
+            conn = urllib.request.Request('http://'+self.server+'/'+self.directory)
+            r1 = urllib.request.urlopen(conn)
         #if r1.status==200:
         #    print "status200 received ok"
         #else:
@@ -160,8 +160,8 @@ class SRTMDownloader:
             if _PY3:
                 r1 = urlopen('http://'+self.server+'/'+self.directory+'/'+continent)
             else:
-                conn = urllib2.Request('http://'+self.server+'/'+self.directory+'/'+continent)
-                r1 = urllib2.urlopen(conn)
+                conn = urllib.request.Request('http://'+self.server+'/'+self.directory+'/'+continent)
+                r1 = urllib.request.urlopen(conn)
             data = r1.read()
             if isinstance(data,bytes):
                 data=data.decode()
@@ -236,8 +236,8 @@ class SRTMDownloader:
                 r1 = urlopen('http://'+self.server+'/'+self.directory+'/'+continent+'/'+filename)
             else:
 
-                conn = urllib2.Request('http://'+self.server+'/'+self.directory+'/'+continent+'/'+filename)
-                r1 = urllib2.urlopen(conn)
+                conn = urllib.request.Request('http://'+self.server+'/'+self.directory+'/'+continent+'/'+filename)
+                r1 = urllib.request.urlopen(conn)
             data = r1.read()
             self.ftpfile = open(os.path.join(self.cachedir,filename), 'wb')
             self.ftpfile.write(data)
@@ -409,8 +409,8 @@ class parseHTMLDirectoryListing(HTMLParser):
 if __name__ == '__main__':
     downloader = SRTMDownloader()
     downloader.loadFileList()
-    latitude = raw_input("latitude : ")
-    longitude = raw_input("longitude : ")
+    latitude = input("latitude : ")
+    longitude = input("longitude : ")
     tile = downloader.getTile(latitude,longitude)
     I = np.array(tile.data).reshape(1201,1201)
     n = np.where(I<0)

@@ -3,9 +3,9 @@ from multiprocessing import Pool
 from functools import partial
 
 def _pickle_method(method):
-	func_name = method.im_func.__name__
-	obj = method.im_self
-	cls = method.im_class
+	func_name = method.__func__.__name__
+	obj = method.__self__
+	cls = method.__self__.__class__
 	if func_name.startswith('__') and not func_name.endswith('__'): #deal with mangled names
 		cls_name = cls.__name__.lstrip('_')
 		func_name = '_' + cls_name + func_name
@@ -21,9 +21,9 @@ def _unpickle_method(func_name, obj, cls):
 			break
 	return func.__get__(obj, cls)
 
-import copy_reg
+import copyreg
 import types
-copy_reg.pickle(types.MethodType, _pickle_method, _unpickle_method)
+copyreg.pickle(types.MethodType, _pickle_method, _unpickle_method)
 
 
 
@@ -38,7 +38,7 @@ class someClass(object):
 
 	def go_mp(self):
 		pool = Pool()             
-		print pool.map(self.fgo_func, range(10))
+		print(pool.map(self.fgo_func, list(range(10))))
 
         def build(self):
     	        self.go_mp()

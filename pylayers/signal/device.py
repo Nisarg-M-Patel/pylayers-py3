@@ -44,7 +44,7 @@ def devicels():
     fp = open(pyu.getlong('devices.json', pstruc['DIRSIMUL']))
     dev = json.load(fp)
     fp.close()
-    print(dev.keys())
+    print((list(dev.keys())))
 
 
 class Device(object):
@@ -193,7 +193,7 @@ class Device(object):
         self.dim = np.array((dim['height'], dim['width'], dim['depth'])) / 1000
         self.ant = {}
 
-        for k in ant.keys():
+        for k in list(ant.keys()):
             self.ant[k] = {}
             self.ant[k]['name'] = ant[k]['name']
             self.ant[k]['p'] = np.array(ant[k]['p'])
@@ -201,12 +201,12 @@ class Device(object):
         self.wstd = {}
 
 
-        for k in wstd.keys():
+        for k in list(wstd.keys()):
             self.wstd[k] = {}
             W = Wstandard(k)
             self.wstd[k]['power']=True
             self.wstd[k]['ant'] = wstd[k]['antenna']
-            self.setchan(wstd=k, channel=W.chan.keys()[0])
+            self.setchan(wstd=k, channel=list(W.chan.keys())[0])
             self.wstd[k]['sens'] = [0]*len(self.wstd[k]['ant'])
             self.wstd[k]['cr'] = W['crate'][0]
             self.wstd[k]['mod'] = W['modulation'][0]

@@ -1,7 +1,7 @@
 #
 # -*- coding: utf-8 -*-
 #
-from __future__ import print_function
+
 r"""
 
 .. currentmodule:: pylayers.simul.link
@@ -308,7 +308,7 @@ class DLink(Link):
 
         # set default attribute
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
 
             if key not in kwargs:
                 if key in specset :
@@ -379,7 +379,7 @@ class DLink(Link):
             cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.node[p]['indoor']]
 
             if self._L.typ =='outdoor':
-                u = self.L.Gi.node.keys()
+                u = list(self.L.Gi.node.keys())
                 # lT : list of transmission interactions
                 lT  =  [k for k in u if (len(k)==3)]
                 # lTi : transmission connected at least to an indoor cycle
@@ -396,7 +396,7 @@ class DLink(Link):
                     except:
                         pdb.set_trace()
                     tbd = []
-                    for l in output.keys():
+                    for l in list(output.keys()):
                         if l in lTiw:
                             tbd.append(l)
                     for d in tbd : 
@@ -1263,7 +1263,7 @@ class DLink(Link):
         try :
             lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])
             f = h5py.File(lfilename,'r')
-            if grpname.encode('utf8') in f[key].keys():
+            if grpname.encode('utf8') in list(f[key].keys()):
                 self.dexist[key]['exist'] = True
             else :
                 self.dexist[key]['exist'] = False
@@ -1522,7 +1522,7 @@ class DLink(Link):
         if (self.Aa.fGHz!=self.Ab.fGHz).all():
             raise AttributeError("Antenna frequency range are not compatible")
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -2439,7 +2439,7 @@ class DLink(Link):
                     'fontsize':18
                     }
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 

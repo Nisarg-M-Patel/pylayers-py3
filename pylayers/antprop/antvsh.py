@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import pdb
 import doctest
 from pylayers.antprop.spharm import *

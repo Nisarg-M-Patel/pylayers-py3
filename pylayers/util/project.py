@@ -1,5 +1,5 @@
 #-*- coding:Utf-8 -*-
-from __future__ import print_function
+
 """
 .. curentmodule:: pylayers.util.project
 
@@ -36,11 +36,11 @@ class PyLayers(object):
 
         """
 
-        members = [ x for x in self.__dict__.keys() if x not in dict.__dict__ ]
+        members = [ x for x in list(self.__dict__.keys()) if x not in dict.__dict__ ]
         lmeth = [ x for x in np.sort(dir(self)) if x not in dict.__dict__]
 
         if typ=='mb':
-            print(np.sort(self.__dict__.keys()))
+            print(np.sort(list(self.__dict__.keys())))
         if typ=='mt':
             for s in lmeth:
                 if s not in members:
@@ -214,7 +214,7 @@ except:
 fd = open(os.path.join(basename,'project.conf'),'w')
 fd.close()
 #for nm in pstruc.keys():
-for nm,nv in pstruc.items():
+for nm,nv in list(pstruc.items()):
     dirname =  os.path.join(basename , pstruc[nm])
     if not 'win' in sys.platform:
         spl = nv.split('/') # never again a variable called sp

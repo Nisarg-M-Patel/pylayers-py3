@@ -6,7 +6,7 @@
     :members:
 
 """
-from __future__ import print_function
+
 import doctest
 import pdb
 import numpy as np
@@ -2574,7 +2574,7 @@ class TUchannel(TBchannel,bs.TUsignal):
         shy = np.shape(self.y)
         x = self.x
         eps = (x[1]-x[0])/2
-        u = map(lambda t: np.where( (x>t-eps) & (x<=t+eps))[0][0],tauk)
+        u = [np.where( (x>t-eps) & (x<=t+eps))[0][0] for t in tauk]
         ynew  = np.zeros(len(x))
         ynew[u] = alphak
         if len(shy)>1:
@@ -3204,7 +3204,7 @@ class Tchannel(bs.FUsignal):
             f.attrs['Ta']=Ta
             f.attrs['Tb']=Tb
             # keys not saved as attribute of h5py file
-            for k,va in self.__dict__.items():
+            for k,va in list(self.__dict__.items()):
                 f.create_dataset(k,shape = np.shape(va),data=va)
             f.close()
         except:
@@ -3248,7 +3248,7 @@ class Tchannel(bs.FUsignal):
         f=h5py.File(filenameh5, 'r')
         try:
             # keys not saved as attribute of h5py file
-            for k,va in f.items():
+            for k,va in list(f.items()):
                 # if k != 'tau1':
                 #     setattr(self,str(k),va[:])
                 # else :
@@ -3290,13 +3290,13 @@ class Tchannel(bs.FUsignal):
         try:
 
             fh5=h5py.File(filename,'a')
-            if not grpname in fh5['H'].keys():
+            if not grpname in list(fh5['H'].keys()):
                 fh5['H'].create_group(grpname)
             else :
                 print('Warning : H/'+grpname +'already exists in '+filenameh5)
             f=fh5['H/'+grpname]
 
-            for k,va in self.__dict__.items():
+            for k,va in list(self.__dict__.items()):
                 #print(k,va)
                 f.create_dataset(k,shape = np.shape(va),data=va)
             fh5.close()
@@ -3323,7 +3323,7 @@ class Tchannel(bs.FUsignal):
             f = fh5['H/'+grpname]
 
             # keys not saved as attribute of h5py file
-            for k,va in f.items():
+            for k,va in list(f.items()):
                 if k !='isFriis':
                     try:
                         setattr(self,str(k),va[:])
@@ -3537,7 +3537,7 @@ class Tchannel(bs.FUsignal):
                     'WMHz':20,
                     'Nf':100}
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -3574,7 +3574,7 @@ class Tchannel(bs.FUsignal):
                     'WGHz':1,
                     'Ntap':100}
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -3714,7 +3714,7 @@ class Tchannel(bs.FUsignal):
                     'xb':[]
                     }
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -3863,7 +3863,7 @@ class Tchannel(bs.FUsignal):
                     'd':'doa'
                     }
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -4013,7 +4013,7 @@ class Tchannel(bs.FUsignal):
 
 
         fig = plt.figure()
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -4311,7 +4311,7 @@ class Tchannel(bs.FUsignal):
                     'phi_vb':0 }
 
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -5263,7 +5263,7 @@ class Ctilde(PyLayers):
         try:
 
             fh5=h5py.File(filename,'a')
-            if not grpname in fh5['Ct'].keys():
+            if not grpname in list(fh5['Ct'].keys()):
                 fh5['Ct'].create_group(grpname)
             else :
                 print('Warning : Ct/'+grpname +'already exists in '+filenameh5)
@@ -5485,7 +5485,7 @@ class Ctilde(PyLayers):
                     'title' : False
                     }
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -5657,7 +5657,7 @@ class Ctilde(PyLayers):
                     }
 
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -5928,7 +5928,7 @@ class Ctilde(PyLayers):
                     'cmap': plt.cm.hot,
                     'fontsize':14}
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -5939,22 +5939,22 @@ class Ctilde(PyLayers):
         ax1 = kwargs['fig'].add_subplot(221)
         fig, ax1 = self.Ctt.imshow(ax=ax1,**kwargs)
         ax1.set_xlabel('Frequency (GHz)',fontsize=kwargs['fontsize'])
-        ax1.set_title(u'$C_{\\theta\\theta}$',fontsize=kwargs['fontsize'])
+        ax1.set_title('$C_{\\theta\\theta}$',fontsize=kwargs['fontsize'])
 
         ax2 = kwargs['fig'].add_subplot(222)
         fig, ax2 = self.Ctp.imshow(ax=ax2,**kwargs)
         ax2.set_xlabel('Frequency (GHz)',fontsize=kwargs['fontsize'])
-        ax2.set_title(u'$C_{\\theta\phi}$',fontsize=kwargs['fontsize'])
+        ax2.set_title('$C_{\\theta\phi}$',fontsize=kwargs['fontsize'])
 
         ax3 = kwargs['fig'].add_subplot(223)
         fig, ax3 = self.Cpt.imshow(ax=ax3,**kwargs)
         ax3.set_xlabel('Frequency (GHz)',fontsize=kwargs['fontsize'])
-        ax3.set_title(u'$C_{\phi\\theta}$',fontsize=kwargs['fontsize'])
+        ax3.set_title('$C_{\phi\\theta}$',fontsize=kwargs['fontsize'])
 
         ax4 = kwargs['fig'].add_subplot(224)
         fig, ax4 = self.Cpp.imshow(ax=ax4,**kwargs)
         ax4.set_xlabel('Frequency (GHz)',fontsize=kwargs['fontsize'])
-        ax4.set_title(u'$C_{\phi\phi}$',fontsize=kwargs['fontsize'])
+        ax4.set_title('$C_{\phi\phi}$',fontsize=kwargs['fontsize'])
 
         return fig, (ax1, ax2, ax3, ax4)
 

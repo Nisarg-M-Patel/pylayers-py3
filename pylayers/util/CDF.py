@@ -70,7 +70,7 @@ class CDF(object):
         self.bound = []
         self.cdf = []
         for d in self.ld:
-            if d.has_key('bound'):
+            if 'bound' in d:
                 bound = d['bound']
             else:
                 bound = np.linspace(d['values'].min(),
@@ -107,52 +107,52 @@ class CDF(object):
         for k in range(len(self.ld)):
 
             d = self.ld[k]
-            if d.has_key('bound'):
+            if 'bound' in d:
                 bound = d['bound']
             else:
                 bound = np.linspace(d['values'].min(),d['values'].max(),len(d['values']*0.1))
-            if d.has_key('marker'):
+            if 'marker' in d:
                 marker = d['marker']
             else:
                 marker = ''
-            if d.has_key('markersize'):
+            if 'markersize' in d:
                 markersize = d['markersize']
             else:
                 markersize = 5
-            if d.has_key('markercolor'):
+            if 'markercolor' in d:
                 markercolor = d['markercolor']
             else:
                 markercolor = 'k'
-            if d.has_key('markerfrequency'):
+            if 'markerfrequency' in d:
                 markerfrequency = d['markerfrequency']
             else:
                 markerfrequency = 10
-            if d.has_key('linewidth'):
+            if 'linewidth' in d:
                 linewidth = d['linewidth']
             else:
                 linewidth = 1
-            if d.has_key('linestyle'):
+            if 'linestyle' in d:
                 linestyle = d['linestyle']
             else:
                 linestyle = '-'
-            if d.has_key('color'):
+            if 'color' in d:
                 color = d['color']
             else:
                 color ='k'
-            if d.has_key('legend'):
+            if 'legend' in d:
                 legend = d['legend']
             else:
                 legend=''
-            if d.has_key('title'):
+            if 'title' in d:
                 title = d['title']
             else:
                 title=''
             if k == 0:
-                if d.has_key('x_label'):
+                if 'x_label' in d:
                     xlabel=d['x_label']
                 else:
                     xlabel=''
-                if d.has_key('y_label'):
+                if 'y_label' in d:
                     ylabel=d['y_label']
                 else:
                     ylabel=''

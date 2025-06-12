@@ -25,7 +25,7 @@ import numpy as np
 import scipy.stats as sp
 
 if sys.version_info.major==2:
-    import ConfigParser
+    import configparser
 else:
     import configparser as ConfigParser
 
@@ -157,7 +157,7 @@ class Body(PyLayers):
 
         st = "My name is : " + self.name + '\n\n'
 
-        for k in self.dev.keys():
+        for k in list(self.dev.keys()):
             if self.dev[k]['status']=='simulated':
                 st = st + 'I have a '+self.dev[k]['name']+' device with id #'+k+' '
                 side = str(self.dev[k]['cyl'])[-1]
@@ -236,7 +236,7 @@ class Body(PyLayers):
             raise NameError(_filebody + ' cannot be found in'
                              + filebody)
 
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         config.read(filebody)
         sections = config.sections()
         di = {}
@@ -249,10 +249,10 @@ class Body(PyLayers):
                 else:
                     di[section][option] = config.get(section,option)
 
-        keys = map(lambda x : eval(x),di['nodes'].keys())
-        nodes_Id = {k:v for (k,v) in zip(keys,di['nodes'].values())}
+        keys = [eval(x) for x in list(di['nodes'].keys())]
+        nodes_Id = {k:v for (k,v) in zip(keys,list(di['nodes'].values()))}
         # identifier are always 4 character. otherwise its a list
-        fnid = filter(lambda x: len(x[1])>4 , nodes_Id.items())
+        fnid = [x for x in list(nodes_Id.items()) if len(x[1])>4]
         for k,v in fnid:
             # clean bracket and coma
             vc = v.split('[')[1].split(']')[0].split(',')
@@ -260,9 +260,9 @@ class Body(PyLayers):
 
         self.nodes_Id=nodes_Id
 
-        self.sl = np.ndarray(shape=(len(di['cylinder'].keys()),3))
+        self.sl = np.ndarray(shape=(len(list(di['cylinder'].keys())),3))
         self.dcyl = {}
-        for cyl in di['cylinder'].keys():
+        for cyl in list(di['cylinder'].keys()):
             t = di['cylinder'][cyl]['t']
             h = di['cylinder'][cyl]['h']
             r = di['cylinder'][cyl]['r']
@@ -275,10 +275,10 @@ class Body(PyLayers):
             #
             self.sl[i,:] = np.array([t,h,r])
 
-        self.ncyl = len(di['cylinder'].values())
+        self.ncyl = len(list(di['cylinder'].values()))
 
         self.idcyl={}
-        [self.idcyl.update({v:k}) for k,v in self.dcyl.items()]
+        [self.idcyl.update({v:k}) for k,v in list(self.dcyl.items())]
 
 
 
@@ -324,7 +324,7 @@ class Body(PyLayers):
                 raise AttributeError('the wareable file '+ devfilename +
                                  ' cannot be found')
 
-        devconf = ConfigParser.ConfigParser()
+        devconf = configparser.ConfigParser()
         devconf.read(devfilename)
         sections = devconf.sections()
         self.dev = {}
@@ -364,7 +364,7 @@ class Body(PyLayers):
         #
         # filter real device and get devices
         #
-        rd = dict(filter(lambda x: x[1]['status']== 'real',self.dev.items()))
+        rd = dict([x for x in list(self.dev.items()) if x[1]['status']== 'real'])
 
 
         # for d in rd :
@@ -514,11 +514,11 @@ class Body(PyLayers):
         self._ccs=np.empty((11,3,3,self.nframes))
         #T10 5 strn 7
 
-        for k,v in config['ccs'].items():
+        for k,v in list(config['ccs'].items()):
             # clean bracket and coma
             vc = v.split('[')[1].split(']')[0].split(',')
             #get position in uc3d of marker
-            uccs=map(lambda x: self._dmn[x],vc)
+            uccs=[self._dmn[x] for x in vc]
 
 
             #1 vector carried by cylinder axis
@@ -683,7 +683,7 @@ class Body(PyLayers):
         {df.update(
             {d:pd.DataFrame(
                 columns=['dev_id','dev_x','dev_y','dev_z'],index=self.traj.index)})
-            for d in self.dev.keys()}
+            for d in list(self.dev.keys())}
 
         for d in self.dev:
             df[d]['dev_id'] = d
@@ -743,13 +743,13 @@ class Body(PyLayers):
         {df.update(
             {d:pd.DataFrame(
                 columns=['dev_id','dev_x','dev_y','dev_z'],index=traj.index)})
-            for d in self.dev.keys()}
+            for d in list(self.dev.keys())}
 
 
         dp=[]
         for it,t in enumerate(traj.time()):
             self.settopos(traj = traj,t=t,cs=True)
-            dp.append(np.array(self.getdevp(df.keys())))
+            dp.append(np.array(self.getdevp(list(df.keys()))))
         dp =np.array(dp)
         for ud,d in enumerate(df.keys()):
             df[d]['dev_id']=d
@@ -772,9 +772,9 @@ class Body(PyLayers):
         ddf = traj.join(addf)
         ddf['name'] = self.name
         # complete dataframe
-        ddf['timestamp']= map(lambda x: str(x.hour).zfill(2) + ':' + str(x.minute).zfill(2) +  ':' + str(x.second).zfill(2) + '.' + str(x.microsecond).zfill(2)[:3],ddf.index)
+        ddf['timestamp']= [str(x.hour).zfill(2) + ':' + str(x.minute).zfill(2) +  ':' + str(x.second).zfill(2) + '.' + str(x.microsecond).zfill(2)[:3] for x in ddf.index]
         if tunit == 'ns':
-            ddf['timestamp']= map(lambda x: x.microsecond*1e3+x.second*1e9+60*1e9*x.minute+3600*1e9*x.hour,ddf.index)
+            ddf['timestamp']= [x.microsecond*1e3+x.second*1e9+60*1e9*x.minute+3600*1e9*x.hour for x in ddf.index]
 
         if poffset:
             mx = min(min(ddf['x']),min(ddf['dev_x']))
@@ -1175,7 +1175,7 @@ class Body(PyLayers):
 
         """
         self.dcs = {}
-        for dev in self.dev.keys():
+        for dev in list(self.dev.keys()):
             if self.dev[dev]['status'] == 'simulated':
                 # retrieving antenna placement information from dictionnary ant
                 cylname = self.dev[dev]['cyl']
@@ -1263,7 +1263,7 @@ class Body(PyLayers):
                     #     md = np.where(min(d)==d)[0]
                     #     self.dev[dev]['asscyl']= md[0]
 
-                    if not self.dev[dev].has_key('asscyl'):
+                    if 'asscyl' not in self.dev[dev]:
                         # find the closest cylinder to the device
                         c0=self.sl[:,0].astype(int)
                         c1=self.sl[:,1].astype(int)
@@ -1295,7 +1295,7 @@ class Body(PyLayers):
         """
 
         self.acs = {}
-        for dev in self.dev.keys():
+        for dev in list(self.dev.keys()):
             if True:#self.dev[dev]['status'] == 'simulated':
                 Rab = self.dev[dev]['T']
                 U = self.dcs[dev]
@@ -1345,7 +1345,7 @@ class Body(PyLayers):
                                   Use settopos() or precise a frameId or time')
 
         if id == -1:
-            return np.array([self.dcs[i][:,0] for i in self.dcs.keys()])
+            return np.array([self.dcs[i][:,0] for i in list(self.dcs.keys())])
         if isinstance(id,list):
             return np.array([self.dcs[i][:,0] for i in id])
         else :
@@ -1357,7 +1357,7 @@ class Body(PyLayers):
         """
 
         dp = {}
-        dev = self.dev.keys()
+        dev = list(self.dev.keys())
         udev = np.array([self.dev[i]['uc3d'][0] for i in dev])
         p = self._f[:,udev,:]
         dist = np.sqrt(np.sum((p[:,:,np.newaxis,:]-p[:,np.newaxis,:,:])**2,axis=3))
@@ -1391,7 +1391,7 @@ class Body(PyLayers):
                             Use settopos() or precise a frameId or time')
 
         if id == -1:
-            return np.array([self.dcs[i][:,1:] for i in self.dcs.keys()])
+            return np.array([self.dcs[i][:,1:] for i in list(self.dcs.keys())])
         if isinstance(id,list):
             return np.array([self.dcs[i][:,1:] for i in id])
         else :
@@ -1447,7 +1447,7 @@ class Body(PyLayers):
         mocaptres = self.Tmocap/self.nframes
         step = int(fargs['tstep']/mocaptres)
         trange=np.arange(fargs['tstart'],fargs['tend'],fargs['tstep'])
-        frange=range(fstart,fend,step)
+        frange=list(range(fstart,fend,step))
 
         vstep=np.arange(0,len(frange))*fargs['sstep']
 
@@ -1514,7 +1514,7 @@ class Body(PyLayers):
                    }
 
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -1556,12 +1556,12 @@ class Body(PyLayers):
         khe = self.sl[:,1].astype(int)
         t=self.traj.time()
 
-        anim = range(5000,self.nframes,10)
+        anim = list(range(5000,self.nframes,10))
 
         ##init antennas
         if 'topos' in dir(self):
             Ant = {}
-            for key in self.dcs.keys():
+            for key in list(self.dcs.keys()):
                 Ant[key]=ant.Antenna(self.dev[key]['file'])
                 if not hasattr(Ant[key],'sqG'):
                     Ant[key].eval()
@@ -1581,7 +1581,7 @@ class Body(PyLayers):
                     X=np.hstack((self._pta,self._phe))
                     # s = np.hstack((cylrad,cylrad))
                     self._mayapts.mlab_source.set(x=X[0,:], y=X[1,:], z=X[2,:])
-                    for key in self.dcs.keys():
+                    for key in list(self.dcs.keys()):
                         x, y, z ,k,scalar = Ant[key]._computemesh(po=self.dcs[key][:,0],
                                                    T=self.acs[key],
                                                    ilog=False,
@@ -1697,7 +1697,7 @@ class Body(PyLayers):
                                 resolution=10,
                                 color =pt_color)
             if kwargs['edge']:
-                connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
+                connections=list(zip(list(range(0,self.ncyl)),list(range(self.ncyl,2*self.ncyl))))
                 self._mayapts.mlab_source.dataset.lines = np.array(connections)
                 tube = mlab.pipeline.tube(self._mayapts, tube_radius=0.005)
                 mlab.pipeline.surface(tube,color=ed_color)
@@ -1883,7 +1883,7 @@ class Body(PyLayers):
             X=np.hstack((pta,phe))
 
         if kwargs['cylinder']:
-            connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
+            connections=list(zip(list(range(0,self.ncyl)),list(range(self.ncyl,2*self.ncyl))))
             s = np.hstack((cylrad*kwargs['widthfactor'],cylrad*kwargs['widthfactor']))
             #pts = mlab.points3d(X[0,:],X[1,:], X[2,:], 5*s ,
                                                  # scale_factor=0.1, resolution=10)
@@ -1930,7 +1930,7 @@ class Body(PyLayers):
             dev_color = tuple(pyu.rgb(colhex)/255.)
 
             if kwargs['devlist'] == []:
-                devlist = self.dev.keys()
+                devlist = list(self.dev.keys())
             else :
                 devlist = [d  for d in self.dev if d in kwargs['devlist']]
 
@@ -1948,7 +1948,7 @@ class Body(PyLayers):
                               resolution=10, 
                               color = dev_color,
                               opacity=kwargs['devopacity'])
-            nodename = self.dev.keys()
+            nodename = list(self.dev.keys())
 
             if kwargs['devid']:
 
@@ -1956,7 +1956,7 @@ class Body(PyLayers):
                     udt = np.arange(len(nodename))
                 else:
                     devtyp = np.unique([self.dev[x]['name'] for x in devlist])
-                    ln =[filter(lambda x: d in x,nodename) for d in devtyp]
+                    ln =[[x for x in nodename if d in x] for d in devtyp]
                     udev = [[nodename.index(n) for n in ln[i]] for i in range(len(ln))]
 
                 for dt in kwargs['devtyp']:
@@ -2007,7 +2007,7 @@ class Body(PyLayers):
 
             #
         if kwargs['dcs']:
-            for key in self.dcs.keys():
+            for key in list(self.dcs.keys()):
                 U = self.dcs[key]
                 pt = U[:,0]
                 pte  = np.repeat(pt[:,np.newaxis],3,axis=1)
@@ -2112,7 +2112,7 @@ class Body(PyLayers):
         # display devices
         if kwargs['dev']:
             if 'dcs' in dir(self):
-                pdev = np.array(self.getdevp(self.dev.keys()))
+                pdev = np.array(self.getdevp(list(self.dev.keys())))
                 ax.plot(pdev[:,ax1]+offset[0],pdev[:,ax2]+offset[1],'og')
             else :
                 iudev = [(i,self.dev[i]['uc3d'][0]) for i in self.dev]
@@ -2162,7 +2162,7 @@ class Body(PyLayers):
                     'filestruc':'DLR.off'
                   }
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -2219,7 +2219,7 @@ class Body(PyLayers):
                     'fileant':'defant.vsh3',
                     'k':0 }
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -2298,7 +2298,7 @@ class Body(PyLayers):
                 cyl.savept(ptn.T,_filename)
                 bodylist.append('{<'+filename+'}\n')
                 if kwargs['verbose']:
-                    print('{<'+filename+'}\n')
+                    print(('{<'+filename+'}\n'))
 
             # display selected cylinder coordinate system
             if kwargs['ccs']:
@@ -2312,7 +2312,7 @@ class Body(PyLayers):
 
         # display antenna cylinder coordinate system
         if kwargs['dcs']:
-            for key in self.dcs.keys():
+            for key in list(self.dcs.keys()):
                 filedcs = kwargs['tag']+'dcs-'+key
                 U = self.dcs[key]
                 geoa = geu.GeomVect(filedcs)
@@ -2324,7 +2324,7 @@ class Body(PyLayers):
 
         if kwargs['pattern']:
             self.setacs()
-            for key in self.dcs.keys():
+            for key in list(self.dcs.keys()):
                 Ant =  ant.Antenna(self.dev[key]['file'])
                 if not hasattr(Ant,'sqG'):
                     Ant.eval()
@@ -2628,7 +2628,7 @@ class Body(PyLayers):
 
         """
 
-        self.links = list(itt.combinations(self.dev.keys(),2))
+        self.links = list(itt.combinations(list(self.dev.keys()),2))
         n_link = len(self.links)
         link_vis = np.ndarray(shape = (n_link))
 
@@ -2703,7 +2703,7 @@ class Body(PyLayers):
             """ display 
             """
             for k in self.dev:
-                print (k,self.dev[k]['uc3d']) 
+                print((k,self.dev[k]['uc3d'])) 
 
 
 def translate(cycle, new_origin):
@@ -2793,7 +2793,7 @@ def Global_Trajectory(cycle, traj):
 
     for i in range(1, traj.shape[1]):
 
-        print( 'i = ', i)
+        print(( 'i = ', i))
 
         vect_depl = traj.T[i] - traj.T[i - 1]
         vect_depl = vect_depl / np.linalg.norm(vect_depl)
@@ -3095,7 +3095,7 @@ if __name__ == '__main__':
         self._show3()
         t=self.traj.time()
 
-        anim = range(5000,self.nframes,10)
+        anim = list(range(5000,self.nframes,10))
 
 
         while True:

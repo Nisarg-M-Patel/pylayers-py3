@@ -120,7 +120,7 @@ class Trajectories(PyLayers,list):
         if not append:
             [self.pop(0) for i in range(len(self))]
 
-        for k in fil.keys():
+        for k in list(fil.keys()):
             df = fil[k]
             #df = df.set_index('t')
             df.index = pd.to_datetime(df.t)
@@ -517,7 +517,7 @@ class Trajectory(PyLayers,pd.DataFrame):
                      'sf': 1
                     }
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -898,7 +898,7 @@ def importsn(_filename='pos.csv'):
     """
     filename = pyu.getlong(_filename, pstruc['DIRNETSAVE'])
     dt = pd.read_csv(filename)
-    dtk = dt.keys()
+    dtk = list(dt.keys())
     N = len(dtk)
     Ntraj = int((N-1)/3)
     lt = []

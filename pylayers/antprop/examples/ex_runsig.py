@@ -57,20 +57,20 @@ cp2 = poly2.centroid.xy
 
 ptx = np.array([cp1[0][0],cp1[1][0],1.5])
 prx = np.array([cp2[0][0],cp2[1][0],1.5])
-print 'Tx : ',ptx
-print 'Rx : ',prx
+print('Tx : ',ptx)
+print('Rx : ',prx)
 v   = prx-ptx
 mv  = np.sqrt(np.sum(v*v,axis=0))
 vn  = v/mv
-print vn
+print(vn)
 
 
 # <codecell>
 
 d = np.sqrt(np.dot((ptx-prx),(ptx-prx)))
 tau = d/0.3
-print "Distance (m): ,",d
-print "Delay (ns): ,",tau
+print("Distance (m): ,",d)
+print("Delay (ns): ,",tau)
 
 
 S=Signatures(L,nc1,nc2)
@@ -78,7 +78,7 @@ S=Signatures(L,nc1,nc2)
 t1 = time.time()
 S.run3(cutoff=2,dcut=3)
 t2 = time.time()
-print "elapsed time :",t2-t1
+print("elapsed time :",t2-t1)
 
 
 t1 = time.time()
@@ -87,6 +87,6 @@ r3=r.to3D()
 r3.locbas(L)
 r3.fillinter(L)
 t2 = time.time()
-print "elapsed time :",t2-t1
+print("elapsed time :",t2-t1)
 
 r3.show3(strucname='WHERE1')

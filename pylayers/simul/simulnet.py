@@ -1,5 +1,5 @@
 #   -*- coding:Utf-8 -*-
-from __future__ import print_function
+
 """
 .. currentmodule:: pylayers.simul.simulnet
 
@@ -29,7 +29,7 @@ import time
 import matplotlib.pyplot as plt
 import sys
 if sys.version_info.major==2:
-    import ConfigParser
+    import configparser
     from simpy.SimulationRT import SimulationRT, Process, hold
 else:
     import configparser as ConfigParser
@@ -96,7 +96,7 @@ class Simul(object):  # Simpy 3
         simpy.RealtimeEnvironment.__init__(self)  #simpy 3
         #self.initialize()
 
-        self.config = ConfigParser.ConfigParser()
+        self.config = configparser.ConfigParser()
         filename = pyu.getlong('simulnet.ini', pstruc['DIRSIMUL'])
 
         self.config.read(filename)
@@ -193,7 +193,7 @@ class Simul(object):  # Simpy 3
 
         self.lAg = []
         agents = []
-        Cf = ConfigParser.ConfigParser()
+        Cf = configparser.ConfigParser()
         Cf.read(pyu.getlong('agent.ini', 'ini'))
         agents = eval(dict(Cf.items('used_agent'))['list'])
         for i, ag in enumerate(agents):
@@ -290,7 +290,7 @@ class Simul(object):  # Simpy 3
             pyu.writeDetails(self)
             if os.path.isfile(os.path.join(basename, 'output', 'Nodes.txt')):
                 print('would you like to erase previous txt files ?')
-                A = raw_input()
+                A = input()
                 if A == 'y':
                     for f in os.listdir(os.path.join(basename, 'output')):
                         try:

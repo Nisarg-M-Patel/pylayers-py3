@@ -5,7 +5,7 @@ import pdb
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 from xml.etree.ElementTree import SubElement
-from geometry import *
+from .geometry import *
 
 class DumpBox(Element):
     """

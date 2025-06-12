@@ -778,7 +778,7 @@ class CLA(object):
 
         if par['boxes']:
 
-            for l in self.dlayer.keys():
+            for l in list(self.dlayer.keys()):
                 self.dlayer[l][0].parmsh['display'] = False
                 self.dlayer[l][1].parmsh['display'] = False
 
@@ -894,7 +894,7 @@ class CLA(object):
 
         if par['boxes']:
 
-            for l in self.dlayer.keys():
+            for l in list(self.dlayer.keys()):
                 self.dlayer[l][0].parmsh['display'] = False
                 self.dlayer[l][1].parmsh['display'] = False
 
@@ -1236,7 +1236,7 @@ class CLA(object):
         """
 
         if l == -1:
-            l = np.max(self.dlayer.keys())
+            l = np.max(list(self.dlayer.keys()))
 
         PP = []
         self.saveP = []
@@ -1289,7 +1289,7 @@ class CLA(object):
         """
 
         if l == -1:
-            l = np.max(self.dlayer.keys())
+            l = np.max(list(self.dlayer.keys()))
 
         PP = []
         poids = []
@@ -1354,9 +1354,9 @@ class CLA(object):
             for i in range(len(axis)):
                 if axis[i] != 0:
                     try:
-                        count = np.vstack((count, np.repeat(range(2 * (p - 1), (2 * (p - 1)) + 2) * (pow(2, saxis - p)), p)))
+                        count = np.vstack((count, np.repeat(list(range(2 * (p - 1), (2 * (p - 1)) + 2)) * (pow(2, saxis - p)), p)))
                     except:
-                        count = np.repeat(range(2 * (p - 1), (2 * (p - 1)) + 2)
+                        count = np.repeat(list(range(2 * (p - 1), (2 * (p - 1)) + 2))
                                           * (pow(2, saxis - p)), p)
                     p = p + 1
             count = count.T

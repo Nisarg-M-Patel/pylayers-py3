@@ -190,7 +190,7 @@ class World:
         '''
 
         X = self._obstacles
-        xv = X.values()
+        xv = list(X.values())
         tahe = []
         for i in range(len(xv)):
             for u in range(len(xv[i])):

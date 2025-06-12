@@ -2,6 +2,7 @@ import pdb
 import numpy as np
 from xml.etree.ElementTree import Element
 from xml.etree import ElementTree
+from functools import reduce
 
 class Point(Element):
     def __init__(self,name,p):

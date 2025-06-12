@@ -8,7 +8,7 @@
 
 """
 
-from __future__ import print_function
+
 import numpy as np
 import scipy as sp
 import pylayers.antprop.loss as plm
@@ -108,7 +108,7 @@ class Observables(object):
     @noise_model.setter
     def noise_model(self, value):
         if hasattr(self, 'noise_model'):
-            idem = np.alltrue(np.array([i in value.items() for i in self.noise_model.items()]))
+            idem = np.alltrue(np.array([i in list(value.items()) for i in list(self.noise_model.items())]))
             # check if any key/values of self.noise != new assigned value
             if not idem:
                 self._noise_model = value
@@ -191,7 +191,7 @@ class Observables(object):
             (Na x Nb x Na)
         """
         ddist = np.ndarray(shape=(0, self.Nb, self.Na))
-        for a in xrange(self.Na):
+        for a in range(self.Na):
             diff = self.dist[:, a][:, None] - self.dist[:, :]
 
             ddist = np.vstack((ddist, diff[None, ...]))
@@ -236,7 +236,7 @@ class Observables(object):
             config['pl_exp'] = 2.
         else:
             if isinstance(config, dict):
-                if config.has_key('model'):
+                if 'model' in config:
                     if config['model'] in implemented_model:
                         pass
                     else:
@@ -276,7 +276,7 @@ class Observables(object):
             config['std'] = 2.
         else:
             if isinstance(config, dict):
-                if config.has_key('law'):
+                if 'law' in config:
                     if config['law'] in implemented_law:
                         pass
                     else:
@@ -310,7 +310,7 @@ class Observables(object):
                     'mode3d':False ,
                     }
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 

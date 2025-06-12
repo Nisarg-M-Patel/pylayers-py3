@@ -24,14 +24,14 @@ A.savevsh3()
 filevsh3 = getlong(_filename.replace('.mat','.vsh3'),'ant')
 Nvsh3 =  os.path.getsize(filevsh3)
 ratio = Norig/(1.*Nvsh3)
-print ratio
-print "errel total"
+print(ratio)
+print("errel total")
 et1,et2,et3 =A.errel(dsf=1,typ='s3')
 et3l = 10*log10(et3)
-print et3l
-print "errel @ 46"
+print(et3l)
+print("errel @ 46")
 e1,e2,e3 = A.errel(kf=46,dsf=1,typ='s3')
-print 10*log10(e3)
+print(10*log10(e3))
 Nc = len(A.C.Br.ind3)
 Nf = A.Nf
 csize = 4*Nc*Nf

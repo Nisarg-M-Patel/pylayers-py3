@@ -81,7 +81,7 @@ av_wstds = ['None']+ list(stds.keys())
 
 
 
-dchann = {w:[str(i) for i in std.Wstandard(w).chan.keys()] for w in av_wstds if w !='None'}
+dchann = {w:[str(i) for i in list(std.Wstandard(w).chan.keys())] for w in av_wstds if w !='None'}
 dchann.update({'None':['None']})
 
 

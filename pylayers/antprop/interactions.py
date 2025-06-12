@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
-from __future__ import print_function
+
 """
 .. currentmodule:: pylayers.antprop.interactions
 
@@ -15,7 +15,7 @@ import glob
 import pdb
 import doctest
 if sys.version_info.major==2:
-    import ConfigParser
+    import configparser
 else:
     import configparser
 import networkx as nx
@@ -656,7 +656,7 @@ class IntR(Inter):
         if len(self.data) != 0:
             mapp = []
             # loop on all type of materials used for reflexion
-            for m in self.dusl.keys():
+            for m in list(self.dusl.keys()):
                 # used theta of the given slab
                 ut = self.data[self.dusl[m], 0]
                 if not ut.size == 0:
@@ -769,7 +769,7 @@ class IntT(Inter):
 
         if len(self.data) != 0:
             mapp = []
-            for m in self.dusl.keys():
+            for m in list(self.dusl.keys()):
                 # ut : used theta of the given slab
                 ut = self.data[self.dusl[m], 0]
                 if ut.size != 0:
@@ -852,7 +852,7 @@ class IntD(Inter):
             self.sinsout()
             D = np.zeros([self.nf, len(self.phi), 2, 2], dtype=complex)
             mapp=[]
-            for m in self.dusl.keys():
+            for m in list(self.dusl.keys()):
                 idx = self.dusl[m]
                 mats = m.split('@') # cf Rays.locbas =>Start diffraction specific case
                 mat0name = mats[0]

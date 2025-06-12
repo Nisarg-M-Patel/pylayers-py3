@@ -233,27 +233,27 @@ class Constraint(object):
     def info_old(self):
         """ display info on constraint
         """
-        print( "Type         : ", self.type)
+        print(( "Type         : ", self.type))
         print( "--------------------------")
-        print( "Time         : ", self.time)
-        print( "validity (s) : ", self.validity)
+        print(( "Time         : ", self.time))
+        print(( "validity (s) : ", self.validity))
 
         if ((self.runable)):
-            print( "Origin : ", self.p)
+            print(( "Origin : ", self.p))
 
         if self.evaluated:
             Npts = np.shape(self.g.p)[0]
-            print( "Nb valid points in volume    : ", Npts, " voxel")
-            print( "Taille kO: ", Npts * 12 / (2 ** 10), " kO")
+            print(( "Nb valid points in volume    : ", Npts, " voxel"))
+            print(( "Taille kO: ", Npts * 12 / (2 ** 10), " kO"))
 
         if self.type == "TOA":
             self.estvol()
-            print( "Estimated Volume", self.estvlm)
-            print( "Toa (ns)", self.value)
-            print( "std (ns)", self.std)
-            print( "vcw     ", self.vcw)
-            print( "Range(m)", self.range)
-            print( "sstd (m)", self.sstd)
+            print(( "Estimated Volume", self.estvlm))
+            print(( "Toa (ns)", self.value))
+            print(( "std (ns)", self.std))
+            print(( "vcw     ", self.vcw))
+            print(( "Range(m)", self.range))
+            print(( "sstd (m)", self.sstd))
         print( "-------------------")
         self.lbox.info()
         print( "-------------------")
@@ -268,9 +268,9 @@ class Constraint(object):
         """
 
         """
-        print( '{0:4} , {1:15}, {2:5}, {3:5}, {4:7}, {5:6}, {6:8}, {7:9}'.format('type', 'p', 'value', 'std', 'runable' , 'usable' , 'obsolete' , 'evaluated'))
+        print(( '{0:4} , {1:15}, {2:5}, {3:5}, {4:7}, {5:6}, {6:8}, {7:9}'.format('type', 'p', 'value', 'std', 'runable' , 'usable' , 'obsolete' , 'evaluated')))
         np.set_printoptions(precision=3)
-        print( '{0:4} , {1:15}, {2:5}, {3:5}, {4:7}, {5:6}, {6:8}, {7:9}'.format(self.type, self.p, self.value, self.std, self.runable, self.usable , self.obsolete , self.evaluated))
+        print(( '{0:4} , {1:15}, {2:5}, {3:5}, {4:7}, {5:6}, {6:8}, {7:9}'.format(self.type, self.p, self.value, self.std, self.runable, self.usable , self.obsolete , self.evaluated)))
 
 
     def _show3(self):

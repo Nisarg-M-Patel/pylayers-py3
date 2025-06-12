@@ -7,7 +7,7 @@
     :members:
 
 """
-from __future__ import print_function
+
 import doctest
 import os
 import glob
@@ -16,7 +16,7 @@ import sys
 import doctest
 import numpy as np
 if sys.version_info.major==2:
-    import ConfigParser as cp 
+    import configparser as cp 
 else:
     import configparser as cp
 
@@ -508,9 +508,9 @@ class RadioNode(PyLayers):
 
         points = space.items("coordinates")
         self.points = pyu.lt2idic(points)
-        self.N = len(self.points.keys())
+        self.N = len(list(self.points.keys()))
         del self.position
-        for k in self.points.keys():
+        for k in list(self.points.keys()):
             try:
                 self.position = np.hstack((self.position,
                                            self.points[k].reshape(3,1)))
@@ -548,7 +548,7 @@ class RadioNode(PyLayers):
             nnpt = int(lig[1])
             coord = lig[2:]
             for index in range(len(coord)):
-                point = map(float, coord[index].split())
+                point = list(map(float, coord[index].split()))
                 ndpoint = np.array([[point[0]], [point[1]], [point[2]]])
                 self.position = np.append(self.position, ndpoint, axis=1)
         self.time = np.arange(nnpt)

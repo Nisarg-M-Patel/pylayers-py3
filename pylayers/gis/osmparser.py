@@ -10,10 +10,10 @@ Module OSMParser
 from osmapi import OsmApi
 import geocoder as geo
 import sys
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 if sys.version_info.major == 2:
-    from  urllib2 import urlopen
+    from  urllib.request import urlopen
 else:
     from  urllib.request import urlopen
 
@@ -473,12 +473,12 @@ class Ways(object):
 
         tpt  = np.empty((2,))
         mask = np.ones((2,))
-        N = len(self.way.keys())
+        N = len(list(self.way.keys()))
         for k,b in enumerate(self.way):
             # retrieve PolyGon or LineString
             # progress bar
             if k%1000==0:
-                print(k,N)
+                print((k,N))
             shp = self.way[b].shp
             if type(shp)==geu.Polygon:
                 pa = self.way[b].shp.ndarray()
@@ -524,7 +524,7 @@ class Ways(object):
                         col = '#abcdef'
                     fig, ax = poly.plot(fig=fig, ax=ax,color=col)
                 except:
-                    print("building: ",b," is not a polygon")
+                    print(("building: ",b," is not a polygon"))
         plt.axis('scaled')
         return(fig,ax)
 
@@ -1030,7 +1030,7 @@ def buildingsparse(filename):
     for bid in relations.relation:
         tags = relations.relation[bid]['tags']
         if tags['type']=='outdoor':
-            print("Constructing Indoor building ", bid)
+            print(("Constructing Indoor building ", bid))
             bdg = FloorPlan(bid,coords,nodes,ways,relations)
             bdg.build(typ='relation',eid=bid)
     return bdg,m

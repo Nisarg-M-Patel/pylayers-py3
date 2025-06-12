@@ -4,7 +4,7 @@
 
 
 """
-from __future__ import print_function
+
 import shapely.geometry as sh
 import scipy.linalg as la
 import pdb
@@ -325,7 +325,7 @@ class LineString(pro.PyLayers, shg.LineString):
         #
         # update default values
         #
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
         #
@@ -580,7 +580,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
         npts = [L.ispoint(np.array(xx), tol=0.01) for xx in zip(x[0:-1], y[0:-1])]
         assert (0 not in npts), pdb.set_trace()
         # seg list of tuple [(n1,n2),(n2,n3),....(,)]
-        seg = zip(npts, np.roll(npts, -1))
+        seg = list(zip(npts, np.roll(npts, -1)))
         vnodes = []
         for pseg in seg:
             vnodes = vnodes + [pseg[0]]
@@ -644,7 +644,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
         #if 0 in npts:
         #    return
         # seg list of tuple [(n1,n2),(n2,n3),....(,)]
-        seg = zip(npts, np.roll(npts, -1))
+        seg = list(zip(npts, np.roll(npts, -1)))
         vnodes = []
 
         for pseg in seg:
@@ -871,7 +871,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
         #
         # update default values
         #
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
         #
@@ -1004,7 +1004,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
 
         # initialize function attributes
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key in kwargs:
                 setattr(self, key, kwargs[key])
             else:
@@ -1129,7 +1129,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
                 #
                 #  si point head
                 #
-                listpoint = range(Np)
+                listpoint = list(range(Np))
                 listpoint.remove(nk)   # remove current point
                 if i == 0:  # first iteration pcornert
                     if nk in uconvex:  # == 1
@@ -1305,7 +1305,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
 
 # initialize function attributes
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key in kwargs:
                 setattr(self, key, kwargs[key])
             else:
@@ -1503,7 +1503,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
                 #
                 #  si point head
                 #
-                listpoint = range(Np)
+                listpoint = list(range(Np))
                 listpoint.remove(nk)   # remove current point
                 if i == 0:  # first iteration pcornert
                     if nk in uconvex:  # == 1
@@ -1642,7 +1642,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
                     'linewidth': 2
                     }
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key in kwargs:
                 setattr(self, key, kwargs[key])
             else:
@@ -2099,7 +2099,7 @@ class GeomVect(Geomview):
         if type(pt) == list:
             pt = np.array(pt).reshape(3, 1)
         if type(pt) == dict:
-            npt = len(pt.keys())
+            npt = len(list(pt.keys()))
         if type(pt) == np.ndarray:
             npt = np.shape(pt)[1]
         snpt = str(npt) + "\n"
@@ -2117,10 +2117,10 @@ class GeomVect(Geomview):
 
         if type(pt) == dict:
             for i in range(npt):
-                x = str(pt[pt.keys()[i]][0])
-                y = str(pt[pt.keys()[i]][1])
+                x = str(pt[list(pt.keys())[i]][0])
+                y = str(pt[list(pt.keys())[i]][1])
                 try:
-                    z = str(pt[pt.keys()[i]][2])
+                    z = str(pt[list(pt.keys())[i]][2])
                 except:
                     z = str(0.0)
                 chaine = x + " " + y + " " + z + "\n"
@@ -2417,7 +2417,7 @@ class Geomoff(Geomview):
                     'tag': 'Pat',
                     'ilog': False}
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -3348,7 +3348,7 @@ def are_points_inside_cone1(points,apex,v,radius=np.inf):
     #bhs  = np.ones(len(bhs),dtype=bool)
     #brad = np.ones(len(brad),dtype=bool)
 
-    tk = [ c for c in combinations(range(Nvec),2) ] 
+    tk = [ c for c in combinations(list(range(Nvec)),2) ] 
     bcw = np.empty((len(tk),Npoints),dtype=bool)
     #print("w : ",w) 
     #print("v :",v)
@@ -4523,7 +4523,7 @@ def plot_bounds(ax, ob, color='#000000'):
     `Shapely <http://pypi.python.org/pypi/Shapely>`_
 
     """
-    x, y = zip(*list((p.x, p.y) for p in ob.boundary))
+    x, y = list(zip(*list((p.x, p.y) for p in ob.boundary)))
     ax.plot(x, y, color=color, zorder=0.1)  # '#000000'
     # ax.plot(x, y, 'o', color='#000000', zorder=0.1)   #'#000000'
 
@@ -4811,7 +4811,7 @@ def plot_bounds2(ax, ob):
 
     http://pypi.python.org/pypi/Shapely
     """
-    x, y = zip(*list((p.x, p.y) for p in ob.boundary))
+    x, y = list(zip(*list((p.x, p.y) for p in ob.boundary)))
     ax.plot(x, y, color='#000000', zorder=0.1)
 
 
@@ -4847,7 +4847,7 @@ def plot_bounds3(ax, ob, color):
     ----------
     http://pypi.python.org/pypi/Shapely
     """
-    x, y = zip(*list((p.x, p.y) for p in ob.boundary))
+    x, y = list(zip(*list((p.x, p.y) for p in ob.boundary)))
     ax.plot(x, y, color=color, zorder=1)
 
 
@@ -6117,7 +6117,7 @@ def get_pol_angles(poly, unit='rad', inside=True):
     if hasattr(poly, 'vnodes'):
         upt = poly.vnodes[poly.vnodes < 0]
     else:
-        upt = range(np.array(poly.exterior.xy).shape[1])
+        upt = list(range(np.array(poly.exterior.xy).shape[1]))
     # flip orientation in case of negative area
     if SignedArea(pt) < 0:
         upt = upt[::-1]

@@ -121,11 +121,11 @@ for n in L.Gt.nodes():
             utsconvex = np.nonzero(abs(tcc) == 1)[0]
             if len(utconvex) != 0:
                 # get points ID in the cycle
-                uus = filter(lambda x: x<0,no)
+                uus = [x for x in no if x<0]
                 # get point convex ID
                 uc = np.array(uus)[utconvex]
                 ucs = np.array(uus)[utsconvex]
-                pucs = array(map(lambda x: L.Gs.pos[x], ucs))
+                pucs = array([L.Gs.pos[x] for x in ucs])
                 pucs = np.vstack((pucs,pucs[-1]))
 
                 ####
@@ -223,14 +223,14 @@ for n in L.Gt.nodes():
                     vnodes.extend(ptmp.vnodes)
                 #air walls to be deleted (because origin Delaunay triangle
                 # has been merged )
-                daw = filter(lambda x: x not in vnodes,naw)
+                daw = [x for x in naw if x not in vnodes]
                 [L.del_segment(d,verbose=False) for d in daw]
                 nbpolys=len(ncpol)
 
                 #remove old cycle
                 L.Gt.remove_node(n)
                 # lcyid: (new) list of cycle id 
-                lcyid = [n] + range(ncy+1,ncy+(nbpolys))
+                lcyid = [n] + list(range(ncy+1,ncy+(nbpolys)))
                 lacy.extend(lcyid)
                 for ip,p in enumerate(ncpol):
                     #p.coorddeter()
@@ -250,7 +250,7 @@ for n in L.Gt.nodes():
                     L.Gt.node[cyid]['isopen']=True
                     L.Gt.pos[cyid] = tuple(cy.g)
 
-                Gtnodes= filter(lambda x: x>0,L.Gt.nodes())
+                Gtnodes= [x for x in L.Gt.nodes() if x>0]
                 for k in combinations(Gtnodes, 2):
                     vnodes0 = np.array(L.Gt.node[k[0]]['cycle'].cycle)
                     vnodes1 = np.array(L.Gt.node[k[1]]['cycle'].cycle)

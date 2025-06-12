@@ -26,7 +26,7 @@ import scipy as sp
 import sys
 
 if sys.version_info.major==2:
-    import ConfigParser
+    import configparser
 else:
     import configparser as ConfigParser
 import itertools
@@ -75,7 +75,7 @@ class EMSolver(object):
 
     def __init__(self,L=Layout()):
 
-        self.config  = ConfigParser.ConfigParser()
+        self.config  = configparser.ConfigParser()
         self.fileini ='EMSolver.ini'
         self.config.read(pyu.getlong(self.fileini,pstruc['DIRSIMUL']))
 
@@ -106,7 +106,7 @@ class EMSolver(object):
 
         fileini = pyu.getlong(self.fileini, pstruc['DIRSIMUL'])
         fd = open(fileini, "a")
-        nconfig     = ConfigParser.ConfigParser()
+        nconfig     = configparser.ConfigParser()
         nconfig.add_section(RAT+'_PLM')
         nconfig.set(RAT+'_PLM','sigrss', str(model.sigrss))
         nconfig.set(RAT+'_PLM','f', str(model.f))
@@ -223,7 +223,7 @@ class EMSolver(object):
 
                 # evaluation of all LDPs
                 if LDP=='all':
-                    pa = np.vstack(p.values())
+                    pa = np.vstack(list(p.values()))
                     lpa = len(pa)
                     Pr = []
                     TOA = []

@@ -13,6 +13,7 @@ from pylayers.util.project import *
 from pylayers.antprop.aarray import *
 from pylayers.measures.exploith5 import *
 from pylayers.measures.vna.E5072A import *
+from functools import reduce
 #import pylayers.measures.switch.ni_usb_6501 as sw
 
 """
@@ -421,7 +422,7 @@ class Axes(PyLayers):
         """
         for k in self.dvar:
             st = self.com('R('+k+')')
-            print( self.dvar[k],st[1].replace('\n',''))
+            print(( self.dvar[k],st[1].replace('\n','')))
 
     def __repr__(self):
         """
@@ -482,7 +483,7 @@ class Axes(PyLayers):
 
 
         if lvar == []:
-            lvar = Axes.dvar.keys()
+            lvar = list(Axes.dvar.keys())
         else:
             var = lvar
             st = self.com('R('+var+')')[1].replace('*','').replace('/n','')
@@ -492,7 +493,7 @@ class Axes(PyLayers):
                 else:
                     print("I'm stationnary")
 
-            print(Axes.dvar[var],st)
+            print((Axes.dvar[var],st))
 
 
     def com(self,command='R(SN)',verbose=False):
@@ -588,7 +589,7 @@ class Axes(PyLayers):
             else:
                 print("Stop motion when a limit is hit but continue the program, ")
 
-            print('deceleration : ',eval(ans[3].split('D')[1]), "rps")
+            print(('deceleration : ',eval(ans[3].split('D')[1]), "rps"))
 
         if not self.emulated:
             if cmd=='set':
@@ -784,10 +785,10 @@ class Axes(PyLayers):
             #### VELOCITY AND ACCELERATION
             ##############################
             if '+' in ans[3]:
-                print('velocity : +',eval(ans[3].split('V+')[1]), "rps")
+                print(('velocity : +',eval(ans[3].split('V+')[1]), "rps"))
             else:
-                print('velocity : -',eval(ans[3].split('V-')[1]), "rps")
-                print('acceleration : ',eval(ans[4].split('A')[1]), "rps")
+                print(('velocity : -',eval(ans[3].split('V-')[1]), "rps"))
+                print(('acceleration : ',eval(ans[4].split('A')[1]), "rps"))
 
 
 
@@ -843,7 +844,7 @@ class Axes(PyLayers):
             else:
                 print("Stop motion when a limit is hit but continue the program, ")
 
-            print('deceleration : ',eval(ans[3].split('D')[1]), "rps")
+            print(('deceleration : ',eval(ans[3].split('D')[1]), "rps"))
 
     def add_profile(self,**kwargs):
         """ add a new profile to lprofile
@@ -1379,7 +1380,7 @@ class Scanner(PyLayers):
         for k in range(1,len(self.a)):
             com = self.a[k].reset()
         toc = time.time()
-        print("time reset (s) :",toc-tic)
+        print(("time reset (s) :",toc-tic))
 
 
     def home(self,cmd='set',init=True,vel=10):
@@ -1545,7 +1546,7 @@ class Scanner(PyLayers):
         Dh5.open('r')
 
         try:
-            ldataset = Dh5.f.keys()
+            ldataset = list(Dh5.f.keys())
         except:
             raise IOError('no calibration in h5 file')
 
@@ -1585,7 +1586,7 @@ class Scanner(PyLayers):
         lN =  [ A.N[k] for  k  in range(4) if A.N[k]!=1 ]
         Dh5.open('a')
         try:
-            ldataset = Dh5.f.keys()
+            ldataset = list(Dh5.f.keys())
         except:
             ldataset = []
 

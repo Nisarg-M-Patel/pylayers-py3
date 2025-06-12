@@ -1,12 +1,12 @@
 # -*- coding: latin1 -*-
-from __future__ import print_function
-from __future__ import division, print_function, absolute_import
+
+
 import os
 import sys
 import string
 if sys.version_info.major==2:
-    import cPickle
-    import ConfigParser as configparser
+    import pickle
+    import configparser as configparser
 else:
     import _pickle as cPickle
     import configparser
@@ -381,7 +381,7 @@ class Interface(PyLayers):
                 'att':False
                }
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -391,11 +391,11 @@ class Interface(PyLayers):
         # filtering kwargs argument for mulplot function
         args ={}
         for k in kwargs:
-            if k not in defaults.keys():
+            if k not in list(defaults.keys()):
                 args[k]=kwargs[k]
         args['nlin'] = 1
 
-        if 'labels' not in kwargs.keys():
+        if 'labels' not in list(kwargs.keys()):
             args['labels'] = [self.name]
 
         args['titles'] = []
@@ -405,7 +405,7 @@ class Interface(PyLayers):
         # Reflexion
         if 'R' in kwargs['coeff']:
             if 'o' in kwargs['polar']:
-                args['titles'].append(u'$R_{\perp}$')
+                args['titles'].append('$R_{\perp}$')
                 if var=='f': # wrt frequency
                     Ro = self.R[:, kv, 0, 0]
                     y = Ro
@@ -413,7 +413,7 @@ class Interface(PyLayers):
                     Ro = self.R[kv, :, 0, 0]
                     y = Ro
             if 'p' in kwargs['polar']:
-                args['titles'].append(u'$R_{//}$')
+                args['titles'].append('$R_{//}$')
                 if var=='f': # wrt frequency
                     Rp = self.R[:, kv, 1, 1]
                     try:
@@ -429,7 +429,7 @@ class Interface(PyLayers):
         # Transmission
         if 'T' in kwargs['coeff']:
             if 'o' in kwargs['polar']:
-                args['titles'].append(u'$T_{\perp}$')
+                args['titles'].append('$T_{\perp}$')
                 if var=='f': # wrt frequency
                     To = self.T[:, kv, 0, 0]
                     try:
@@ -443,7 +443,7 @@ class Interface(PyLayers):
                     except:
                         y = To
             if 'p' in kwargs['polar']:
-                args['titles'].append(u'$T_{//}$')
+                args['titles'].append('$T_{//}$')
                 if var=='f': # wrt frequency
                     Tp = self.T[:, kv, 1, 1]
                     try:
@@ -718,7 +718,7 @@ class Mat(PyLayers,dict):
         # epsrp  = a * fGHZ ** b 
         # sigma  = c * fGHZ ** d 
         #
-        if (name in ITU_P2040_T3.keys()):
+        if (name in list(ITU_P2040_T3.keys())):
             abcd = ITU_P2040_T3[name]
             self['a'] = abcd[0]
             self['b'] = abcd[1]
@@ -835,8 +835,8 @@ class MatDB(PyLayers,dict):
             self._fileini = _fileini
             self.load(_fileini)
         else:
-            for matname in dm.keys():
-                if 'name' in dm[matname].keys():
+            for matname in list(dm.keys()):
+                if 'name' in list(dm[matname].keys()):
                     dm[matname].pop('name')
                 M = Mat(matname,**dm[matname])
                 #ddm = dm[matname]
@@ -1027,7 +1027,7 @@ class MatDB(PyLayers,dict):
     def choose(self):
         """ Choose a mat from matdir
         """
-        import tkFileDialog
+        import tkinter.filedialog
         FD = tkFileDialog
         filename = FD.askopenfilename(filetypes=[("Mat file ", "*.ini"),
                                                  ("All", "*")],
@@ -1739,7 +1739,7 @@ class SlabDB(dict):
     def __repr__(self):
         st = 'List of Slabs\n'
         st = st + '-----------------------------'+'\n'+'\n'
-        for i in self.keys():
+        for i in list(self.keys()):
             st = st + self[i].__repr__()
         #    S.info()
         #st =      "Slab file name     : " + self.fileslab+ '\n'
@@ -1752,9 +1752,9 @@ class SlabDB(dict):
         """
 
         if type(sl).__name__ == 'str':
-            return sl in self.keys()
+            return sl in list(self.keys())
         elif type(sl).__name__ == 'Slab':
-            return sl['name'] in self.keys()
+            return sl['name'] in list(self.keys())
 
 
     def __add__(self,sl):
@@ -1790,7 +1790,7 @@ class SlabDB(dict):
         """ show all slabs
 
         """
-        lsl = self.keys()
+        lsl = list(self.keys())
         k = len(lsl)
         nl = k / 2
         cpt = 1

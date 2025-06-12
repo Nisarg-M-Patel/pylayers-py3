@@ -49,7 +49,7 @@ threshold = 0.1
 logger.info(" evaluation of DLink cutoff:%d threshold:%f",cutoff,threshold)
 DL.eval(verbose=False,force=True,bt=True,cutoff=cutoff,threshold=threshold,ra_vectorized=True,nD=1,diffraction=False)
 toc = time.time()
-print(toc-tic)
+print((toc-tic))
 #DL.b=np.array([755,1110,1.5])
 #DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True)
 #dist_a_b = np.sqrt(np.sum((DL.a-DL.b)**2))

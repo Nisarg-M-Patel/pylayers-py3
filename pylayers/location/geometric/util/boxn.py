@@ -135,7 +135,7 @@ class LBoxN(PyLayers):
         if len(self.bd ) != 0:
             lbd=len(self.bd)/2
             self.ctr=np.zeros((lbd,self.ndim))
-            for i in xrange(lbd):self.ctr[i,:]=(self.bd[2*i]+self.bd[(2*i)+1])/2.
+            for i in range(lbd):self.ctr[i,:]=(self.bd[2*i]+self.bd[(2*i)+1])/2.
 #########################FONTIONNE MAIS TROP LOURD/TENT quand bcp de box
 #            C  =np.array(([[1/2.,1/2.]]))
 #            #M  =np.array(([[-1.,1.]]))    
@@ -241,7 +241,7 @@ class LBoxN(PyLayers):
             print("------------")
             self.box[k].info()
             Vtot = Vtot+self.box[k].vol
-        print("Volume : ",Vtot)
+        print(("Volume : ",Vtot))
 
     def bd2coord(self,Mapping = False):
         """Boundary to coordinates
@@ -286,17 +286,17 @@ class LBoxN(PyLayers):
         P=np.zeros((lbd*dimm1,self.ndim)) #P=(len self.bd/2)*4
         # organisation de P
         if self.ndim == 3:
-            R=np.repeat(range(0,dimm1*lbd,dimm1),2)
-            R[range(1,len(R),2)]=R[range(1,len(R),2)]+1
+            R=np.repeat(list(range(0,dimm1*lbd,dimm1)),2)
+            R[list(range(1,len(R),2))]=R[list(range(1,len(R),2))]+1
         if self.ndim == 2:
-            R=np.repeat(range(0,dimm1*lbd,dim),2)
-            R[range(1,len(R),2)]=R[range(1,len(R),2)]+1
+            R=np.repeat(list(range(0,dimm1*lbd,dim)),2)
+            R[list(range(1,len(R),2))]=R[list(range(1,len(R),2))]+1
 
         if self.ndim == 3:
-            RZ=np.repeat(range(0,dimm1*lbd,dim),dimm1)+(lbd/2)*range(0,dimm1,1)
+            RZ=np.repeat(list(range(0,dimm1*lbd,dim)),dimm1)+(lbd/2)*list(range(0,dimm1,1))
         # aller chercher dans self.bd
-        R2a=np.repeat(self.bd[range(0,lbd,2),:],dimm1,axis=0)
-        R2b=np.repeat(self.bd[range(1,lbd,2),:],dimm1,axis=0)
+        R2a=np.repeat(self.bd[list(range(0,lbd,2)),:],dimm1,axis=0)
+        R2b=np.repeat(self.bd[list(range(1,lbd,2)),:],dimm1,axis=0)
 
 #        # X
 #        P[R,0]=R2a[:,0]#np.repeat(L.bd[range(0,lbd,2),0],4)
@@ -323,7 +323,7 @@ class LBoxN(PyLayers):
 
         # mapping coresponding box
         if Mapping == True:
-            Map=np.repeat(range(0,lbd/2,1),dim)
+            Map=np.repeat(list(range(0,lbd/2,1)),dim)
         #    Map=10*np.repeat(self.bnum,8)+range(0,8,1)*(len(self.bnum))
             return(P,Map)
 #        P=np.array((
@@ -365,16 +365,16 @@ class LBoxN(PyLayers):
 
             M=np.repeat(3*np.arange(0,len(self.bd)/2),16)  # groupe de 16 boundaries equivaut a 8 sous boites
 
-            X = (range(0,2)+range(1,3))*4*(len(self.bd)/2)
-            Y =(range(0,2)*2+range(1,3)*2)*2*(len(self.bd)/2)
-            Z = (range(0,2)*4+range(1,3)*4)*(len(self.bd)/2)
+            X = (list(range(0,2))+list(range(1,3)))*4*(len(self.bd)/2)
+            Y =(list(range(0,2))*2+list(range(1,3))*2)*2*(len(self.bd)/2)
+            Z = (list(range(0,2))*4+list(range(1,3))*4)*(len(self.bd)/2)
 
             Rx = BD[X+M,0]
             Ry = BD[Y+M,1]
             Rz = BD[Z+M,2]
             lbd = np.array((Rx,Ry,Rz )).T
             llbd=len(lbd)
-            xr=xrange(0,llbd,2)
+            xr=range(0,llbd,2)
             lb=LBoxN([BoxN(lbd[i:i+2],ndim=self.ndim) for i in xr])
             lb.mesure()
 
@@ -391,8 +391,8 @@ class LBoxN(PyLayers):
 
             M=np.repeat(3*np.arange(0,len(self.bd)/2),8)  # groupe de 16 boundaries equivaut a 8 sous boites
 
-            X = (range(0,2)+range(1,3))*2*(len(self.bd)/2)
-            Y =(range(0,2)*2+range(1,3)*2)*(len(self.bd)/2)
+            X = (list(range(0,2))+list(range(1,3)))*2*(len(self.bd)/2)
+            Y =(list(range(0,2))*2+list(range(1,3))*2)*(len(self.bd)/2)
 
 
             Rx = BD[X+M,0]
@@ -402,7 +402,7 @@ class LBoxN(PyLayers):
             llbd=len(lbd)
 
 
-            lb=LBoxN(np.array([BoxN(lbd[i:i+2],ndim=self.ndim) for i in xrange(0,llbd,2)]))
+            lb=LBoxN(np.array([BoxN(lbd[i:i+2],ndim=self.ndim) for i in range(0,llbd,2)]))
 
 
 
@@ -640,8 +640,8 @@ class BoxN(PyLayers):
         """ Information on BoxN
         """
 
-        print( "Volume (.vol) :",self.vol)
-        print( "Center (.ctr)  :",self.ctr)
+        print(( "Volume (.vol) :",self.vol))
+        print(( "Center (.ctr)  :",self.ctr))
 
 
     def bd2coord(self):
@@ -862,7 +862,7 @@ class BoxN(PyLayers):
         if self.parmsh['interactive']==True:
             print('(read geometry {define foo \n')
             print("LIST\n")
-            print("{appearance  {-edge material {alpha "+str(alpha)+ " diffuse 1 0 0" +" }}")
+            print(("{appearance  {-edge material {alpha "+str(alpha)+ " diffuse 1 0 0" +" }}"))
             # 6 faces du cube
             for k in range(6):
                 print("{QUAD ")
@@ -871,7 +871,7 @@ class BoxN(PyLayers):
                     x = str(self.bd[b[k,i,0],dim[0]])
                     y = str(self.bd[b[k,i,1],dim[1]])
                     z = str(self.bd[b[k,i,2],dim[2]])
-                    print(x+" "+y+" "+z+" ")
+                    print((x+" "+y+" "+z+" "))
                 print("} ")
             print('}})')
         else:
@@ -930,7 +930,7 @@ class BoxN(PyLayers):
 
             if self.ndim==2 :
 
-                Z=1.0*np.array(range(0,2)*len(self.bd))
+                Z=1.0*np.array(list(range(0,2))*len(self.bd))
                 for k in range(6):        
                     # 6 faces du cube
                     #filebbk = "face" +str(Id)+str(o)+str(l)+str(k)+".quad"

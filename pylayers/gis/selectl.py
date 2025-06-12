@@ -6,7 +6,7 @@ r"""
 .. autosummary::
 
 """
-from __future__ import print_function
+
 import os
 import pdb
 from PIL import Image
@@ -547,7 +547,7 @@ class SelectL(object):
         # flip layout in y
         #
         if self.evt == ',':
-            for k in self.ddoc.keys():
+            for k in list(self.ddoc.keys()):
                 print(k,self.ddoc[k])
 
         if self.evt == 'v':
@@ -611,7 +611,7 @@ class SelectL(object):
         # Choose layers to visualized
         #
         if self.evt == 'l':
-            listchoices = self.L.name.keys()
+            listchoices = list(self.L.name.keys())
             self.L.display['layers'] = multchoicebox('message',
                                                      'titre', listchoices)
             self.state = 'Init'
@@ -729,7 +729,7 @@ class SelectL(object):
         #
         if self.evt == 'b':
             if self.state == 'Init':
-                self.nsel = eval(raw_input("seg number :"))
+                self.nsel = eval(input("seg number :"))
                 #self.L.edit_segment(nseg)
                 self.state='SS'
                 self.update_state()
@@ -915,7 +915,7 @@ class SelectL(object):
         #
         if self.evt == 'w':
         # display all layer
-            self.L.display['activelayer'] = self.L.name.keys()
+            self.L.display['activelayer'] = list(self.L.name.keys())
             print( self.L.display['activelayer'])
             self.fig,self.ax = self.show(fig=self.fig,ax=self.ax,clear=True)
             return self.fig,self.ax
@@ -1180,9 +1180,8 @@ class SelectL(object):
             if not self.ctrl_is_held:
                 self.selectpt.extend(selectpt)
                 self.selectseg.extend(selectseg)
-                self.selectseg=filter(lambda x: self.L.Gs.node[x]['connect'][0] in self.selectpt
-                                 and self.L.Gs.node[x]['connect'][1] in self.selectpt,
-                                 self.selectseg)
+                self.selectseg=[x for x in self.selectseg if self.L.Gs.node[x]['connect'][0] in self.selectpt
+                                 and self.L.Gs.node[x]['connect'][1] in self.selectpt]
 
                 self.selectpt=np.unique(self.selectpt).tolist()
                 self.selectseg=np.unique(self.selectseg).tolist()

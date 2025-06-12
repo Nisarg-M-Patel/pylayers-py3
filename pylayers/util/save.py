@@ -7,7 +7,7 @@ import sys
 
 if sys.version_info.major==2:
     from SimPy.SimulationRT import Simulation, Process, hold
-    import ConfigParser
+    import configparser
 else:
     import configparser as ConfigParser
     from simpy import Process
@@ -61,7 +61,7 @@ class Save(Process):
                     'sim': None}
 
 ##       initialize attributes
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key in args:
                 setattr(self, key, args[key])
             else:
@@ -72,7 +72,7 @@ class Save(Process):
         Process.__init__(self, name='save', sim=self.args['sim'])
 
 
-        self.C = ConfigParser.ConfigParser()
+        self.C = configparser.ConfigParser()
         self.C.read(pyu.getlong('save.ini','ini'))
         self.opt = dict(self.C.items('config'))
         self.pos = dict(self.C.items('position'))
@@ -126,7 +126,7 @@ class Save(Process):
         """
         self.save=self.load()
         self.savemat=copy.deepcopy(self.save)
-        nodes=self.save['saveopt']['type'].keys()
+        nodes=list(self.save['saveopt']['type'].keys())
         for inn,n in enumerate(nodes):
             self.savemat['node_'+n]=self.save[n]
             for n2 in nodes:

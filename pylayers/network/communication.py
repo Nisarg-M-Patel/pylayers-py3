@@ -50,7 +50,7 @@ from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 
 if sys.version_info.major==2:
-    import ConfigParser
+    import configparser
     from SimPy.SimulationRT import Process, hold, SimEvent, Simulation, waitevent
 else:
     import configparser as ConfigParser
@@ -71,7 +71,7 @@ class dcond(dict):
     """
 
     def __init__(self,ID=0):
-        Cf = ConfigParser.ConfigParser()
+        Cf = configparser.ConfigParser()
         Cf.read(pyu.getlong('agent.ini','ini'))
         self.ag_opt = dict(Cf.items(ID))
         self.parse()
@@ -118,7 +118,7 @@ class TX():
                   }
 ##       initialize attributes
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key in args:
                 setattr(self, key, args[key])
             else:
@@ -151,7 +151,7 @@ class TX():
             #Process.__init__(self,env,generator)
             # Python3 implementation not done
 
-        Cf = ConfigParser.ConfigParser()
+        Cf = configparser.ConfigParser()
         Cf.read(pyu.getlong('agent.ini','ini'))
         for s in Cf.sections():
             try:
@@ -166,10 +166,10 @@ class TX():
     def run(self):
         while True:
             self.levt=[]
-            for d in self.dcond.keys():
+            for d in list(self.dcond.keys()):
                 if self.c_interpret(self.dcond[d]):
                     self.levt.append(self.dcste[c])
-            print('Tx ', self.ID,' @',self.sim.now())
+            print(('Tx ', self.ID,' @',self.sim.now()))
             yield hold, self, self.refresh
 
 
@@ -243,7 +243,7 @@ class TX():
                 # mettre boolean dans variable pour condition a plus d41 regle
                     if 'rssth' in r:
                         # rssth<100
-                        rntmp = np.array(nx.get_edge_attributes(self.PN.SubNet[wstd],'Pr').values())
+                        rntmp = np.array(list(nx.get_edge_attributes(self.PN.SubNet[wstd],'Pr').values()))
                         if len(r.split('<')) > 1:
                             rn = rn and ( rntmp  < eval(r.split('<')[1]) )
                         elif len(r.split('>')) > 1:
@@ -275,7 +275,7 @@ class TX():
             # wait request localization from localization layer
             yield waitevent,self,self.cmdrq
             if self.sim.verbose:
-                print("communication requested by node ",self.ID)
+                print(("communication requested by node ",self.ID))
 
             # n = nodes compliant with the rules given in communication.py
             #     and in self.gcom.dec[self.ID]
@@ -283,7 +283,7 @@ class TX():
 
 
             # send a signal (a.k.a. request transmission) to nodes in n
-            for wstd in rn.keys():
+            for wstd in list(rn.keys()):
                 for n in rn[wstd]:
                     # check if nodes in visibility
                     if self.net.edge[self.ID][n][wstd]['vis']:
@@ -333,7 +333,7 @@ class RX():
                   'mp':False
                   }
 ##       initialize attributes
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key in args:
 
                 setattr(self, key, args[key])
@@ -349,7 +349,7 @@ class RX():
 
         Process.__init__(self,name='Rx-'+str(self.ID),sim=self.sim)
 
-        Cf = ConfigParser.ConfigParser()
+        Cf = configparser.ConfigParser()
         Cf.read(pyu.getlong('agent.ini','ini'))
         for s in Cf.sections():
             try:
@@ -445,7 +445,7 @@ class RX():
         """
         self.create_evt()
         while 1:
-            for wstd in self.PN.SubNet.keys():
+            for wstd in list(self.PN.SubNet.keys()):
             # 2 approach to determine visibility
             ##  1) test visibility during the refresh
 #                [self.PN.edge[self.ID][n][wstd].update(
@@ -457,10 +457,10 @@ class RX():
             #  2) copy the visibility information from network layer
                 [self.PN.edge[self.ID][n][wstd].update(
                 {'Pr':self.net.edge[self.ID][n][wstd]['Pr'],'tPr':self.sim.now(),'vis':self.net.edge[self.ID][n][wstd]['vis']})
-                for n in self.PN.SubNet[wstd].edge[self.ID].keys() ]
+                for n in list(self.PN.SubNet[wstd].edge[self.ID].keys()) ]
 
             if self.sim.verbose:
-                print('refresh RSS node', self.ID, ' @',self.sim.now())
+                print(('refresh RSS node', self.ID, ' @',self.sim.now()))
 
             yield hold, self, self.refreshRSS
 
@@ -538,8 +538,8 @@ class RX():
         """
         self.create_evt()
         while 1:
-            yield waitevent,self,self.devt.values()
-            for evt in self.devt.values():
+            yield waitevent,self,list(self.devt.values())
+            for evt in list(self.devt.values()):
                 if evt.occurred:
                     # evt.name[0] = requester
                     # evt.name[1] = requested ( = self.ID)
@@ -547,7 +547,7 @@ class RX():
                     # update personal network
                     self.fill_req(evt.name[0],evt.name[2])
                     if self.sim.verbose:
-                        print('Done request from',evt.name[0],'to',evt.name[1], 'on wstd', evt.name[2])
+                        print(('Done request from',evt.name[0],'to',evt.name[1], 'on wstd', evt.name[2]))
 
 
 
@@ -616,7 +616,7 @@ class Gcom(nx.MultiDiGraph):
         self.devt = {}
 
     def load_dec_file(self):
-        self.config = ConfigParser.ConfigParser()
+        self.config = configparser.ConfigParser()
         self.config.read(pyu.getlong(self.fileini,pstruc['DIRSIMUL']))
         nodes = self.config.sections()
         ntype = nx.get_node_attributes(self.net,'typ')
@@ -629,7 +629,7 @@ class Gcom(nx.MultiDiGraph):
                     self.dec[n]['action']=eval(dict(self.config.items(n))['action'])
                     self.dec[n]['rule']=eval(dict(self.config.items(n))['rule'])
             except:
-                nconfig = ConfigParser.ConfigParser()
+                nconfig = configparser.ConfigParser()
                 nconfig.add_section(n)
                 nconfig.set(n,'wstd',[self.net.node[n]['wstd'][0]])
                 nconfig.set(n,'rule',['always'])
@@ -638,7 +638,7 @@ class Gcom(nx.MultiDiGraph):
                 fd = open(fileini, "a")
                 nconfig.write(fd)
                 fd.close()
-                print ('Warning: Communication of node '+n + 'set with default values')
+                print(('Warning: Communication of node '+n + 'set with default values'))
 
 
 
@@ -675,7 +675,7 @@ class Gcom(nx.MultiDiGraph):
                     else :
                         self.add_edges_from(self.net.Gen_tuple(nx.DiGraph(le).reverse().edges_iter(),wstd,ld))
                 except:
-                    print('WARNING : no edge on wstd',wstd)
+                    print(('WARNING : no edge on wstd',wstd))
 
 
 

@@ -9,7 +9,7 @@ theta = np.array(hdf_mesh['theta'])
 phi   = np.array(hdf_mesh['phi'])
 nf2ff = f['nf2ff']
 
-attrs = nf2ff.attrs.items()
+attrs = list(nf2ff.attrs.items())
 freq = attrs[0][1]
 Prad = attrs[1][1]
 Dmax = attrs[2][1]

@@ -1,6 +1,6 @@
 # -*- coding:Utf-8 -*-
 #from numpy import *
-from __future__ import print_function
+
 """
 .. currentmodule:: pylayers.antprop.loss
 
@@ -2031,7 +2031,7 @@ def visuPts(S,nu,nd,Pts,Values,fig=[],sp=[],vmin=0,vmax=-1,label=' ',tit='',size
         vmax = max(Values)
     S.L.showGs()
     if xticks:
-        for loc, spine in sp.spines.iteritems():
+        for loc, spine in sp.spines.items():
               if loc in ['left','bottom']:
                 spine.set_position(('outward',10)) # outward by 10 points
                 sp.yaxis.set_ticks_position('left')
@@ -2041,7 +2041,7 @@ def visuPts(S,nu,nd,Pts,Values,fig=[],sp=[],vmin=0,vmax=-1,label=' ',tit='',size
               else:
                 raise ValueError('unknown spine location: %s'%loc)
     else:
-        for loc, spine in sp.spines.iteritems():
+        for loc, spine in sp.spines.items():
               if loc in ['left']:
                 spine.set_position(('outward',10)) # outward by 10 points
                 sp.yaxis.set_ticks_position('left')

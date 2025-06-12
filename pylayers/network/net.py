@@ -23,7 +23,7 @@ import random
 import doctest
 import matplotlib.pylab as plt
 import pdb
-from prioritydict import priorityDictionary
+from .prioritydict import priorityDictionary
 from pylayers.util.project import *
 
 #
@@ -200,7 +200,7 @@ class Network(PyLayers,nx.Graph):
                 pathsByHop[pathLen] = []
             pathsByHop[pathLen].append(path)
         #print "PATHS (DICT): ", pathsByHop
-        pathKeys = pathsByHop.keys()
+        pathKeys = list(pathsByHop.keys())
         #print "PATH KEYS: ", pathKeys
         for i in range(0, len(pathKeys)):
             pathList = pathsByHop.get(pathKeys[i])
@@ -246,7 +246,7 @@ class Network(PyLayers,nx.Graph):
                     for time in range(prevPacketTime+1, numTimeSlots):
                         #2d: Check if nodes are available during this time slot. Set used = False, change to True if not possible.
                         used = False
-                        for key in self.schedule[time].keys():
+                        for key in list(self.schedule[time].keys()):
                             for i in range(0, len(self.schedule[time][key])):
                                 curLink = self.schedule[time][key][i]
                                 #print "curlink", curLink
@@ -260,7 +260,7 @@ class Network(PyLayers,nx.Graph):
                         #2e: Nodes are available, locate first available offset.
                         if used == False:
                             #Offset positions are available. Fill directly.
-                            offset = len(self.schedule[time].keys())
+                            offset = len(list(self.schedule[time].keys()))
                             if (offset < numOffsets):
                                 self.schedule[time][offset] = []
                                 linkSet = True
@@ -349,7 +349,7 @@ class Network(PyLayers,nx.Graph):
                 first = 1
                 timeSchedule = self.schedule.get(time, -1)
                 if timeSchedule != -1:
-                    for offset in timeSchedule.keys():
+                    for offset in list(timeSchedule.keys()):
                         for link in timeSchedule[offset]:
                             link = str(link)
                             link = link.replace(" ", "")
@@ -432,6 +432,6 @@ def connectModel(d,fGHz=2.4,sensitivitydBm=-85,n=2,PtdBm=0):
 
 if __name__=="__main__":
     plt.ion()
-    print "testing net.py"
+    print("testing net.py")
     doctest.testmod()
-    print "------------"
+    print("------------")

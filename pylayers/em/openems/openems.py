@@ -9,11 +9,11 @@ import os
 from xml.etree.ElementTree import Element
 from xml.etree import ElementTree
 # temporary import
-from geometry import *
-from matter import *
-from excitation import *
-from probe import *
-from dumpbox import *
+from .geometry import *
+from .matter import *
+from .excitation import *
+from .probe import *
+from .dumpbox import *
 
 
 class OpenEMS(Element):
@@ -126,7 +126,7 @@ class CSX(Element):
 
         """
         #if 'name' not in self.proper
-        if el.attrib.has_key('Name'):
+        if 'Name' in el.attrib:
             nameExist = False
             P = self.find('Properties')
             for ch in P.getchildren():

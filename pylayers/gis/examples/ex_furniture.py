@@ -28,9 +28,9 @@ for name in furname:
         p   = np.array(pos).T
         d1,d2,h = geu.dptseg(p,pt,ph)
         if ((np.prod(d1>0)) & (np.prod(d2>0))):
-            print d1
-            print d2 
-            print h 
+            print(d1)
+            print(d2) 
+            print(h) 
             fig,ax=F.show(fig,ax)
 apt =np.array(lpt)
 sh =np.shape(apt)

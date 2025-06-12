@@ -205,8 +205,8 @@ class Simul(PyLayers):
                                         }
                                  })
         self.ctime = np.nan
-        self.Nag = len(self.dpersons.keys())
-        self.Nap = len(self.dap.keys())
+        self.Nag = len(list(self.dpersons.keys()))
+        self.Nap = len(list(self.dap.keys()))
         self.traj = traj
 
     def load_CorSer(self,source):
@@ -225,7 +225,7 @@ class Simul(PyLayers):
         elif isinstance(source.B,list):
             B = source.B
         elif isinstance(source.B,dict):
-            B=source.B.values()
+            B=list(source.B.values())
         else:
             raise AttributeError('CorSer.B must be a list or a Body')
         self.L = source.L
@@ -519,7 +519,7 @@ class Simul(PyLayers):
         elif not isinstance(links, dict):
             raise AttributeError('links is {wstd:[list of links]}, see self.N.links')
 
-        for k in links.keys():
+        for k in list(links.keys()):
             checkl = [l in self.N.links[k] for l in links[k]]
             if len(np.where(checkl==False)[0])>0:
             # if sum(checkl) != len(self.N.links):
@@ -527,14 +527,14 @@ class Simul(PyLayers):
                 raise AttributeError(str(np.array(links)[uwrong])
                                      + ' links does not exist in Network')
 
-        wstd = links.keys()
+        wstd = list(links.keys())
         # # Check wstd attribute
         # if wstd == []:
         #     wstd = self.N.wstd.keys()
         # elif not isinstance(wstd, list):
         #     wstd = [wstd]
 
-        checkw = [w in self.N.wstd.keys() for w in wstd]
+        checkw = [w in list(self.N.wstd.keys()) for w in wstd]
         if sum(checkw) != len(wstd):
             uwrong = np.where(np.array(checkw) is False)[0]
             raise AttributeError(str(np.array(wstd)[uwrong])
@@ -591,7 +591,7 @@ class Simul(PyLayers):
             #trev = t[it]
         else:
             ta = kwargs['t']
-            it = range(len(ta))
+            it = list(range(len(ta)))
 
         ## Start to loop over time
         ##   ut : counter
@@ -613,10 +613,10 @@ class Simul(PyLayers):
                     #
                     if self.todo[typ]:
                         if self.verbose:
-                            print('-'*30)
-                            print('time:', t, '/',  lt[-1] ,' time idx:', ut, '/',len(ta),'/',ks)
-                            print('processing: ',na, ' <-> ', nb, 'wstd: ', w)
-                            print('-'*30)
+                            print(('-'*30))
+                            print(('time:', t, '/',  lt[-1] ,' time idx:', ut, '/',len(ta),'/',ks))
+                            print(('processing: ',na, ' <-> ', nb, 'wstd: ', w))
+                            print(('-'*30))
                         eng = 0
                         #
                         # Invoque link deterministic simulation 
@@ -813,7 +813,7 @@ class Simul(PyLayers):
             for up, person in enumerate(self.dpersons.values()):
                 person.settopos(self._traj[up], t=t, cs=True)
                 name = person.name
-                dev = person.dev.keys()
+                dev = list(person.dev.keys())
                 devlist.extend(dev)
                 #nodeid.extend([n + '_' + name for n in dev])
                 pos.extend([person.dcs[d][:, 0] for d in dev])
@@ -877,7 +877,7 @@ class Simul(PyLayers):
         plinks = kwargs['links']
         links=[]
         if isinstance(plinks,dict):
-            for l in plinks.keys():
+            for l in list(plinks.keys()):
                 links.extend(plinks[l])
 
         if len(links) == 0:
@@ -889,9 +889,9 @@ class Simul(PyLayers):
             # for each requested links
             for link in links:
                 linkname=link[0]+'-'+link[1]
-                if not output.has_key(linkname):
+                if linkname not in output:
                     output[linkname] = {}
-                if not output[linkname].has_key('t'):
+                if 't' not in output[linkname]:
                     output[linkname]['t'] = []
 
                 # restrict global dataframe self.data to the specific link
@@ -934,27 +934,27 @@ class Simul(PyLayers):
                         #if (lid[5]==str(uAa))&(lid[6]==str(uAb)):
                         self.DL.load(self.DL.H,H_id)
                         if 'ak' in kwargs['typ']:
-                            if not output[linkname].has_key('ak'):
+                            if 'ak' not in output[linkname]:
                                 output[linkname]['ak']=[]
                             output[linkname]['ak'].append(copy.deepcopy(self.DL.H.ak))
                         if 'tk' in kwargs['typ']:
-                            if not output[linkname].has_key('tk'):
+                            if 'tk' not in output[linkname]:
                                 output[linkname]['tk']=[]
                             output[linkname]['tk'].append(copy.deepcopy(self.DL.H.tk))
                         if 'rss' in kwargs['typ']:
-                            if not output[linkname].has_key('rss'):
+                            if 'rss' not in output[linkname]:
                                 output[linkname]['rss']=[]
                             output[linkname]['rss'].append(copy.deepcopy(self.DL.H.rssi()))
 
                     if 'R' in kwargs['typ']:
-                        if not output[linkname].has_key('R'):
+                        if 'R' not in output[linkname]:
                             output[linkname]['R']=[]
                         ray_id = line['ray_id']
                         self.DL.load(self.DL.R,ray_id)
                         output[linkname]['R'].append(copy.deepcopy(self.DL.R))
 
                     if 'C' in kwargs['typ']:
-                        if not output[linkname].has_key('C'):
+                        if 'C' not in output[linkname]:
                             output[linkname]['C']=[]
                         Ct_id = line['Ct_id']
                         self.DL.load(self.DL.C,Ct_id)
@@ -967,7 +967,7 @@ class Simul(PyLayers):
 
 
                     if 'H' in kwargs['typ']:
-                        if not output[linkname].has_key('H'):
+                        if 'H' not in output[linkname]:
                             output[linkname]['H']=[]
                         H_id = line['H_id']
                         lid = H_id.split('_')
@@ -977,14 +977,14 @@ class Simul(PyLayers):
 
                 # if time value not found in dataframe
                 else:
-                    if not output[linkname].has_key('time_to_simul'):
+                    if 'time_to_simul' not in output[linkname]:
                         output[linkname]['time_to_simul'] = []
                     output[linkname]['time_to_simul'].append(tt)
 
 
-        for l in output.keys():
-            if output[l].has_key('time_to_simul'):
-                print('link', l , 'require simulation for timestamps', output[l]['time_to_simul'])
+        for l in list(output.keys()):
+            if 'time_to_simul' in output[l]:
+                print(('link', l , 'require simulation for timestamps', output[l]['time_to_simul']))
 
 
         return(output)
@@ -1045,7 +1045,7 @@ class Simul(PyLayers):
         plinks = kwargs['links']
         links=[]
         if isinstance(plinks,dict):
-            for l in plinks.keys():
+            for l in list(plinks.keys()):
                 links.extend(plinks[l])
 
         if len(links) == 0:
@@ -1057,9 +1057,9 @@ class Simul(PyLayers):
             # for each requested links
             for link in links:
                 linkname=link[0]+'-'+link[1]
-                if not output.has_key(linkname):
+                if linkname not in output:
                     output[linkname] = {}
-                if not output[linkname].has_key('t'):
+                if 't' not in output[linkname]:
                     output[linkname]['t'] = []
 
 
@@ -1271,7 +1271,7 @@ class Simul(PyLayers):
         # read/write error
         try:
             fh5 = h5py.File(filenameh5, 'a')
-            if not grpname in fh5.keys():
+            if not grpname in list(fh5.keys()):
                 fh5.create_group(grpname)
                 f = fh5[grpname]
                 # for k in kwargs:
@@ -1320,7 +1320,7 @@ class Simul(PyLayers):
         # read/write error
         try:
             fh5 = h5py.File(filenameh5, 'r')
-            if not grpname in fh5.keys():
+            if not grpname in list(fh5.keys()):
                 fh5.close()
                 raise NameError(grpname + ' cannot be reached in ' + self.filename)
             f = fh5[grpname]
@@ -1344,7 +1344,7 @@ class Simul(PyLayers):
             fil = csv.writer(csvfile, delimiter=';',
                              quoting=csv.QUOTE_MINIMAL)
             if init:
-                keys = self.data.iloc[-1].keys()
+                keys = list(self.data.iloc[-1].keys())
                 data = [k for k in keys]
                 data .append('ak')
                 data .append('tk')

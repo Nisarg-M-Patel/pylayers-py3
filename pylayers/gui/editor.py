@@ -332,7 +332,7 @@ class PropertiesWin(QDialog):    # any super class is okay
         """
         sender = self.sender()
         wid = None
-        for k,w in self.dwidget.items():
+        for k,w in list(self.dwidget.items()):
             if w.heightmin == sender:
                 wid = self.dwidget[k]
                 break
@@ -350,7 +350,7 @@ class PropertiesWin(QDialog):    # any super class is okay
         sender = self.sender()
         wid = None
         widkey = None
-        for k,w in self.dwidget.items():
+        for k,w in list(self.dwidget.items()):
             if w.heightmin == sender:
                 wid = self.dwidget[k]
                 widkey = k
@@ -438,7 +438,7 @@ class PropertiesWin(QDialog):    # any super class is okay
         # elif diffseg < 0:
         #     # segments have been removed
         #     pass
-        for w in self.dwidget.values():
+        for w in list(self.dwidget.values()):
             # get nodes
             zmin = w.heightmin.value()
             zmax = w.heightmax.value()
@@ -960,7 +960,7 @@ class GridSet(QDialog):    # any super class is okay
 
 
     def ok(self):
-        print(self.xspacing.value(),self.yspacing.value())
+        print((self.xspacing.value(),self.yspacing.value()))
         self.parent.selectl.stepgridx = self.xspacing.value()
         self.parent.selectl.stepgridy = self.yspacing.value()
         self.parent.selectl.gridOn=True
@@ -1257,7 +1257,7 @@ class AppForm(QMainWindow):
         except:
             pass
         try:
-            n1,n2 = self.L.Gs[self.selectl.nsel].keys()
+            n1,n2 = list(self.L.Gs[self.selectl.nsel].keys())
             pn1 = np.array(self.L.Gs.pos[n1])
             pn2 = np.array(self.L.Gs.pos[n2])
             l="%.2f"%np.sqrt(np.sum((pn1-pn2)**2))

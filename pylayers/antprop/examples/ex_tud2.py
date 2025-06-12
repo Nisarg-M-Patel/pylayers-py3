@@ -67,13 +67,13 @@ Gt.load(S.dtud[itx][irx],S.dtang[itx][irx],S.drang[itx][irx],S.slab)
 
 
 a=time.time()
-print 'evaluation of all rays & interactions'
+print('evaluation of all rays & interactions')
 Gt.eval()
 b=time.time()
 
 #print 'memory size occupied by Interaction matrix = ',Gt.I.I.nbytes/1e6,'MB'
 #print 'memory size occupied by Ctilde matrix = ',Gt.Ctilde.nbytes/1e6,'MB'
-print 'evaluation in ',(b-a) ,'seconds'
+print('evaluation in ',(b-a) ,'seconds')
 
 C=Ctilde()
 C.load(pyu.getlong(S.dfield[itx][irx],pstruc['DIRTRA']))

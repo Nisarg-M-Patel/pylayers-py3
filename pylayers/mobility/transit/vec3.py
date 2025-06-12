@@ -45,13 +45,13 @@ class vec3:
         elif len(args)==1:
             T = type(args[0])
             # scalar
-            if T==types.FloatType or T==types.IntType or T==types.LongType:
+            if T==float or T==int or T==int:
                 self.x, self.y, self.z = (args[0], args[0], args[0])
             # vec3
             elif isinstance(args[0], vec3):
                 self.x, self.y, self.z = args[0]
             # Tuple/List
-            elif T==types.TupleType or T==types.ListType:
+            elif T==tuple or T==list:
                 if len(args[0])==0:
                     self.x = self.y = self.z = 0.0
                 elif len(args[0])==1:
@@ -64,11 +64,11 @@ class vec3:
                 else:
                     raise TypeError("vec3() takes at most 3 arguments")
             # String
-            elif T==types.StringType:
+            elif T==bytes:
                 s=args[0].replace(","," ").replace("  "," ").strip().split(" ")
                 if s==[""]:
                     s=[]
-                f=map(lambda x: float(x), s)
+                f=[float(x) for x in s]
                 dummy = vec3(f)
                 self.x, self.y, self.z = dummy
             # error
@@ -171,7 +171,7 @@ class vec3:
 
         T = type(other)
         # vec3*scalar
-        if T==types.FloatType or T==types.IntType or T==types.LongType:
+        if T==float or T==int or T==int:
             return vec3(self.x*other, self.y*other, self.z*other)
         # vec3*vec3
         if isinstance(other, vec3):
@@ -195,7 +195,7 @@ class vec3:
         """
         T = type(other)
         # vec3/scalar
-        if T==types.FloatType or T==types.IntType or T==types.LongType:
+        if T==float or T==int or T==int:
             return vec3(self.x/other, self.y/other, self.z/other)
         # unsupported
         else:
@@ -211,7 +211,7 @@ class vec3:
         """
         T = type(other)
         # vec3%scalar
-        if T==types.FloatType or T==types.IntType or T==types.LongType:
+        if T==float or T==int or T==int:
             return vec3(self.x%other, self.y%other, self.z%other)
         # unsupported
         else:
@@ -261,7 +261,7 @@ class vec3:
         """
         T = type(other)
         # vec3*=scalar
-        if T==types.FloatType or T==types.IntType or T==types.LongType:
+        if T==float or T==int or T==int:
             self.x*=other
             self.y*=other
             self.z*=other
@@ -279,7 +279,7 @@ class vec3:
         """
         T = type(other)
         # vec3/=scalar
-        if T==types.FloatType or T==types.IntType or T==types.LongType:
+        if T==float or T==int or T==int:
             self.x/=other
             self.y/=other
             self.z/=other
@@ -297,7 +297,7 @@ class vec3:
         """
         T = type(other)
         # vec3%=scalar
-        if T==types.FloatType or T==types.IntType or T==types.LongType:
+        if T==float or T==int or T==int:
             self.x%=other
             self.y%=other
             self.z%=other
@@ -350,7 +350,7 @@ class vec3:
         -1.8
         """
         T=type(key)
-        if T!=types.IntType and T!=types.LongType:
+        if T!=int and T!=int:
             raise TypeError("index must be integer")
 
         if   key==0: return self.x
@@ -368,7 +368,7 @@ class vec3:
         (1.5000, 0.7000, -0.3000)
         """
         T=type(key)
-        if T!=types.IntType and T!=types.LongType:
+        if T!=int and T!=int:
             raise TypeError("index must be integer")
 
         if   key==0: self.x = value
@@ -514,7 +514,7 @@ class vec3:
 def _test():
     import doctest, vec3
     failed, total = doctest.testmod(vec3)
-    print("%d/%d failed" % (failed, total))
+    print(("%d/%d failed" % (failed, total)))
 
 if __name__=="__main__":
 

@@ -54,7 +54,7 @@ ATDOA= np.array(([A[:,0],A[:,1]], [A[:,0],A[:,2]], [A[:,0],A[:,3]]))
 pe_toa = []
 pe_tdoa = []
 pe_toa_tdoa = []
-for k in xrange(N):
+for k in range(N):
     C_toa=CLA()
     C_tdoa=CLA()
     C_toa_tdoa=CLA()

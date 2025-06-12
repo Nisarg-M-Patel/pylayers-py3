@@ -27,11 +27,11 @@ poly2 = L.Gt.node[nc2]['polyg']
 cp2 = poly2.centroid.xy
 ptx = np.array([cp1[0][0],cp1[1][0],1.5])
 prx = np.array([cp2[0][0]+0.5,cp2[1][0]+0.5,1.5])
-print ptx
-print prx
+print(ptx)
+print(prx)
 d = np.sqrt(np.dot((ptx-prx),(ptx-prx)))
 tau = d/0.3
-print d,tau
+print(d,tau)
 
 
 
@@ -42,13 +42,13 @@ logging.info('Calculate signature')
 #S.run2(cutoff=6,dcut=3)
 S.run(cutoff=2)
 b=time.time()
-print b-a
+print(b-a)
 
 for i in L.Gi.nodes():
     ei = eval(i)
     if type(ei)!= int:
         if ei[0] == 354:
-            print i
+            print(i)
 
 #Gsi.add_node('Tx')
 #Gsi.pos['Tx']=tuple(ptx[:2])
@@ -79,9 +79,9 @@ for i in L.Gi.nodes():
 ##S.run(L,metasig,cutoff=3)
 #print "r = S.rays "
 r = S.rays(ptx,prx)
-print "r3 = r.to3D "
+print("r3 = r.to3D ")
 r3 = r.to3D()
-print "r3.locbas "
+print("r3.locbas ")
 r3.locbas(L)
 #print "r3.fillinter "
 r3.fillinter(L)

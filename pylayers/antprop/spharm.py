@@ -6,7 +6,7 @@
     :members:
 
 """
-from __future__ import print_function
+
 import doctest
 import os
 import glob
@@ -392,12 +392,12 @@ class SCoeff(PyLayers):
         st = st +  "fmin (GHz) : "+  str(self.fmin) + "\n"
         st = st +  "fmax (GHz) : "+  str(self.fmax) + "\n"
 
-        if 's2' in self.__dict__.keys():
+        if 's2' in list(self.__dict__.keys()):
             sh2 = np.shape(self.s2)
             if sh2[0] != 0:
                 st = st + "NCoeff s2  : " + str(len(self.ind2))+ "\n"
 
-        if 's3' in self.__dict__.keys():
+        if 's3' in list(self.__dict__.keys()):
             sh3 = np.shape(self.s3)
             if sh3[0] != 0:
                 st = st + "Ncoeff s3 : " + str(len(self.ind3))+ "\n"
@@ -1417,21 +1417,21 @@ class VSHCoeff(object):
         print(self.Ci.ind2[ib[k-1]])
         print(self.Bi.ind2[ib[k-1]])
         #ind = np.nonzero(E > (E.max() * threshold))[0]
-        self.Br.ind3 = self.Br.ind2[ib[range(k)]]
-        self.Br.s3 = self.Br.s2[:, ib[range(k)]]
-        self.Br.k2 = ib[range(k)]
+        self.Br.ind3 = self.Br.ind2[ib[list(range(k))]]
+        self.Br.s3 = self.Br.s2[:, ib[list(range(k))]]
+        self.Br.k2 = ib[list(range(k))]
 
-        self.Bi.ind3 = self.Bi.ind2[ib[range(k)]]
-        self.Bi.s3 = self.Bi.s2[:, ib[range(k)]]
-        self.Bi.k2 = ib[range(k)]
+        self.Bi.ind3 = self.Bi.ind2[ib[list(range(k))]]
+        self.Bi.s3 = self.Bi.s2[:, ib[list(range(k))]]
+        self.Bi.k2 = ib[list(range(k))]
 
-        self.Cr.ind3 = self.Cr.ind2[ib[range(k)]]
-        self.Cr.s3 = self.Cr.s2[:, ib[range(k)]]
-        self.Cr.k2 = ib[range(k)]
+        self.Cr.ind3 = self.Cr.ind2[ib[list(range(k))]]
+        self.Cr.s3 = self.Cr.s2[:, ib[list(range(k))]]
+        self.Cr.k2 = ib[list(range(k))]
 
-        self.Ci.ind3 = self.Ci.ind2[ib[range(k)]]
-        self.Ci.s3 = self.Ci.s2[:, ib[range(k)]]
-        self.Ci.k2 = ib[range(k)]
+        self.Ci.ind3 = self.Ci.ind2[ib[list(range(k))]]
+        self.Ci.s3 = self.Ci.s2[:, ib[list(range(k))]]
+        self.Ci.k2 = ib[list(range(k))]
         return E[ib[k-1]]
 
     def s2tos3(self, threshold=-1):

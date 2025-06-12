@@ -10,7 +10,7 @@ import json
 import sys
 
 if sys.version_info.major==2:
-    import ConfigParser
+    import configparser
 else:
     import configparser as ConfigParser
 
@@ -73,7 +73,7 @@ class Band(PyLayers,dict):
         """ load spectrum
         """
         self._fileini = _fileini
-        self.config = ConfigParser.ConfigParser()
+        self.config = configparser.ConfigParser()
         fp = open(pyu.getlong(_fileini,pstruc['DIRSIMUL']))
         self.config.readfp(fp)
         band = dict(self.config.items(bandname))
@@ -202,7 +202,7 @@ class Wstandard(PyLayers,dict):
         try:
             st = self.name+'\n'
             st = st+'-------------------------\n'
-            for k in np.sort(self.chan.keys()):
+            for k in np.sort(list(self.chan.keys())):
                 st = st + str(k) +' :  '+  self.chan[k].__repr__()
         except:
             st = 'No standard loaded \n'
@@ -268,7 +268,7 @@ class Wstandard(PyLayers,dict):
         stds = json.load(fp)
         fp.close()
         for k in stds:
-            print(k + ' , ',)
+            print((k + ' , ',))
 
     def power(self, band, info ='max', unit='mw'):
         """ Returns power information for a given channel
@@ -329,7 +329,7 @@ class Wstandard(PyLayers,dict):
             except:
                 raise TypeError('Incorrect band name')
 
-        for k in std['channels'].keys():
+        for k in list(std['channels'].keys()):
             f0 = std['channels'][k]['fstart']
             f1 = std['channels'][k]['fstop']
             bmhz = std['channels'][k]['bmhz']

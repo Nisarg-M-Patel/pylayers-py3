@@ -33,7 +33,7 @@ import scipy as sp
 from copy import copy
 import sys
 if sys.version_info.major==2:
-    import ConfigParser
+    import configparser
 else:
     import configparser as ConfigParser
 
@@ -103,7 +103,7 @@ class RSS(Constraint):
         self.std = std
         self.vcw = vcw
         if model == {}:
-            self.config = ConfigParser.ConfigParser()
+            self.config = configparser.ConfigParser()
             self.config.read(pyu.getlong('EMSolver.ini', 'ini'))
             param = dict(self.config.items('rat1_PLM'))
             self.model = PLSmodel(f=eval(param['f']), 

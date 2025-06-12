@@ -46,7 +46,7 @@ fig = plt.figure(figsize=(20,20))
 fig,ax = S.L.showG('st',nodes=False, fig=fig,aw=True)
 plt.axis('on')
 c = (5,0)
-k = AnchorNodes.keys()[c[0]]
+k = list(AnchorNodes.keys())[c[0]]
 pta = array([AnchorNodes[k]['coord'][0], AnchorNodes[k]['coord'][1], AnchorNodes[k]['coord'][2]]).reshape(3,1)
 S.tx.point(pta,mode="add")
 # ###### Trajectoire
@@ -93,7 +93,7 @@ tic5 = time.clock()
 #print "Algo 5 (new procone) :",tic5-tic4,len(link.Si),len(link.Si.keys())
 (ak,tauk)= link.eval(force=['sig','R','Ct','H'],alg=1,ra_ceil_height_meter=3,ra_number_mirror_cf=1,verbose=False,cutoff=4)
 tic6 = time.clock()
-print("Algo 7  :",tic6-tic5,len(link.Si),len(link.Si.keys()))
+print(("Algo 7  :",tic6-tic5,len(link.Si),len(list(link.Si.keys()))))
 #print "apply ..."
 #ciro = link.H.applywav(wav.sfg)
 #

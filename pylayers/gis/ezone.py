@@ -1117,8 +1117,8 @@ class Ezone(PyLayers):
         dpoly = pickle.load(fd)
         fd.close()
 
-        keys  = np.array(dpoly.keys())
-        lpoly = dpoly.values()
+        keys  = np.array(list(dpoly.keys()))
+        lpoly = list(dpoly.values())
         #u = np.argsort(np.array(keys))
 
         var  = Rennes['ALT_FAITAG'].values-Rennes['ALT_SOL'].values
@@ -1314,12 +1314,12 @@ class Ezone(PyLayers):
             ltiles = ext2qt(extent,self.lL0)
             # iterating over subtiles
             for ti in ltiles:
-                if ti in self.dbldg.keys():
+                if ti in list(self.dbldg.keys()):
                    info = self.dbldg[ti][0]
                    poly = self.dbldg[ti][1]
                    if kwargs['coord']=='cartesian':
-                       tu   = map(lambda x : self.m(x[:,0],x[:,1]),poly)
-                       poly = map(lambda x : np.vstack((x[0],x[1])).T,tu)
+                       tu   = [self.m(x[:,0],x[:,1]) for x in poly]
+                       poly = [np.vstack((x[0],x[1])).T for x in tu]
 
                    if kwargs['height']:
                        fig,ax = plu.polycol(poly,
@@ -1405,7 +1405,7 @@ class Ezone(PyLayers):
                         lpol = arr2lp(b)
                         self.dbldg[k] = [a,lpol]
 
-                l1 =   [ x.replace('i','') for x in self.dbldg.keys() ]
+                l1 =   [ x.replace('i','') for x in list(self.dbldg.keys()) ]
                 llon = [ eval(x.split('-')[0]) for x in l1 ]
                 llat = [ eval(x.split('-')[1]) for x in l1 ]
 
@@ -1432,26 +1432,26 @@ class Ezone(PyLayers):
         # create missing groups
         # extent
         # dem
-        if u'dem' not in f.keys():
-            dem = f.create_group(u'dem')
+        if 'dem' not in list(f.keys()):
+            dem = f.create_group('dem')
         else:
-            dem = f[u'dem']
+            dem = f['dem']
 
         if hasattr(self,'extent'):
             if 'extent' not in f:
                 f['extent'] = self.extent
-        if u'bldg' not in f.keys():
-            bldg = f.create_group(u'bldg')
+        if 'bldg' not in list(f.keys()):
+            bldg = f.create_group('bldg')
         else:
-            bldg=f[u'bldg']
+            bldg=f['bldg']
 
         if hasattr(self,'hgts'):
-            if u'srtm' not in dem:
-                srtm  = dem.create_group(u'srtm')
+            if 'srtm' not in dem:
+                srtm  = dem.create_group('srtm')
             else:
-                srtm = dem[u'srtm']
+                srtm = dem['srtm']
 
-            if u'hgts' not in srtm:
+            if 'hgts' not in srtm:
                 srtm.create_dataset('hgts',shape=self.hgts.shape,data=self.hgts)
 
         if hasattr(self,'lcvs'):
@@ -1459,10 +1459,10 @@ class Ezone(PyLayers):
                 srtm.create_dataset('lcvs',shape=self.lcvs.shape,data=self.lcvs)
 
         if hasattr(self,'hgta'):
-            if u'aster' not in dem:
-                aster = dem.create_group(u'aster')
+            if 'aster' not in dem:
+                aster = dem.create_group('aster')
             else:
-                aster = dem[u'aster']
+                aster = dem['aster']
 
             if 'hgta' not in aster:
                 aster.create_dataset('hgta',shape=self.hgta.shape,data=self.hgta)

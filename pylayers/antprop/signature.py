@@ -1,5 +1,5 @@
 #-*- coding:Utf-8 -*-
-from __future__ import print_function
+
 """
 .. currentmodule:: pylayers.antprop.signature
 
@@ -132,9 +132,9 @@ def gidl(g):
     for k in gr.edges():
         #print(k)
         di = gr[k[0]][k[1]]
-        ke = di['output'].keys()
-        va = di['output'].values()
-        keva = zip(ke,va)
+        ke = list(di['output'].keys())
+        va = list(di['output'].values())
+        keva = list(zip(ke,va))
         keva_valid = [ x for x in keva if len(x[0])>1]
         gr[k[0]][k[1]]['output'] = dict(keva_valid)
 
@@ -143,10 +143,10 @@ def gidl(g):
     return(gr)
 
 def shLtmp(L):
-    seg_connect = {x:L.Gs.edge[x].keys() for x in L.Gs.nodes() if x >0}
+    seg_connect = {x:list(L.Gs.edge[x].keys()) for x in L.Gs.nodes() if x >0}
 
-    dpts = {x[0]:(L.Gs.pos[x[1][0]],L.Gs.pos[x[1][1]]) for x in seg_connect.items() }
-    L._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
+    dpts = {x[0]:(L.Gs.pos[x[1][0]],L.Gs.pos[x[1][1]]) for x in list(seg_connect.items()) }
+    L._shseg = {p[0]:sh.LineString(p[1]) for p in list(dpts.items())}
 
 def showsig2(lsig,L,tahe):
     if isinstance(lsig,list):
@@ -156,7 +156,7 @@ def showsig2(lsig,L,tahe):
         k0 = k[0]
         k1 = k[1]
         if k0>0:
-            npt = L.Gs[k0].keys()
+            npt = list(L.Gs[k0].keys())
             pta = np.array(L.Gs.pos[npt[0]])
             phe = np.array(L.Gs.pos[npt[1]])
             if k1==2:
@@ -460,7 +460,7 @@ class Signatures(PyLayers,dict):
             size[k] = int(len(self[k])/2)
         s = s + 'from cycle : '+ str(self.source) + ' to cycle ' + str(self.target)+'\n'
         if self.dump==-1:
-            ldump = self.keys()
+            ldump = list(self.keys())
         else:
             ldump = self.dump
 
@@ -735,7 +735,7 @@ class Signatures(PyLayers,dict):
             f.attrs['source']=self.source
             f.attrs['target']=self.target
             f.attrs['cutoff']=self.cutoff
-            for k in self.keys():
+            for k in list(self.keys()):
                 f.create_dataset(str(k),shape=np.shape(self[k]),data=self[k])
             f.close()
         except:
@@ -756,7 +756,7 @@ class Signatures(PyLayers,dict):
         # read/write error
         try:
             f=h5py.File(filename,'r')
-            for k in f.keys():
+            for k in list(f.keys()):
                 self.update({eval(k):f[k][:]})
             f.close()
         except:
@@ -791,7 +791,7 @@ class Signatures(PyLayers,dict):
         try:
             # file management
             fh5=h5py.File(filename,'a')
-            if not grpname in fh5['sig'].keys():
+            if not grpname in list(fh5['sig'].keys()):
                 fh5['sig'].create_group(grpname)
             else :
                 raise NameError('sig/'+grpname +'already exists in '+filenameh5)
@@ -805,7 +805,7 @@ class Signatures(PyLayers,dict):
             f.attrs['threshold']=self.threshold
             f.create_group('ratio')
             f.create_group('sig')
-            for k in self.keys():
+            for k in list(self.keys()):
                 f['sig'].create_dataset(str(k),shape=np.shape(self[k]),data=self[k])
                 f['ratio'].create_dataset(str(k),shape=np.shape(self.ratio[k]),data=self.ratio[k])
             fh5.close()
@@ -849,18 +849,18 @@ class Signatures(PyLayers,dict):
             f=fh5['sig/'+grpname]
 
             # compliant with new h5 format:
-            if 'sig' in f.keys():
-                for k in f['sig'].keys():
+            if 'sig' in list(f.keys()):
+                for k in list(f['sig'].keys()):
                     self.update({eval(k):f['sig'][k][:]})
                     self.ratio.update({eval(k):f['ratio'][k][:]})
             # old h5 format
             else:
-                for k in f.keys():
+                for k in list(f.keys()):
                     self.update({eval(k):f[k][:]})
             Lname=f.attrs['L']
             self.cutoff = f.attrs['cutoff']
 
-            if 'threshold' in f.attrs.keys():
+            if 'threshold' in list(f.attrs.keys()):
                 self.threshold = f.attrs['threshold']
             # ensure backward compatibility
             else:
@@ -1332,7 +1332,7 @@ class Signatures(PyLayers,dict):
                 #
                 if animation :
                     cpt = cpt+1
-                    edge = zip(visited[:-1],visited[1:])
+                    edge = list(zip(visited[:-1],visited[1:]))
                     N = nx.draw_networkx_nodes(Gi,pos=Gi.pos,
                             nodelist=visited,labels={},
                             node_size=15,ax=ax,fig=fig)
@@ -1770,11 +1770,11 @@ class Signatures(PyLayers,dict):
                                     except:
                                         pass
 
-                            outint = Gi[visited[-2]][interaction]['output'].keys()
+                            outint = list(Gi[visited[-2]][interaction]['output'].keys())
                             #
                             # proint not used 
                             #
-                            proint = Gi[visited[-2]][interaction]['output'].values()
+                            proint = list(Gi[visited[-2]][interaction]['output'].values())
                             nexti  = [it for it in outint ]
                             stack.append(iter(nexti))
                         # 1590 ratio <= threshold
@@ -1975,7 +1975,7 @@ class Signatures(PyLayers,dict):
                     'aw':True
                    }
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
         # display layout
@@ -1994,14 +1994,14 @@ class Signatures(PyLayers,dict):
         # i=-1 all rays
         # else block of interactions i
         if kwargs['i']==-1:
-            lgrint = self.keys()
+            lgrint = list(self.keys())
         else:
             lgrint = [kwargs['i']]
 
 
         if kwargs['s'] == -1:
             for i in lgrint:
-                lsig = range(int(len(self[i])/2))
+                lsig = list(range(int(len(self[i])/2)))
                 for j in lsig:
                     sig = [ self.L.Gs.pos[x] for x in self[i][2*j] ]
                     siga = np.array(sig)
@@ -2038,7 +2038,7 @@ class Signatures(PyLayers,dict):
         plt.ion()
         fig = plt.figure()
 
-        nit = self.keys()
+        nit = list(self.keys())
         ni = nit[uni]
         ust = len(self[ni])/2
 
@@ -2066,7 +2066,7 @@ class Signatures(PyLayers,dict):
             ax.plot(ptx[0],prx[1],'xr')
             ax.plot(prx[0],prx[1],'xb')
 
-            if ni not in self.keys():
+            if ni not in list(self.keys()):
                 print("incorrect number of interactions")
             pos={}
 
@@ -2074,7 +2074,7 @@ class Signatures(PyLayers,dict):
                 for u in self[ni][us*2]:
                     pos.update({u:self.L.Gs.pos[u]})
                     line = np.vstack((line,np.array((self.L.Gs.pos[u]))))
-                nx.draw_networkx_nodes(self.L.Gs,pos=pos,nodelist=pos.keys(),node_color='r',ax=ax)
+                nx.draw_networkx_nodes(self.L.Gs,pos=pos,nodelist=list(pos.keys()),node_color='r',ax=ax)
 
                 for ii in self[ni][(us*2)+1]:
                     if ii == 1:
@@ -2090,7 +2090,7 @@ class Signatures(PyLayers,dict):
             ax.plot(line[:,0],line[:,1])
             plt.draw()
             print(inter)
-            st = raw_input()
+            st = input()
             ax.cla()
             if st == 'n':
                 if us+2 <= ust:
@@ -2232,7 +2232,7 @@ class Signatures(PyLayers,dict):
 
                     if isray:
                         Yi = np.fliplr(Yi)
-                        if k in rays.keys():
+                        if k in list(rays.keys()):
                             Yi3d = np.vstack((Yi[:, 1:-1], np.zeros((1, k))))
                             Yi3d = Yi3d.reshape(3, k, 1)
                             rays[k]['pt'] = np.dstack(( rays[k]['pt'], Yi3d))
@@ -2354,7 +2354,7 @@ class Signatures(PyLayers,dict):
             R[0]= {'sig':np.zeros(shape=(0,0,1)),'pt': np.zeros(shape=(2,1,0))}
 
         rays.update(R)
-        rays.nb_origin_sig = len(self.keys())
+        rays.nb_origin_sig = len(list(self.keys()))
         rays.origin_sig_name = self.filename
 
         return rays
@@ -2403,7 +2403,7 @@ class Signatures(PyLayers,dict):
         rayp={}
 
         # loop on number of interactions
-        for ninter in self.keys():
+        for ninter in list(self.keys()):
             signatures = copy.deepcopy(self[ninter])
             #get segment ids of signature with ninter interactions
             # seg = self[ninter][::2]
@@ -2655,7 +2655,7 @@ class Signatures(PyLayers,dict):
             tx = tx[:2]
         dM={}
         # loop on number of interactions
-        for ninter in self.keys():
+        for ninter in list(self.keys()):
 
             #get segment ids of signature with ninter interactions
             # nid = node id
@@ -2821,7 +2821,7 @@ class Signatures(PyLayers,dict):
             return nsp
 
         dM={}
-        for ninter in self.keys():
+        for ninter in list(self.keys()):
             #get segment ids of signature with ninter interactions
             seg = self[ninter][::2]
             nsig = len(seg)
@@ -3049,8 +3049,8 @@ class Signature(PyLayers,object):
             self.typ = sig[1, :]
 
         if type(sig) == list:
-            self.seq = map(seginter,sig)
-            self.typ = map(typinter,sig)
+            self.seq = list(map(seginter,sig))
+            self.typ = list(map(typinter,sig))
 
     def __repr__(self):
         s = ''
@@ -3062,7 +3062,7 @@ class Signature(PyLayers,object):
         return s
 
     def info(self):
-        for k in self.__dict__.keys():
+        for k in list(self.__dict__.keys()):
             print(k, ':', self.__dict__[k])
 
     def ev2(self, L):
@@ -3107,7 +3107,7 @@ class Signature(PyLayers,object):
                 norm = np.array([0, 0]).reshape(2,1)
             return(np.vstack((pa,pb,pc,norm)))
 
-            v = np.array(map(seqpointa,self.seq))
+            v = np.array(list(map(seqpointa,self.seq)))
 
             self.pa = v[:,0:2,:]
             self.pb = v[:,2:4,:]

@@ -12,8 +12,8 @@ import re
 import sys
 import doctest
 if sys.version_info.major==2:
-    from  urllib2 import urlopen
-    import ConfigParser
+    from  urllib.request import urlopen
+    import configparser
 else:
     from  urllib.request import urlopen
     import configparser as ConfigParser
@@ -99,7 +99,7 @@ class Furniture(PyLayers):
 
         """
         for key in self.__dict__:
-            print(key, '\t\t:\t', self.__dict__[key])
+            print((key, '\t\t:\t', self.__dict__[key]))
 
     def set_position(self, p=[], angle=0):
         """ set position
@@ -146,7 +146,7 @@ class Furniture(PyLayers):
             >>> plt.show()
         """
         filefurn = pyu.getlong(_filename,os.path.join('struc','furnitures'))
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         config.read(filefurn)
 
         self.name = config.get(name, "name")
@@ -183,7 +183,7 @@ class Furniture(PyLayers):
         """
         filefurn = pyu.getlong(_filename, "struc")
         fd = open(filefurn, "a")
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
 
         secname = self.name
         config.add_section(secname)

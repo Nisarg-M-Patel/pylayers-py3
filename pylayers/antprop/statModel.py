@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 """
 .. currentmodule:: pylayers.antprop.statModel
 

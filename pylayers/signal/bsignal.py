@@ -441,7 +441,7 @@ class Bsignal(PyLayers):
                     'ik' : 0
                    }
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -589,7 +589,7 @@ class Bsignal(PyLayers):
                     'xlabel':'',
                     'ylabel':''}
 
-        for k in defaults.keys():
+        for k in list(defaults.keys()):
             if not k in kwargs:
                 kwargs[k]=defaults[k]
 
@@ -1461,7 +1461,7 @@ class TBsignal(Bsignal):
                   'logy'  : False
                  }
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -1777,13 +1777,13 @@ class TUsignal(TBsignal, Usignal):
         """
         print('TUsignal')
         print('--------')
-        print('shx : ', np.shape(self.x))
-        print('shy : ', np.shape(self.y))
-        print('dx :  ', self.dx())
-        print('xmin :', self.x.min())
-        print('xmax :', self.x.max())
-        print('ymin :', self.y.min())
-        print('ymax :', self.y.max())
+        print(('shx : ', np.shape(self.x)))
+        print(('shy : ', np.shape(self.y)))
+        print(('dx :  ', self.dx()))
+        print(('xmin :', self.x.min()))
+        print(('xmax :', self.x.max()))
+        print(('ymin :', self.y.min()))
+        print(('ymax :', self.y.max()))
 
 
 
@@ -2037,8 +2037,8 @@ class TUsignal(TBsignal, Usignal):
         """
         O = TUsignal()
         #ba  = iirfilter(order,[wp,ws],ftype=ftype)
-        print("wp = ", wp)
-        print("ws = ", ws)
+        print(("wp = ", wp))
+        print(("ws = ", ws))
         #ba  = iirdesign(wp,ws,1,40,ftype=ftype)
         h = firwin(1001, [wp, ws])
         O.y = lfilter(h, 1, self.y)
@@ -2816,12 +2816,12 @@ class FUsignal(FBsignal,Usignal):
         T = 1.0 / df
         print('FUsignal')
         print('--------')
-        print('N Freq    ', N)
-        print('shape(y)  ', sh)
-        print('Fmin (GHz) : ', fmin)
-        print('Fmax (GHz) : ', fmax)
+        print(('N Freq    ', N))
+        print(('shape(y)  ', sh))
+        print(('Fmin (GHz) : ', fmin))
+        print(('Fmax (GHz) : ', fmax))
 
-        print('Frequency sampling step : ', df)
+        print(('Frequency sampling step : ', df))
 
     def energy(self,axis=-1,Friis=False,mode='mean'):
         r""" calculate energy along a given axis of the FUsignal
@@ -3343,7 +3343,7 @@ class FUsignal(FBsignal,Usignal):
                     'Ntap':100,
                     'baseband':True}
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 

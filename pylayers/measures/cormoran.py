@@ -230,9 +230,9 @@ class CorSer(PyLayers):
         # 2 - (if available) apply offset
 
         if ('BS' in self.typ) or ('FULL' in self.typ):
-            print( '\nBS data frame index: ',)
+            print(( '\nBS data frame index: ',))
             self._align_on_devdf(typ='BS')
-            print( 'Align on mocap OK...',)
+            print(( 'Align on mocap OK...',))
             try:
                 self._apply_offset('BS')
                 print ('time-offset applied OK')
@@ -241,9 +241,9 @@ class CorSer(PyLayers):
                 print ('No BS offset not yet set => use self.offset_setter ')
 
         if ('TCR' in self.typ) or ('FULL' in self.typ):
-            print ('\nTCR data frame index:', )
+            print(('\nTCR data frame index:', ))
             self._align_on_devdf(typ='TCR')
-            print ('Align on mocap OK...',)
+            print(('Align on mocap OK...',))
             try:
                 self._apply_offset('TCR')
                 print ('time-offset applied OK')
@@ -253,9 +253,9 @@ class CorSer(PyLayers):
 
 
         if ('HK' in self.typ) or ('FULL' in self.typ):
-            print ('\nHKB data frame index:',)
+            print(('\nHKB data frame index:',))
             self._align_on_devdf(typ='HKB')
-            print ('Align on mocap OK...',)
+            print(('Align on mocap OK...',))
             try:
                 # self._apply_offset('HKB')
                 print ('time-offset applied OK')
@@ -263,9 +263,9 @@ class CorSer(PyLayers):
                 print ('WARNING time-offset NOT applied')
                 print ('No HKB offset not yet set => use self.offset_setter')
 
-        print ('\nCreate distance Dataframe...',)
+        print(('\nCreate distance Dataframe...',))
         self._computedistdf()
-        print ('OK',)
+        print(('OK',))
 
     def __repr__(self):
         st = ''
@@ -333,52 +333,52 @@ class CorSer(PyLayers):
         """
 
         title = '{0:21} | {1:7} | {2:8} | {3:10} '.format('Name in Dataframe', 'Real Id', 'Body Id', 'Subject')
-        print( title + '\n' + '='*len(title))
+        print(( title + '\n' + '='*len(title)))
         # access points HKB
         for d in self.din:
             if ('HK' in d) :
                 dev = self.devmapper(d,'HKB')
-                print('{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
+                print(('{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])))
         if 'FULL' in self.typ:
-                print ('{0:21} | {1:7} | {2:8} | {3:10} '.format('','','',''))
+                print(('{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')))
         for d in self.din:
             if ('BS' in d) :
                 dev = self.devmapper(d,'BS')
-                print ('{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
+                print(('{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])))
         if 'FULL' in self.typ:
-                print ('{0:21} | {1:7} | {2:8} | {3:10} '.format('','','',''))
+                print(('{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')))
 
         # access points TCR
         for d in self.din:
             if ('TCR' in d)  :
                 dev = self.devmapper(d,'TCR')
-                print ('{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
-        print ('{0:66}'.format('-'*len(title) ))
+                print(('{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])))
+        print(('{0:66}'.format('-'*len(title) )))
         #device per RAT per body
         for b in self.B:
             if b not in self.interf:
                 #HKB per body
-                for d in self.B[b].dev.keys():
+                for d in list(self.B[b].dev.keys()):
 
                     if ('HK' in d):
                         dev = self.devmapper(d,'HKB')
-                        print( '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
+                        print(( '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])))
                 #bespoon
                 if ('FULL' in self.typ) or ('HKB' in self.typ):
-                    print( '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','',''))
-                for d in self.B[b].dev.keys():
+                    print(( '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')))
+                for d in list(self.B[b].dev.keys()):
                     if ('BS' in d):
                         dev = self.devmapper(d,'BS')
-                        print( '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
+                        print(( '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])))
                 # print '{0:66}'.format('-'*len(title) )
                 #TCR per body
                 if 'FULL' in self.typ:
-                    print ('{0:21} | {1:7} | {2:8} | {3:10} '.format('','','',''))
-                for d in self.B[b].dev.keys():
+                    print(('{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')))
+                for d in list(self.B[b].dev.keys()):
                     if ('TCR' in d):
                         dev = self.devmapper(d,'TCR')
-                        print ('{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
-                print ('{0:66}'.format('-'*len(title) ))
+                        print(('{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])))
+                print(('{0:66}'.format('-'*len(title) )))
 
     @property
     def ant(self):
@@ -386,52 +386,52 @@ class CorSer(PyLayers):
         """
 
         title = '{0:21} | {1:7} | {2:8} | {3:10} '.format('Name in Dataframe', 'Real Id', 'Body Id', 'Subject')
-        print (title + '\n' + '='*len(title) )
+        print((title + '\n' + '='*len(title) ))
         # access points HKB
         for d in self.din:
             if ('HK' in d) :
                 dev = self.devmapper(d,'HKB')
-                print ('{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
+                print(('{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])))
         if 'FULL' in self.typ:
-                print ('{0:21} | {1:7} | {2:8} | {3:10} '.format('','','',''))
+                print(('{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')))
         for d in self.din:
             if ('BS' in d) :
                 dev = self.devmapper(d,'BS')
-                print ('{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
+                print(('{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])))
         if 'FULL' in self.typ:
-                print( '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','',''))
+                print(( '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')))
 
         # access points TCR
         for d in self.din:
             if ('TCR' in d)  :
                 dev = self.devmapper(d,'TCR')
-                print( '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
-        print ('{0:66}'.format('-'*len(title) ))
+                print(( '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])))
+        print(('{0:66}'.format('-'*len(title) )))
         #device per RAT per body
         for b in self.B:
             if b not in self.interf:
                 #HKB per body
-                for d in self.B[b].dev.keys():
+                for d in list(self.B[b].dev.keys()):
 
                     if ('HK' in d):
                         dev = self.devmapper(d,'HKB')
-                        print( '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
+                        print(( '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])))
                 #bespoon
                 if ('FULL' in self.typ) or ('HKB' in self.typ):
-                    print( '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','',''))
-                for d in self.B[b].dev.keys():
+                    print(( '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')))
+                for d in list(self.B[b].dev.keys()):
                     if ('BS' in d):
                         dev = self.devmapper(d,'BS')
-                        print( '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
+                        print(( '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])))
                 # print '{0:66}'.format('-'*len(title) )
                 #TCR per body
                 if 'FULL' in self.typ:
-                    print( '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','',''))
-                for d in self.B[b].dev.keys():
+                    print(( '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')))
+                for d in list(self.B[b].dev.keys()):
                     if ('TCR' in d):
                         dev = self.devmapper(d,'TCR')
-                        print( '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
-                print( '{0:66}'.format('-'*len(title) ))
+                        print(( '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])))
+                print(( '{0:66}'.format('-'*len(title) )))
 
 
 
@@ -516,7 +516,7 @@ bernard
 
         filename = os.path.join(self.rootdir,'RAW','11-06-2014','MOCAP','scene.c3d')
 
-        print( "\nload infrastructure node position:",)
+        print(( "\nload infrastructure node position:",))
         a, self.infraname, pts, i = c3d.ReadC3d(filename)
 
         pts = pts/1000.
@@ -634,7 +634,7 @@ bernard
         self.B={}
         color=['LightBlue','YellowGreen','PaleVioletRed','white','white','white','white','white','white','white']
         for us,subject in enumerate(self.subject):
-            print( "\nload ",subject, " body:",)
+            print(( "\nload ",subject, " body:",))
             seriestr = str(self.serie).zfill(3)
             if day == 11:
                 self.filemocap = os.path.join(self.rootdir,'RAW',str(self.day)+'-06-2014','MOCAP','serie_'+seriestr+'.c3d')
@@ -677,7 +677,7 @@ bernard
                 self.interf.remove('Bernard_Cylindre:')
             for ui,i in enumerate(self.interf):
                 #try:
-                print( "load ",i, " interfering body:",)
+                print(( "load ",i, " interfering body:",))
                 _filemocap = pyu.getshort(self.filemocap)
                 self.B.update({i:Cylinder(name=i,
                                           _filemocap=_filemocap,
@@ -778,24 +778,24 @@ bernard
 
 
         dTCRni={}
-        for k in self.TNET.keys():
+        for k in list(self.TNET.keys()):
             dTCRni[k]=self.idTCR[self.TNET[k]]
 
 
         files = os.listdir(dirname)
         if serie != '':
             try:
-                self._fileTCR = filter(lambda x : '_S'+str(serie)+'_' in x ,files)[0]
+                self._fileTCR = [x for x in files if '_S'+str(serie)+'_' in x][0]
             except:
-                self._fileTCR = filter(lambda x : '_s'+str(serie)+'_' in x ,files)[0]
+                self._fileTCR = [x for x in files if '_s'+str(serie)+'_' in x][0]
             tt = self._fileTCR.split('_')
             self.scenario=tt[0].replace('Sc','')
             self.run = tt[2].replace('R','')
             self.typ = tt[3].replace('.csv','').upper()
             self.video = 'NA'
         else:
-            filesc = filter(lambda x : 'Sc'+scenario in x ,files)
-            self._fileTCR = filter(lambda x : 'R'+str(run) in x ,filsc)[0]
+            filesc = [x for x in files if 'Sc'+scenario in x]
+            self._fileTCR = [x for x in filsc if 'R'+str(run) in x][0]
             self.scenario= scenario
             self.run = str(run)
 
@@ -859,7 +859,7 @@ bernard
         else:
             self._fileBS = [ x for x in files if 'R'+str(serie) in x ][0]
             #filesc = filter(lambda x : 'Sc'+scenario in x ,files)
-            self._fileBS = filter(lambda x : 'R'+str(run) in x ,filsc)[0]
+            self._fileBS = [x for x in filsc if 'R'+str(run) in x][0]
 
         bespo = pd.read_csv(os.path.join(dirname,self._fileBS),index_col='ts')
 
@@ -1040,25 +1040,25 @@ bernard
         if techno == 'TCR':
             if not ((self.typ == 'TCR') or  (self.typ == 'FULL')):
                 raise AttributeError('Serie has not data for techno: ',techno)
-            hname = self.tcr.keys()
+            hname = list(self.tcr.keys())
             dnode=copy.copy(self.dTCR)
             dnode.pop('COORD')
             prefix = 'TCR:'
         elif techno=='HKB':
             if not ((self.typ == 'HKBS') or  (self.typ == 'FULL')):
                 raise AttributeError('Serie has not data for techno: '+techno)
-            hname = self.hkb.keys()
+            hname = list(self.hkb.keys())
             dnode=self.dHKB
             prefix = 'HKB:'
         # get link list
         if all_links:
             import itertools
-            links =[l for l in itertools.combinations(dnode.keys(),2)]
+            links =[l for l in itertools.combinations(list(dnode.keys()),2)]
         else:
             links=[n.split('-') for n in hname]
             links = [l for l in links if ('COORD' not in l[0]) and ('COORD' not in l[1])]
         #mapping between device name in self.hkb and on body/in self.devdf
-        dev_bid = [self.devmapper(k,techno=techno)[2] for k in dnode.keys()]
+        dev_bid = [self.devmapper(k,techno=techno)[2] for k in list(dnode.keys())]
 
         nb_totaldev=len(np.unique(self.devdf['id']))
         # extract all dev position on body
@@ -1078,7 +1078,7 @@ bernard
         nA = np.array([prefix+ str(dnode[l[0]]) for l in links])
         nB = np.array([prefix+ str(dnode[l[1]]) for l in links])
 
-        dma = dict(zip(dev_bid,range(len(dev_bid))))
+        dma = dict(list(zip(dev_bid,list(range(len(dev_bid))))))
         mnA = [dma[n] for n in nA]
         mnB = [dma[n] for n in nB]
 
@@ -1100,7 +1100,7 @@ bernard
         #C or D : 3 x 11 body segments x time
         # radius of cylinders are (nb_cylinder x time)
         for b in self.B:
-            print( 'processing shadowing from ',b)
+            print(( 'processing shadowing from ',b))
             # if b is a body not a cylinder
             if not 'Cylindre' in b:
                 uta = self.B[b].sl[:,0].astype('int')
@@ -1167,8 +1167,8 @@ bernard
 
         if square_mda:
             dev= np.unique(links)
-            ddev = dict(zip(dev,range(len(dev))))
-            lmap = np.array(map(lambda x: (ddev[x[0]],ddev[x[1]]),links))
+            ddev = dict(list(zip(dev,list(range(len(dev))))))
+            lmap = np.array([(ddev[x[0]],ddev[x[1]]) for x in links])
             M = np.nan*np.ones((len(dev),len(dev),intersect.shape[-1]))
             for i in range(len(intersect)):
                 id1 = lmap[i][0]
@@ -1731,14 +1731,14 @@ bernard
         # HIKOB
         if ('HK' in self.typ) or ('FULL' in self.typ):
             devmap = {self.devmapper(k,'hkb')[0]:self.devmapper(k,'hkb')[2] for k in self.dHKB}
-            udev = np.array([[self.dist_nodesmap.index(devmap[k.split('-')[0]]),self.dist_nodesmap.index(devmap[k.split('-')[1]])] for k in self.hkb.keys()])
+            udev = np.array([[self.dist_nodesmap.index(devmap[k.split('-')[0]]),self.dist_nodesmap.index(devmap[k.split('-')[1]])] for k in list(self.hkb.keys())])
             iudev =np.array([(self.dist_nodesmap[u[0]]+'-'+self.dist_nodesmap[u[1]]) for u in udev])
             df = pd.DataFrame(self.dist[:,udev[:,0],udev[:,1]],columns=iudev,index=self.tmocap)
 
         # BE Spoon
         if ('BS' in self.typ) or ('FULL' in self.typ):
             devmap = {self.devmapper(k,'BS')[0]:self.devmapper(k,'BS')[2] for k in self.dBS}
-            udev = np.array([[self.dist_nodesmap.index(devmap[k.split('-')[0]]),self.dist_nodesmap.index(devmap[k.split('-')[1]])] for k in self.bespo.keys()])
+            udev = np.array([[self.dist_nodesmap.index(devmap[k.split('-')[0]]),self.dist_nodesmap.index(devmap[k.split('-')[1]])] for k in list(self.bespo.keys())])
             iudev =np.array([(self.dist_nodesmap[u[0]]+'-'+self.dist_nodesmap[u[1]]) for u in udev])
             dfb = pd.DataFrame(self.dist[:,udev[:,0],udev[:,1]],columns=iudev,index=self.tmocap)
             df = df.join(dfb)
@@ -1748,7 +1748,7 @@ bernard
             devmap = {self.devmapper(k,'tcr')[0]:self.devmapper(k,'tcr')[2] for k in self.dTCR}
             udev = np.array([[self.dist_nodesmap.index(devmap[k.split('-')[0]]),
                               self.dist_nodesmap.index(devmap[k.split('-')[1]])]
-                             for k in self.tcr.keys() ])
+                             for k in list(self.tcr.keys()) ])
             #                 for k in self.tcr.keys() if not 'COORD' in k])
             iudev =np.array([(self.dist_nodesmap[u[0]]+'-'+self.dist_nodesmap[u[1]]) for u in udev])
             dft = pd.DataFrame(self.dist[:,udev[:,0],udev[:,1]],columns=iudev,index=self.tmocap)
@@ -1835,7 +1835,7 @@ bernard
         """
         videofile = os.path.join(self.rootdir,'POST-TREATED', str(self.day)+'-06-2014','Videos')
         ldir = os.listdir(videofile)
-        luldir = map(lambda x : self._filename in x,ldir)
+        luldir = [self._filename in x for x in ldir]
 
         try:
             uldir = luldir.index(True)
@@ -1877,7 +1877,7 @@ bernard
 
         videofile = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','Videos')
         ldir = os.listdir(videofile)
-        luldir = map(lambda x : self._filename in x,ldir)
+        luldir = [self._filename in x for x in ldir]
         uldir = luldir.index(True)
         _filename = ldir[uldir]
         filename = os.path.join(videofile,_filename)
@@ -2039,7 +2039,7 @@ bernard
 
         if kwargs['L']:
             self.L._show3(opacity=0.5)
-        v = self.din.items()
+        v = list(self.din.items())
         if kwargs['inodes']:
             X= np.array([v[i][1]['p'] for i in range(len(v))])
             mlab.points3d(X[:,0],X[:,1], X[:,2],scale_factor=kwargs['insize'],color=in_color)
@@ -2160,14 +2160,14 @@ bernard
         #img1 = ax1.imshow(self.rssi[:,:,timeindex],interpolation='nearest',origin='lower')
         img1 = ax1.imshow(dt1,interpolation='nearest')
         labels = [ self.idHKB[x] for x in range(1,17)] 
-        plt.xticks(range(16),labels,rotation=80,fontsize=14)
-        plt.yticks(range(16),labels,fontsize=14)
+        plt.xticks(list(range(16)),labels,rotation=80,fontsize=14)
+        plt.yticks(list(range(16)),labels,fontsize=14)
         if kind=='time':
             plt.title('t = '+str(time)+ ' s')
         if kind=='mean':
-            plt.title(u'$mean(\mathbf{L})$')
+            plt.title('$mean(\mathbf{L})$')
         if kind=='std':
-            plt.title(u'$std(\mathbf{L})$')
+            plt.title('$std(\mathbf{L})$')
         divider = make_axes_locatable(ax1)
         cax1 = divider.append_axes("right", size="5%", pad=0.05)
         clb1 = fig.colorbar(img1,cax1)
@@ -2175,10 +2175,10 @@ bernard
         ax2 = fig.add_subplot(122)
         #img2 = ax2.imshow(self.D[:,:,timeindex],interpolation='nearest',origin='lower')
         img2 = ax2.imshow(dt2,interpolation='nearest')
-        plt.title(u'$\mathbf{L}-\mathbf{L}^T$')
+        plt.title('$\mathbf{L}-\mathbf{L}^T$')
         divider = make_axes_locatable(ax2)
-        plt.xticks(range(16),labels,rotation=80,fontsize=14)
-        plt.yticks(range(16),labels,fontsize=14)
+        plt.xticks(list(range(16)),labels,rotation=80,fontsize=14)
+        plt.yticks(list(range(16)),labels,fontsize=14)
         cax2 = divider.append_axes("right", size="5%", pad=0.05)
         clb2 = fig.colorbar(img2,cax2)
         clb2.set_label('level dBm',fontsize=14)
@@ -2848,7 +2848,7 @@ bernard
             ax = kwargs['ax']
 
         if kwargs['subject']=='':
-            subject=self.B.keys()[0]
+            subject=list(self.B.keys())[0]
         else:
             subject=kwargs['subject']
 
@@ -2953,7 +2953,7 @@ bernard
             line[0].set_xdata(x[:i])
             return line
 
-        ani = animation.FuncAnimation(fig, animate, xrange(1, len(x)),
+        ani = animation.FuncAnimation(fig, animate, range(1, len(x)),
                                       interval=interval, blit=True)
         if save:
             ani.save(link+'.mp4')
@@ -3024,7 +3024,7 @@ bernard
         plt.legend()
         plt.xlabel('time (s)')
         plt.ylabel('RSS (dBm)')
-        ani = animation.FuncAnimation(fig, animate, xrange(0, len(x)),
+        ani = animation.FuncAnimation(fig, animate, range(0, len(x)),
                                       interval=interval, blit=True)
         if save:
             ani.save(a+'.mp4')
@@ -3154,7 +3154,7 @@ bernard
             
         if kwargs['sqrtinv']:
             df = np.sqrt(1./df)
-            ylabel = u'$ (mW)^{-1/2} linear scale$'
+            ylabel = '$ (mW)^{-1/2} linear scale$'
 
         lines = df.plot(ax=ax,color=kwargs['color'],label=label)
 
@@ -3165,9 +3165,9 @@ bernard
             if kwargs['yoffset']==1:
                 ylabel = 'mW'
             if kwargs['yoffset']==1e3:
-                ylabel = u'$\micro$W'
+                ylabel = '$\micro$W'
             if kwargs['yoffset']==1e6:
-                ylabel = u'nW'
+                ylabel = 'nW'
 
         ax.set_ylabel(ylabel)
         # if kwargs['data']==True:
@@ -3338,12 +3338,12 @@ bernard
                     if kwargs['yoffset']==1:
                         ax.set_ylabel('mW')
                     if kwargs['yoffset']==1e3:
-                        ax.set_ylabel(u'$\micro$W')
+                        ax.set_ylabel('$\micro$W')
                     if kwargs['yoffset']==1e6:
-                        ax.set_ylabel(u'nW')
+                        ax.set_ylabel('nW')
 
             else:
-                ax.set_ylabel(u'$\prop (mW)^{-1/2} linear scale$')
+                ax.set_ylabel('$\prop (mW)^{-1/2} linear scale$')
 
         if kwargs['reciprocal']==True:
             # if kwargs['data']==True:
@@ -3512,7 +3512,7 @@ bernard
 
 
         if subject=='':
-            subject=self.B.keys()[0]
+            subject=list(self.B.keys())[0]
         else:
             subject=subject
 
@@ -3552,17 +3552,17 @@ bernard
 
             if inverse:
                 var = 1./(var)
-                ax.set_ylabel(u'$m^{-2}$',fontsize=fontsize)
+                ax.set_ylabel('$m^{-2}$',fontsize=fontsize)
                 if log :
                     #var = gamma*10*np.log10(var)
                     var = 20*np.log10(var)+gamma
-                    ax.set_ylabel(u'$- 20 \log_{10}(d)'+str(gamma)+'$  (dB)',fontsize=fontsize)
+                    ax.set_ylabel('$- 20 \log_{10}(d)'+str(gamma)+'$  (dB)',fontsize=fontsize)
                     plt.ylim(-65,-40)
             else:
-                ax.set_ylabel(u'meters',fontsize=fontsize)
+                ax.set_ylabel('meters',fontsize=fontsize)
                 if log :
                     var = gamma*10*np.log10(var)+gamma
-                    ax.set_ylabel(u'$10log_{10}m^{-2}$',fontsize=fontsize)
+                    ax.set_ylabel('$10log_{10}m^{-2}$',fontsize=fontsize)
 
             #ax.plot(self.B[subject].time,var,label=label,**kwargs)
             var.plot()
@@ -4034,7 +4034,7 @@ bernard
         if 'AP' not in ab:
             Nframe = B.shape[0]
         else: 
-            Nframe = len(self.B[self.B.keys()[0]].time)
+            Nframe = len(self.B[list(self.B.keys())[0]].time)
         iframe = np.arange(0,Nframe-1,dsf)
         tvisi = []
         #
@@ -4148,12 +4148,12 @@ bernard
                     ud = np.hstack((ud,np.array([len(vv)-1])))
 
 
-            tseg = np.array(zip(um,ud))
+            tseg = np.array(list(zip(um,ud)))
             #else:
             #    tseg = np.array(zip(ud,um))
         else:
             if vv.all():
-                tseg = np.array(zip(np.array([0]),np.array([len(vv)-1])))
+                tseg = np.array(list(zip(np.array([0]),np.array([len(vv)-1]))))
             else :
                 tseg = np.array([[0,0]])
         itseg = copy.copy(tseg)
@@ -4201,7 +4201,7 @@ bernard
 
         for b in B:
             if 'dev' in dir(B[b]):
-                dev = B[b].dev.keys()
+                dev = list(B[b].dev.keys())
                 udev=[B[b].dev[d]['uc3d'] for d in dev]
 
                 postmp = np.array([np.mean(B[b]._f[:,u,:],axis=1) for u in udev])
@@ -4273,7 +4273,7 @@ bernard
                   'offset':np.array(([0,0,0])),
                   'alias':{}}
 
-        for key, value in defaults.items():
+        for key, value in list(defaults.items()):
             if key not in kwargs:
                 kwargs[key] = value
 
@@ -4598,9 +4598,9 @@ bernard
         df = self.distdf
 
 
-        if (nna +'-' + nnb) in self.distdf.keys():
+        if (nna +'-' + nnb) in list(self.distdf.keys()):
             link = nna +'-' + nnb
-        elif (nnb +'-' + nna) in self.distdf.keys():
+        elif (nnb +'-' + nna) in list(self.distdf.keys()):
             link = nnb +'-' + nna
         else :
             raise AttributeError('Link between ' + str(ra) +' and ' + str(rb) + ' is not available in distdf dataframe')
@@ -4712,18 +4712,18 @@ bernard
         b,ib,nnb,subjectb,techno = self.devmapper(b,techno)
 
         if ('HK' in techno.upper()) :
-            if (a +'-' + b) in self.hkb.keys():
+            if (a +'-' + b) in list(self.hkb.keys()):
                 link = a +'-' + b
-            elif (b +'-' + a) in self.hkb.keys():
+            elif (b +'-' + a) in list(self.hkb.keys()):
                 link = b +'-' + a
             else :
                 raise AttributeError('Link between ' + str(ra) +' and ' + str(rb) + ' is not available in hkb dataframe')
             df = self.hkb
 
         elif ('BS' in techno.upper()):
-            if (a +'-' + b) in self.bespo.keys():
+            if (a +'-' + b) in list(self.bespo.keys()):
                 link = a +'-' + b
-            elif (b +'-' + a) in self.bespo.keys():
+            elif (b +'-' + a) in list(self.bespo.keys()):
                 link = b +'-' + a
             else:
                 raise AttributeError('Link between ' + str(ra) +' and ' + str(rb) + ' is not available in bespo dataframe')
@@ -4731,9 +4731,9 @@ bernard
             df = self.bespo
 
         elif ('TCR' in techno.upper()):
-            if (a +'-' + b) in self.tcr.keys():
+            if (a +'-' + b) in list(self.tcr.keys()):
                 link = a +'-' + b
-            elif (b +'-' + a) in self.tcr.keys():
+            elif (b +'-' + a) in list(self.tcr.keys()):
                 link = b +'-' + a
             else:
                 raise AttributeError('Link between ' + str(ra) +' and ' + str(rb) + ' is not available in tcr dataframe')
@@ -4867,7 +4867,7 @@ bernard
 
                 for b in self.B:
                     if not 'Cylindre' in b:
-                        if ba in self.B[b].dev.keys():
+                        if ba in list(self.B[b].dev.keys()):
                             subject = b
                             break
 
@@ -4900,7 +4900,7 @@ bernard
 
                 for b in self.B:
                     if not 'Cylindre' in b:
-                        if ba in self.B[b].dev.keys():
+                        if ba in list(self.B[b].dev.keys()):
                             subject = b
                             break
 
@@ -4909,19 +4909,19 @@ bernard
             # techno autodetection raise an error if conflict and invite to precise radio techno
             if techno == '':
                 if hasattr(self,'idHKB'):
-                    if a in self.idHKB.keys() :
+                    if a in list(self.idHKB.keys()) :
                         if techno == '':
                             techno = 'HKB'
                         else :
                             raise AttributeError('Please indicate the radio techno in argument : TCR, HKB, BS')
                 if hasattr(self,'idBS'):
-                    if a in self.idBS.keys():
+                    if a in list(self.idBS.keys()):
                         if techno == '':
                             techno = 'BS'
                         else :
                             raise AttributeError('Please indicate the radio techno in argument : TCR, HKB, BS')
                 if hasattr(self,'idTCR'):
-                    if a in self.idTCR.keys():
+                    if a in list(self.idTCR.keys()):
                         if techno == '':
                             techno = 'TCR'
                         else :
@@ -4947,7 +4947,7 @@ bernard
 
             for b in self.B:
                 if not 'Cylindre' in b:
-                    if ba in self.B[b].dev.keys():
+                    if ba in list(self.B[b].dev.keys()):
                         subject = b
                         break
 
@@ -5040,7 +5040,7 @@ bernard
             df.index = pd.Index(npahkbi + nstart)
 
             #add blank at begining
-            df = pd.DataFrame({},columns=df.keys(),index=npahkbi[:offset])
+            df = pd.DataFrame({},columns=list(df.keys()),index=npahkbi[:offset])
             ndf=pd.concat([df,df])
             df=ndf
         if techno == 'HKB':
@@ -5093,7 +5093,7 @@ bernard
             self.hkb.index = pd.Index(npahkbi + nstart)
 
             #add blank at begining
-            df = pd.DataFrame({},columns=self.hkb.keys(),index=npahkbi[:offset])
+            df = pd.DataFrame({},columns=list(self.hkb.keys()),index=npahkbi[:offset])
             ndf=pd.concat([df,self.hkb])
             self.hkb=ndf
             self.thkb = self.hkb.index
