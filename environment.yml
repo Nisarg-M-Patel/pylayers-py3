@@ -1,0 +1,64 @@
+# PyLayers Python 3.11 Development Environment  
+# Scientific radio propagation simulation platform
+# Note: Using Python 3.11 for better package compatibility
+# 
+# Usage:
+#   conda env create -f environment.yml
+#   conda activate pylayers-py3
+#
+# For faster installs, use mamba:
+#   mamba env create -f environment.yml
+
+name: pylayers-py3
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  # Core Python - using 3.11 for better package compatibility
+  - python=3.11.*
+  - pip>=23.0
+
+  # Scientific Computing Stack
+  - numpy>=1.24.0
+  - scipy>=1.10.0
+  - pandas>=2.0.0
+
+  # Visualization
+  - matplotlib>=3.6.0
+  - plotly>=5.0.0  # Interactive plots
+  - seaborn>=0.12.0  # Statistical plotting
+
+  # Geospatial and Network Analysis
+  - networkx>=3.0
+  - shapely>=2.0.0
+  - gdal>=3.6.0  # Geospatial data handling
+
+  # Image Processing
+  - pillow>=10.0.0  # PIL replacement
+
+  # Development Tools - Essential only
+  - ipython>=8.0.0
+  - jupyterlab>=4.0.0
+
+  # Code Quality and Testing - Essential only
+  - pytest>=7.0.0
+  - black>=23.0.0  # Code formatting
+
+  # Package Management
+  - setuptools>=65.0.0
+  - wheel>=0.40.0
+
+  # Dependencies not available via conda
+  - pip:
+    - simpy>=4.0.0  # Discrete event simulation
+    - bitstring>=4.0.0  # Binary data manipulation
+    - mayavi>=4.8.0  # 3D visualization via pip
+    - cartopy>=0.21.0  # Map projections via pip if conda fails
+
+# Environment variables (optional)
+variables:
+  PYTHONPATH: ${CONDA_PREFIX}/lib/python3.12/site-packages
+  NUMBA_CACHE_DIR: ${CONDA_PREFIX}/tmp/numba_cache
+  MPLBACKEND: Qt5Agg  # Matplotlib backend for interactive plots
