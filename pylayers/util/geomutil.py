@@ -22,7 +22,7 @@ import numpy.ma as ma
 
 # from antenna import *
 import shapely.geometry as shg
-from descartes.patch import PolygonPatch
+from matplotlib.patches import Polygon as PolygonPatch
 from itertools import combinations, permutations, product
 
 

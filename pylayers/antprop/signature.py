@@ -49,7 +49,7 @@ def plot_lines(ax, ob, color = []):
 
     """
 
-    from descartes.patch import PolygonPatch
+    from matplotlib.patches import Polygon as PolygonPatch
 
     for ii,line in enumerate(ob):
         if color == []:
@@ -78,7 +78,7 @@ def plot_poly(ax, ob, color = []):
 
     """
 
-    from descartes.patch import PolygonPatch
+    from matplotlib.patches import Polygon as PolygonPatch
     for ii,poly in enumerate(ob):
         pp = PolygonPatch(poly,alpha=0.3)
         ax.add_patch(pp)
@@ -1889,7 +1889,7 @@ class Signatures(PyLayers,dict):
 
     def pltunfold(self,L,i=0,s=0):
         import shapely.ops as sho
-        from descartes.patch import PolygonPatch
+        from matplotlib.patches import Polygon as PolygonPatch
         plt.ion()
         plt.gcf()
         plt.clf()

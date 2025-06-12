@@ -41,7 +41,7 @@ from mpl_toolkits.basemap import Basemap
 import shapely.geometry as sh
 import shapefile as shp
 from shapely.ops import cascaded_union
-from descartes.patch import PolygonPatch
+from matplotlib.patches import Polygon as PolygonPatch
 from numpy import array
 import PIL.Image as Image
 import hashlib
