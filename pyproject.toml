@@ -42,6 +42,8 @@ dependencies = [
     "simpy>=4.0.0",
     "bitstring>=4.0.0",
     "h5py>=3.8.0",
+    "tqdm>=4.60.0",
+    "triangle>=20220202",
 ]
 
 [project.optional-dependencies]
