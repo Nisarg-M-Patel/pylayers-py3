@@ -10,7 +10,7 @@ from pylayers.gis.layout import *
 # lines = [sh.LineString(p) for p in pts]
 # X=sho.polygonize(lines)
 # P=[x for x in X]
-# pols = sho.cascaded_union(P)
+# pols = sho.unary_union(P)
 
 # test simple add / delete
 L=Layout('Luebbers_raw.ini',force=True)

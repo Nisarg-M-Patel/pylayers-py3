@@ -40,7 +40,7 @@ from networkx.readwrite import write_graphml, read_graphml
 from pylayers.util.basemap_compat import Basemap
 import shapely.geometry as sh
 import shapefile as shp
-from shapely.ops import cascaded_union
+from shapely.ops import unary_union
 from matplotlib.patches import Polygon as PolygonPatch
 from numpy import array
 import PIL.Image as Image
