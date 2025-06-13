@@ -446,7 +446,7 @@ class Layout(pro.PyLayers):
                         # If node 0 exists : the layout has been built
 
                         # If .ini file has changed rebuild
-                        if self._hash == self.Gt.nodes[0]['hash']:
+                        if len(self.Gt.nodes()) > 0 and self._hash == self.Gt.nodes[list(self.Gt.nodes())[0]]['hash']:
                             self.dumpr('stvirw')
                             self.isbuilt = True
                             bbuild = False

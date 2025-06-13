@@ -359,7 +359,7 @@ class LineString(pro.PyLayers, shg.LineString):
 # -----------------------------------------------------------
 
 
-class Polygon(pro.PyLayers, shg.Polygon):
+class Polygon(pro.PyLayers):
     """ Overloaded shapely Polygon class
 
     Attributes
@@ -406,9 +406,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
 
         if type(p) == shg.polygon.Polygon:
             self.Np = np.shape(p.exterior.xy)[1] - 1
-            p = np.vstack((p.exterior.xy[0][0:-1], p.exterior.xy[1][0:-1]))
-            # shg.Polygon.__init__(self, pt)
-            #
+            self._polygon = p
 
         if type(p) == tuple:
             xmin = p[0] - delta
@@ -416,10 +414,12 @@ class Polygon(pro.PyLayers, shg.Polygon):
             ymin = p[2] - delta
             ymax = p[3] + delta
             p = [[xmin, xmin, xmax, xmax], [ymin, ymax, ymax, ymin]]
+            self._polygon = shg.Polygon([(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin)])
+            self.Np = 4
 
         if type(p) == shg.multipoint.MultiPoint:
             self.Np = np.shape(p)[0]
-            shg.Polygon.__init__(self, p)
+            self._polygon = shg.Polygon(p)
 
         if type(p) == list:
             p = np.array(p)
@@ -433,9 +433,13 @@ class Polygon(pro.PyLayers, shg.Polygon):
                 tp.append(p[:, k])
             tp.append(tp[0])
             tu = tuple(tp)
-            shg.Polygon.__init__(self, tu)
+            self._polygon = shg.Polygon(tu)
 
-        self.Np = np.shape(self.exterior.xy)[1] - 1
+        if not hasattr(self, '_polygon'):
+            # This shouldn't happen, but just in case
+            raise ValueError("Polygon was not properly initialized")
+        if not hasattr(self, 'Np'):
+            self.Np = np.shape(self._polygon.exterior.xy)[1] - 1
 
         if vnodes != []:
             self.vnodes = np.array(vnodes)
@@ -469,6 +473,33 @@ class Polygon(pro.PyLayers, shg.Polygon):
         # Call the parent's __setstate__ with the other tuple elements.
         super(Polygon, self).__setstate__(staten)
 
+    @property
+    def exterior(self):
+        return self._polygon.exterior
+
+    @property 
+    def area(self):
+        return self._polygon.area
+    
+    @property
+    def bounds(self):
+        return self._polygon.bounds
+    
+    @property
+    def centroid(self):
+        return self._polygon.centroid
+
+    def contains(self, other):
+        return self._polygon.contains(other)
+
+    def intersection(self, other):
+        return self._polygon.intersection(other)
+
+    def union(self, other):
+        if hasattr(other, '_polygon'):
+            return self._polygon.union(other._polygon)
+        else:
+            return self._polygon.union(other)
 
     def __add__(self, p):
         """ add 2 polygons

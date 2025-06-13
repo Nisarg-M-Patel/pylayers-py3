@@ -376,8 +376,8 @@ class DLink(Link):
             # an indoor cycle at the exception of AIR
             #
 
-            cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.node[p]['indoor']]
-
+            cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.nodes[p]['indoor']]
+            
             if self._L.typ =='outdoor':
                 u = list(self.L.Gi.node.keys())
                 # lT : list of transmission interactions
