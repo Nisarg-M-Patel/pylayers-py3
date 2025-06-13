@@ -115,7 +115,9 @@ import pylayers.signal.bsignal as bs
 import pylayers.antprop.channel as ch
 from   pylayers.util.project import *
 from   scipy import io
-from   scipy import signal, linspace, polyval, polyfit, stats
+from scipy import signal, stats
+from numpy import linspace, polyval, polyfit
+from numpy import linspace
 #from   pylayers.Simul import SimulEM
 #
 # Utility functions
