@@ -20,7 +20,7 @@ else:
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 import pylayers.util.geomutil as geu
-from mpl_toolkits.basemap import Basemap
+from pylayers.util.basemap_compat import Basemap
 from matplotlib.collections import PolyCollection
 import matplotlib.pyplot as plt
 import networkx as nx

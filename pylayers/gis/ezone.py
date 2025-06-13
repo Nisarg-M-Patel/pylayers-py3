@@ -29,7 +29,7 @@ from shapely.geometry import Polygon
 from pylayers.gis.gisutil import *
 import pylayers.gis.kml as gkml
 import pylayers.gis.srtm as srtm
-from mpl_toolkits.basemap import Basemap
+from pylayers.util.basemap_compat import Basemap
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from mpl_toolkits.axes_grid1.colorbar import colorbar
 import smopy

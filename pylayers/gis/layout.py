@@ -37,7 +37,7 @@ import pandas as pd
 from itertools import combinations, product
 import ast
 from networkx.readwrite import write_graphml, read_graphml
-from mpl_toolkits.basemap import Basemap
+from pylayers.util.basemap_compat import Basemap
 import shapely.geometry as sh
 import shapefile as shp
 from shapely.ops import cascaded_union
